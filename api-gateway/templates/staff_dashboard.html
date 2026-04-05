@@ -1,14 +1,19 @@
+{% load currency_filters %}
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Dashboard — LUMIÈRE</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Staff Dashboard &mdash; LUMI&Egrave;RE
+  </title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+  </script>
   <style>
-    :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
+   :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     body{font-family:var(--font-body);font-size:14px;line-height:1.6;color:var(--color-charcoal);background:#f4f1ec;-webkit-font-smoothing:antialiased;display:flex;min-height:100vh}
     h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.2}
@@ -111,116 +116,630 @@
     @media(max-width:1024px){.stats-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr}.orders-grid{grid-template-columns:1fr}}
     @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}}
   </style>
-</head>
-<body>
+ </head>
+ <body>
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">LUMIÈRE<small>Staff Dashboard</small></div>
-    <nav class="sidebar-nav">
-      <div class="nav-section">Tổng quan</div>
-      <div class="nav-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg> Đơn hàng</div>
-      <div class="nav-section">Quản lý</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Sách</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2 12 5.5 8 2l-4.38 1.46A1 1 0 003 4.41V20a1 1 0 001.56.83L8 18.5l4 3.5 4-3.5 3.44 2.33A1 1 0 0021 20V4.41a1 1 0 00-.62-.95z"/></svg> Thời Trang</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Khách hàng</div>
-      <div class="nav-section">AI & Analytics</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> AI Behavior</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Báo cáo</div>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="avatar">Q</div>
-      <div class="info"><strong>Quy Admin</strong><small>Super Admin</small></div>
+   <div class="sidebar-logo">
+    LUMI&Egrave;RE
+    <small>
+     Staff Dashboard
+    </small>
+   </div>
+   <nav class="sidebar-nav">
+    <div class="nav-section">
+     Tổng quan
     </div>
+    <div class="nav-item active" data-target="dashboard" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <rect height="7" width="7" x="3" y="3">
+      </rect>
+      <rect height="7" width="7" x="14" y="3">
+      </rect>
+      <rect height="7" width="7" x="3" y="14">
+      </rect>
+      <rect height="7" width="7" x="14" y="14">
+      </rect>
+     </svg>
+     Dashboard
+    </div>
+    <div class="nav-item" data-target="orders" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z">
+      </path>
+      <line x1="3" x2="21" y1="6" y2="6">
+      </line>
+     </svg>
+     &Dstrok;ơn h&agrave;ng
+    </div>
+    <div class="nav-section">
+     Quản l&yacute;
+    </div>
+    <div class="nav-item" data-target="books" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <path d="M4 19.5A2.5 2.5 0 016.5 17H20">
+      </path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z">
+      </path>
+     </svg>
+     S&aacute;ch
+    </div>
+    <div class="nav-item" data-target="clothes" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <path d="M20.38 3.46L16 2 12 5.5 8 2l-4.38 1.46A1 1 0 003 4.41V20a1 1 0 001.56.83L8 18.5l4 3.5 4-3.5 3.44 2.33A1 1 0 0021 20V4.41a1 1 0 00-.62-.95z">
+      </path>
+     </svg>
+     Thời Trang
+    </div>
+    <div class="nav-item" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2">
+      </path>
+      <circle cx="9" cy="7" r="4">
+      </circle>
+      <path d="M23 21v-2a4 4 0 00-3-3.87">
+      </path>
+      <path d="M16 3.13a4 4 0 010 7.75">
+      </path>
+     </svg>
+     Kh&aacute;ch h&agrave;ng
+    </div>
+    <div class="nav-section">
+     AI &amp; Analytics
+    </div>
+    <div class="nav-item" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12">
+      </polyline>
+     </svg>
+     AI Behavior
+    </div>
+    <div class="nav-item" style="cursor:pointer;">
+     <svg viewbox="0 0 24 24">
+      <line x1="18" x2="18" y1="20" y2="10">
+      </line>
+      <line x1="12" x2="12" y1="20" y2="4">
+      </line>
+      <line x1="6" x2="6" y1="20" y2="14">
+      </line>
+     </svg>
+     B&aacute;o c&aacute;o
+    </div>
+   </nav>
+   <div class="sidebar-footer">
+    <div class="avatar">
+     Q
+    </div>
+    <div class="info">
+     <strong>
+      Quy Admin
+     </strong>
+     <small>
+      Super Admin
+     </small>
+    </div>
+   </div>
   </aside>
-
   <!-- MAIN -->
   <div class="main">
+   <div class="content-section" id="section-dashboard">
     <div class="top-bar">
-      <h1>Dashboard</h1>
-      <div class="top-bar-right">
-        <input type="text" class="search-box" placeholder="Tìm kiếm...">
-        <div class="notif-btn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><div class="notif-dot"></div></div>
+     <h1>
+      Dashboard
+     </h1>
+     <div class="top-bar-right">
+      <input class="search-box" placeholder="T&igrave;m kiếm..." type="text"/>
+      <div class="notif-btn">
+       <svg viewbox="0 0 24 24">
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9">
+        </path>
+        <path d="M13.73 21a2 2 0 01-3.46 0">
+        </path>
+       </svg>
+       <div class="notif-dot">
+       </div>
       </div>
+     </div>
     </div>
-
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Doanh thu tháng</div><div class="stat-value">1.2B ₫</div><div class="stat-change up">↑ 12.5% so với tháng trước</div></div>
-      <div class="stat-card"><div class="stat-label">Đơn hàng</div><div class="stat-value">847</div><div class="stat-change up">↑ 8.3% so với tháng trước</div></div>
-      <div class="stat-card"><div class="stat-label">Khách hàng mới</div><div class="stat-value">1,234</div><div class="stat-change up">↑ 23.1% so với tháng trước</div></div>
-      <div class="stat-card"><div class="stat-label">Tỷ lệ hoàn trả</div><div class="stat-value">2.1%</div><div class="stat-change down">↑ 0.3% so với tháng trước</div></div>
+     <div class="stat-card">
+      <div class="stat-label">
+       Doanh thu th&aacute;ng
+      </div>
+      <div class="stat-value">
+       1.2B ₫
+      </div>
+      <div class="stat-change up">
+       &uarr; 12.5% so với th&aacute;ng trước
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-label">
+       &Dstrok;ơn h&agrave;ng
+      </div>
+      <div class="stat-value">
+       847
+      </div>
+      <div class="stat-change up">
+       &uarr; 8.3% so với th&aacute;ng trước
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-label">
+       Kh&aacute;ch h&agrave;ng mới
+      </div>
+      <div class="stat-value">
+       1,234
+      </div>
+      <div class="stat-change up">
+       &uarr; 23.1% so với th&aacute;ng trước
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-label">
+       Tỷ lệ ho&agrave;n trả
+      </div>
+      <div class="stat-value">
+       2.1%
+      </div>
+      <div class="stat-change down">
+       &uarr; 0.3% so với th&aacute;ng trước
+      </div>
+     </div>
     </div>
-
     <!-- CHARTS -->
     <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Doanh Thu</h3>
-          <div class="chart-tabs"><button class="chart-tab active" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">7 ngày</button><button class="chart-tab" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">30 ngày</button><button class="chart-tab" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">90 ngày</button></div>
-        </div>
-        <canvas id="revenueChart" height="100"></canvas>
+     <div class="chart-card">
+      <div class="chart-header">
+       <h3>
+        Doanh Thu
+       </h3>
+       <div class="chart-tabs">
+        <button class="chart-tab active" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=&gt;t.classList.remove('active'));this.classList.add('active')">
+         7 ng&agrave;y
+        </button>
+        <button class="chart-tab" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=&gt;t.classList.remove('active'));this.classList.add('active')">
+         30 ng&agrave;y
+        </button>
+        <button class="chart-tab" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=&gt;t.classList.remove('active'));this.classList.add('active')">
+         90 ng&agrave;y
+        </button>
+       </div>
       </div>
-      <div class="chart-card">
-        <div class="chart-header"><h3>Phân Khúc KH</h3></div>
-        <canvas id="segmentChart" height="160"></canvas>
+      <canvas height="100" id="revenueChart">
+      </canvas>
+     </div>
+     <div class="chart-card">
+      <div class="chart-header">
+       <h3>
+        Ph&acirc;n Kh&uacute;c KH
+       </h3>
       </div>
+      <canvas height="160" id="segmentChart">
+      </canvas>
+     </div>
     </div>
-
     <!-- AI INSIGHTS -->
     <div class="ai-section">
-      <div class="ai-header"><h3>AI Insights</h3><span class="ai-badge">✦ Powered by AI</span></div>
-      <div class="ai-grid">
-        <div class="ai-card">
-          <h4>📈 Xu hướng mua sắm</h4>
-          <p>Nhóm "Loyal Customer" tăng 15% trong tuần. Sách self-help và thời trang Gucci là combo phổ biến nhất.</p>
-          <span class="tag tag-segment">Loyal +15%</span>
-        </div>
-        <div class="ai-card">
-          <h4>🎯 Đề xuất marketing</h4>
-          <p>243 khách "Window Shopper" chưa mua. Gợi ý: push notification combo "Sách + Phụ kiện" giảm 10%.</p>
-          <span class="tag tag-action">Cần hành động</span>
-        </div>
-        <div class="ai-card">
-          <h4>⚠️ Cảnh báo tồn kho</h4>
-          <p>"Đắc Nhân Tâm" còn 12 cuốn (dự kiến hết trong 3 ngày). "Gucci Blazer" size M hết hàng.</p>
-          <span class="tag tag-alert">Sắp hết hàng</span>
-        </div>
+     <div class="ai-header">
+      <h3>
+       AI Insights
+      </h3>
+      <span class="ai-badge">
+       ✦ Powered by AI
+      </span>
+     </div>
+     <div class="ai-grid">
+      <div class="ai-card">
+       <h4>
+        📈 Xu hướng mua sắm
+       </h4>
+       <p>
+        Nh&oacute;m "Loyal Customer" t&abreve;ng 15% trong tuần. S&aacute;ch self-help v&agrave; thời trang Gucci l&agrave; combo phổ biến nhất.
+       </p>
+       <span class="tag tag-segment">
+        Loyal +15%
+       </span>
       </div>
+      <div class="ai-card">
+       <h4>
+        🎯 &Dstrok;ề xuất marketing
+       </h4>
+       <p>
+        243 kh&aacute;ch "Window Shopper" chưa mua. Gợi &yacute;: push notification combo "S&aacute;ch + Phụ kiện" giảm 10%.
+       </p>
+       <span class="tag tag-action">
+        Cần h&agrave;nh &dstrok;ộng
+       </span>
+      </div>
+      <div class="ai-card">
+       <h4>
+        ⚠️ Cảnh b&aacute;o tồn kho
+       </h4>
+       <p>
+        "&Dstrok;ắc Nh&acirc;n T&acirc;m" c&ograve;n 12 cuốn (dự kiến hết trong 3 ng&agrave;y). "Gucci Blazer" size M hết h&agrave;ng.
+       </p>
+       <span class="tag tag-alert">
+        Sắp hết h&agrave;ng
+       </span>
+      </div>
+     </div>
     </div>
-
     <!-- BEHAVIOR TABLE -->
     <div class="table-card">
-      <div class="table-top">
-        <h3>Phân Tích Hành Vi Khách Hàng (AI)</h3>
-        <button class="btn-refresh" id="btn-refresh">🔄 Cập nhật từ AI</button>
-      </div>
-      <table class="data-table">
-        <thead><tr><th>Khách hàng</th><th>Phân khúc</th><th>Điểm AI</th><th>Hành vi gần nhất</th><th>Đơn hàng</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Nguyễn Minh Anh</strong><br><span style="font-size:11px;color:var(--color-ash)">user_001</span></td><td><span class="segment-badge seg-loyal">Loyal Customer</span></td><td>0.95 <div class="score-bar"><div class="score-fill" style="width:95%;background:var(--color-emerald)"></div></div></td><td>Mua "Sapiens" + "Gucci Blazer"</td><td style="font-family:var(--font-mono)">12</td></tr>
-          <tr><td><strong>Trần Hữu Nghĩa</strong><br><span style="font-size:11px;color:var(--color-ash)">user_002</span></td><td><span class="segment-badge seg-premium">Premium Buyer</span></td><td>0.88 <div class="score-bar"><div class="score-fill" style="width:88%;background:#533483"></div></div></td><td>Xem Dior Book Tote (3 lần)</td><td style="font-family:var(--font-mono)">8</td></tr>
-          <tr><td><strong>Lê Thị Hương</strong><br><span style="font-size:11px;color:var(--color-ash)">user_003</span></td><td><span class="segment-badge seg-impulse">Impulse Buyer</span></td><td>0.72 <div class="score-bar"><div class="score-fill" style="width:72%;background:var(--color-gold)"></div></div></td><td>Add-to-cart "Atomic Habits"</td><td style="font-family:var(--font-mono)">5</td></tr>
-          <tr><td><strong>Phạm Đức Huy</strong><br><span style="font-size:11px;color:var(--color-ash)">user_004</span></td><td><span class="segment-badge seg-window">Window Shopper</span></td><td>0.34 <div class="score-bar"><div class="score-fill" style="width:34%;background:var(--color-ash)"></div></div></td><td>Browse 15 sản phẩm, 0 mua</td><td style="font-family:var(--font-mono)">0</td></tr>
-          <tr><td><strong>Võ Thanh Tùng</strong><br><span style="font-size:11px;color:var(--color-ash)">user_005</span></td><td><span class="segment-badge seg-price">Price Sensitive</span></td><td>0.51 <div class="score-bar"><div class="score-fill" style="width:51%;background:var(--color-crimson)"></div></div></td><td>Lọc "Giá giảm dần" 5 lần</td><td style="font-family:var(--font-mono)">3</td></tr>
-        </tbody>
-      </table>
+     <div class="table-top">
+      <h3>
+       Ph&acirc;n T&iacute;ch H&agrave;nh Vi Kh&aacute;ch H&agrave;ng (AI)
+      </h3>
+      <button class="btn-refresh" id="btn-refresh">
+       🔄 Cập nhật từ AI
+      </button>
+     </div>
+     <table class="data-table">
+      <thead>
+       <tr>
+        <th>
+         Kh&aacute;ch h&agrave;ng
+        </th>
+        <th>
+         Ph&acirc;n kh&uacute;c
+        </th>
+        <th>
+         &Dstrok;iểm AI
+        </th>
+        <th>
+         H&agrave;nh vi gần nhất
+        </th>
+        <th>
+         &Dstrok;ơn h&agrave;ng
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+       {% for order in orders|slice:":5" %}
+       <tr>
+        <td>
+         <span class="ord-id">
+          #LM{{ order.id }}
+         </span>
+        </td>
+        <td>
+         User_{{ order.customer_id }}
+        </td>
+        <td>
+         {{ order.created_at|slice:":10" }}
+        </td>
+        <td>
+         <span class="ord-price" style="font-family:var(--font-mono); color:var(--color-gold);">
+          {{ order.total_price|vnd }} ₫
+         </span>
+        </td>
+        <td>
+         <span class="segment-badge" style="background:var(--color-silk);color:var(--color-charcoal);">
+          {{ order.status }}
+         </span>
+        </td>
+        <td class="action-cell">
+         <button class="btn-action primary" onclick="updateStatus({{ order.id }}, 'APPROVED')" style="padding:6px 12px; background:var(--color-gold); color:#fff; border:none; border-radius:4px; font-size:12px; cursor:pointer;">
+          Duyệt
+         </button>
+        </td>
+       </tr>
+       {% empty %}
+       <tr>
+        <td colspan="6" style="text-align:center; padding:20px;">
+         Chưa c&oacute; &dstrok;ơn h&agrave;ng n&agrave;o.
+        </td>
+       </tr>
+       {% endfor %}
+      </tbody>
+     </table>
     </div>
-
     <!-- RECENT ORDERS -->
     <div class="table-card">
-      <div class="table-top"><h3>Đơn Hàng Gần Đây</h3></div>
-      <div class="orders-grid">
-        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#1a1a2e,#533483);border-radius:8px"></div><div class="order-info"><h4>#LM260401</h4><p>Gucci Blazer · 32.500.000 ₫</p></div><span class="order-status status-done">Đã giao</span></div>
-        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#2D6A4F,#081C15);border-radius:8px"></div><div class="order-info"><h4>#LM260402</h4><p>Đắc Nhân Tâm x2 · 176.000 ₫</p></div><span class="order-status status-ship">Đang ship</span></div>
-        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:8px"></div><div class="order-info"><h4>#LM260403</h4><p>Dior Book Tote · 59.500.000 ₫</p></div><span class="order-status status-pending">Chờ xử lý</span></div>
-        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#8B4513,#F4A460);border-radius:8px"></div><div class="order-info"><h4>#LM260404</h4><p>Hermès Birkin · 85.000.000 ₫</p></div><span class="order-status status-done">Đã giao</span></div>
+     <div class="table-top">
+      <h3>
+       &Dstrok;ơn H&agrave;ng Gần &Dstrok;&acirc;y
+      </h3>
+     </div>
+     <div class="orders-grid">
+      <div class="order-card">
+       <div class="order-thumb" style="background:linear-gradient(135deg,#1a1a2e,#533483);border-radius:8px">
+       </div>
+       <div class="order-info">
+        <h4>
+         #LM260401
+        </h4>
+        <p>
+         Gucci Blazer &middot; 32.500.000 ₫
+        </p>
+       </div>
+       <span class="order-status status-done">
+        &Dstrok;&atilde; giao
+       </span>
       </div>
+      <div class="order-card">
+       <div class="order-thumb" style="background:linear-gradient(135deg,#2D6A4F,#081C15);border-radius:8px">
+       </div>
+       <div class="order-info">
+        <h4>
+         #LM260402
+        </h4>
+        <p>
+         &Dstrok;ắc Nh&acirc;n T&acirc;m x2 &middot; 176.000 ₫
+        </p>
+       </div>
+       <span class="order-status status-ship">
+        &Dstrok;ang ship
+       </span>
+      </div>
+      <div class="order-card">
+       <div class="order-thumb" style="background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:8px">
+       </div>
+       <div class="order-info">
+        <h4>
+         #LM260403
+        </h4>
+        <p>
+         Dior Book Tote &middot; 59.500.000 ₫
+        </p>
+       </div>
+       <span class="order-status status-pending">
+        Chờ xử l&yacute;
+       </span>
+      </div>
+      <div class="order-card">
+       <div class="order-thumb" style="background:linear-gradient(135deg,#8B4513,#F4A460);border-radius:8px">
+       </div>
+       <div class="order-info">
+        <h4>
+         #LM260404
+        </h4>
+        <p>
+         Herm&egrave;s Birkin &middot; 85.000.000 ₫
+        </p>
+       </div>
+       <span class="order-status status-done">
+        &Dstrok;&atilde; giao
+       </span>
+      </div>
+     </div>
     </div>
+   </div>
+   <!-- SECTION ORDERS -->
+   <div class="content-section" id="section-orders" style="display:none;">
+    <div class="table-top">
+     <h3 style="font-size:24px;margin-bottom:20px;">
+      Quản L&yacute; &Dstrok;ơn H&agrave;ng (Tất cả)
+     </h3>
+    </div>
+    <div class="table-card">
+     <table class="data-table">
+      <thead>
+       <tr>
+        <th>
+         M&atilde; &Dstrok;H
+        </th>
+        <th>
+         M&atilde; Kh&aacute;ch
+        </th>
+        <th>
+         Ng&agrave;y &Dstrok;ặt
+        </th>
+        <th>
+         Tổng Tiền
+        </th>
+        <th>
+         Trạng Th&aacute;i
+        </th>
+        <th>
+         H&agrave;nh &Dstrok;ộng
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+       {% for order in orders %}
+       <tr>
+        <td>
+         <span class="ord-id">
+          #LM{{ order.id }}
+         </span>
+        </td>
+        <td>
+         {{ order.customer_id }}
+        </td>
+        <td>
+         {{ order.created_at|slice:":10" }}
+        </td>
+        <td>
+         <span class="ord-price" style="font-family:var(--font-mono); color:var(--color-gold);">
+          {{ order.total_price|vnd }} ₫
+         </span>
+        </td>
+        <td>
+         <span class="segment-badge" style="background:var(--color-silk);color:var(--color-charcoal);">
+          {{ order.status }}
+         </span>
+        </td>
+        <td class="action-cell">
+         <button class="btn-action primary" onclick="updateStatus({{ order.id }}, 'APPROVED')" style="padding:6px 12px; background:var(--color-gold); color:#fff; border:none; border-radius:4px; font-size:12px; cursor:pointer;">
+          Duyệt
+         </button>
+        </td>
+       </tr>
+       {% empty %}
+       <tr>
+        <td colspan="6" style="text-align:center; padding:20px;">
+         Chưa c&oacute; &dstrok;ơn h&agrave;ng n&agrave;o.
+        </td>
+       </tr>
+       {% endfor %}
+      </tbody>
+     </table>
+    </div>
+   </div>
+   <!-- SECTION BOOKS -->
+   <div class="content-section" id="section-books" style="display:none;">
+    <div class="table-top">
+     <h3 style="font-size:24px;margin-bottom:20px;">
+      Kho S&aacute;ch
+     </h3>
+    </div>
+    <div class="table-card">
+     <table class="data-table">
+      <thead>
+       <tr>
+        <th>
+         M&atilde; S&aacute;ch
+        </th>
+        <th>
+         T&ecirc;n S&aacute;ch
+        </th>
+        <th>
+         T&aacute;c Giả
+        </th>
+        <th>
+         Gi&aacute; B&aacute;n
+        </th>
+        <th>
+         Tồn Kho
+        </th>
+        <th>
+         H&agrave;nh &Dstrok;ộng
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+       {% for book in books %}
+       <tr>
+        <td>
+         <span class="ord-id">
+          #B{{ book.id }}
+         </span>
+        </td>
+        <td>
+         <strong>
+          {{ book.title }}
+         </strong>
+        </td>
+        <td>
+         {{ book.author }}
+        </td>
+        <td>
+         <span class="ord-price" style="font-family:var(--font-mono); color:var(--color-gold);">
+          {{ book.price|vnd }} ₫
+         </span>
+        </td>
+        <td>
+         {% if book.stock < 10 %}
+         <span style="color:red;font-weight:bold;">
+          {{ book.stock }}
+         </span>
+         {% else %}{{ book.stock }}{% endif %}
+        </td>
+        <td>
+         <button class="btn-action" onclick="alert('T&iacute;nh n&abreve;ng &dstrok;ang ph&aacute;t triển')" style="padding:6px 12px; background:var(--color-charcoal); color:#fff; border:none; border-radius:4px; font-size:12px; cursor:pointer;">
+          Sửa
+         </button>
+        </td>
+       </tr>
+       {% empty %}
+       <tr>
+        <td colspan="6" style="text-align:center; padding:20px;">
+         Kho trống.
+        </td>
+       </tr>
+       {% endfor %}
+      </tbody>
+     </table>
+    </div>
+   </div>
+   <!-- SECTION CLOTHES -->
+   <div class="content-section" id="section-clothes" style="display:none;">
+    <div class="table-top">
+     <h3 style="font-size:24px;margin-bottom:20px;">
+      Kho Thời Trang
+     </h3>
+    </div>
+    <div class="table-card">
+     <table class="data-table">
+      <thead>
+       <tr>
+        <th>
+         M&atilde; SP
+        </th>
+        <th>
+         T&ecirc;n Sản Phẩm
+        </th>
+        <th>
+         Thương Hiệu
+        </th>
+        <th>
+         Size
+        </th>
+        <th>
+         Gi&aacute;
+        </th>
+        <th>
+         Tồn Kho
+        </th>
+        <th>
+         H&agrave;nh &Dstrok;ộng
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+       {% for cloth in clothes %}
+       <tr>
+        <td>
+         <span class="ord-id">
+          #C{{ cloth.id }}
+         </span>
+        </td>
+        <td>
+         <strong>
+          {{ cloth.name }}
+         </strong>
+        </td>
+        <td>
+         {{ cloth.brand }}
+        </td>
+        <td>
+         {{ cloth.size }}
+        </td>
+        <td>
+         <span class="ord-price" style="font-family:var(--font-mono); color:var(--color-gold);">
+          {{ cloth.price|vnd }} ₫
+         </span>
+        </td>
+        <td>
+         {% if cloth.stock < 10 %}
+         <span style="color:red;font-weight:bold;">
+          {{ cloth.stock }}
+         </span>
+         {% else %}{{ cloth.stock }}{% endif %}
+        </td>
+        <td>
+         <button class="btn-action" onclick="alert('T&iacute;nh n&abreve;ng &dstrok;ang ph&aacute;t triển')" style="padding:6px 12px; background:var(--color-charcoal); color:#fff; border:none; border-radius:4px; font-size:12px; cursor:pointer;">
+          Sửa
+         </button>
+        </td>
+       </tr>
+       {% empty %}
+       <tr>
+        <td colspan="7" style="text-align:center; padding:20px;">
+         Kho trống.
+        </td>
+       </tr>
+       {% endfor %}
+      </tbody>
+     </table>
+    </div>
+   </div>
   </div>
-
   <script>
-    /* REVENUE CHART */
+   /* REVENUE CHART */
     new Chart(document.getElementById('revenueChart'),{
       type:'line',
       data:{
@@ -258,5 +777,66 @@
       setTimeout(()=>{this.textContent='🔄 Cập nhật từ AI'},2000);
     });
   </script>
-</body>
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
+      const navItems = document.querySelectorAll(".nav-item");
+      const sections = document.querySelectorAll(".content-section");
+
+      navItems.forEach(item => {
+        item.addEventListener("click", () => {
+          const target = item.getAttribute("data-target");
+          if (!target) return; // Ignore logout or others
+
+          // Update active class on nav
+          navItems.forEach(n => n.classList.remove("active"));
+          item.classList.add("active");
+
+          // Update section visibility
+          sections.forEach(sec => {
+            if (sec.id === 'section-' + target) {
+              sec.style.display = "block";
+            } else {
+              sec.style.display = "none";
+            }
+          });
+        });
+      });
+    });
+
+    async function refreshAI() {
+      const aiBtn = document.querySelector('button[onclick="refreshAI()"]');
+      const originalText = aiBtn ? aiBtn.innerText : "Refresh";
+      if (aiBtn) aiBtn.innerText = 'Đang phân tích...';
+      try {
+         // Lấy lịch sử mua hàng ví dụ
+        const response = await fetch('http://localhost:8020/analyze-behavior', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            customer_id: 1, 
+            history: [
+              {"item_id": 101, "category": "books"},
+              {"item_id": 202, "category": "clothes"}
+            ]
+          })
+        });
+        
+        const data = await response.json();
+        const segmentsStr = Array.isArray(data.segments) ? data.segments.join(", ") : data.segments;
+        
+        const badge = document.querySelector('.ai-profile .segment-badge');
+        if (badge) badge.innerText = segmentsStr;
+        
+        const desc = document.querySelector('.ai-profile .ai-desc');
+        if (desc) desc.innerText = 'Dự đoán: ' + data.prediction;
+        
+      } catch (err) {
+        console.error(err);
+        alert('Lỗi kết nối đến AI Service (localhost:8020)');
+      } finally {
+        if (aiBtn) aiBtn.innerText = originalText;
+      }
+    }
+  </script>
+ </body>
 </html>

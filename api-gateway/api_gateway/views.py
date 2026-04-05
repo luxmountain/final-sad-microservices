@@ -365,6 +365,9 @@ def universal_proxy(request, service_name, path):
         elif request.method == 'PUT':
             payload = json.loads(request.body) if request.body else {}
             res = requests.put(target_url, headers=headers, json=payload)
+        elif request.method == 'PATCH':
+            payload = json.loads(request.body) if request.body else {}
+            res = requests.patch(target_url, headers=headers, json=payload)
         elif request.method == 'DELETE':
             res = requests.delete(target_url, headers=headers)
         else:
@@ -483,9 +486,18 @@ def staff_dashboard(request):
         categories = []
 
     # 4. Ném toàn bộ Data ra cho cái file HTML nó hiển thị
+    total_revenue = sum(float(o.get('total_price', 0)) for o in orders)
+    low_stock_books = sum(1 for b in books if int(b.get('stock', 0)) < 10)
+    low_stock_clothes = sum(1 for c in clothes if int(c.get('stock', 0)) < 10)
+    low_stock_total = low_stock_books + low_stock_clothes
+    total_items = len(books) + len(clothes)
+
     return render(request, 'staff_dashboard.html', {
-        'orders': orders, 
-        'books': books, 
-        'clothes': clothes, 
-        'categories': categories
+        'orders': orders,
+        'books': books,
+        'clothes': clothes,
+        'categories': categories,
+        'total_revenue': total_revenue,
+        'low_stock_total': low_stock_total,
+        'total_items': total_items,
     })
