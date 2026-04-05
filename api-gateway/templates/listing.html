@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh Sách Sản Phẩm — LUMIÈRE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);font-size:15px;line-height:1.6;color:var(--color-charcoal);background:var(--color-ivory);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.2}
+    a{text-decoration:none;color:inherit;transition:var(--transition)}
+    button{font-family:var(--font-body);cursor:pointer;border:none;outline:none;transition:var(--transition)}
+    .container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+    /* NAVBAR */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(248,245,240,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--color-silk)}
+    .navbar.scrolled{box-shadow:var(--shadow-subtle)}
+    .navbar-inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 24px;height:72px}
+    .nav-logo{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:3px}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{font-size:14px;font-weight:500;letter-spacing:0.5px;color:var(--color-ash);text-transform:uppercase}
+    .nav-links a:hover{color:var(--color-gold)}
+    .nav-icons{display:flex;align-items:center;gap:20px}
+    .nav-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--color-charcoal);cursor:pointer;position:relative}
+    .nav-icon:hover{background:var(--color-silk)}
+    .nav-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+    .cart-badge{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:var(--color-gold);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+    /* BREADCRUMB */
+    .breadcrumb{padding:96px 0 16px;font-size:13px;color:var(--color-ash)}
+    .breadcrumb a:hover{color:var(--color-gold)}
+
+    /* LISTING LAYOUT */
+    .listing-layout{display:flex;gap:32px;padding-bottom:64px}
+
+    /* SIDEBAR */
+    .sidebar{width:260px;flex-shrink:0}
+    .sidebar h3{font-size:18px;margin-bottom:24px}
+    .filter-group{margin-bottom:24px;border-bottom:1px solid var(--color-silk);padding-bottom:20px}
+    .filter-title{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:600;cursor:pointer;padding:8px 0;color:var(--color-charcoal)}
+    .filter-title::after{content:'−';font-size:18px;color:var(--color-ash)}
+    .filter-title.collapsed::after{content:'+'}
+    .filter-body{padding-top:12px}
+    .filter-body.hidden{display:none}
+    .filter-check{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:14px;cursor:pointer}
+    .filter-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--color-gold);cursor:pointer}
+
+    /* RANGE SLIDER */
+    .range-display{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:13px;color:var(--color-gold);margin-bottom:8px}
+    .range-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:var(--color-silk);border-radius:3px;outline:none;margin:8px 0}
+    .range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--color-gold);cursor:pointer;border:2px solid #fff;box-shadow:var(--shadow-subtle)}
+
+    /* STAR FILTER */
+    .star-filter{display:flex;flex-direction:column;gap:6px}
+    .star-option{display:flex;align-items:center;gap:8px;padding:4px 0;cursor:pointer;font-size:14px;color:var(--color-ash)}
+    .star-option:hover{color:var(--color-gold)}
+    .star-option.active{color:var(--color-gold);font-weight:600}
+    .star-option .stars{color:var(--color-gold);letter-spacing:1px}
+
+    .filter-actions{display:flex;gap:12px;margin-top:8px}
+    .btn-apply{padding:10px 24px;background:var(--color-gold);color:#fff;font-size:13px;font-weight:600;border-radius:var(--radius-sm);letter-spacing:0.5px}
+    .btn-apply:hover{background:#b8973f}
+    .btn-clear{padding:10px;font-size:13px;color:var(--color-ash);background:transparent}
+    .btn-clear:hover{color:var(--color-crimson)}
+
+    /* MAIN CONTENT */
+    .listing-main{flex:1}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--color-silk)}
+    .toolbar-count{font-size:14px;color:var(--color-ash)}
+    .toolbar-right{display:flex;align-items:center;gap:16px}
+    .sort-select{padding:8px 12px;border:1px solid var(--color-silk);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;background:#fff;outline:none;cursor:pointer}
+    .view-toggle{display:flex;gap:4px}
+    .view-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:transparent;color:var(--color-ash)}
+    .view-btn.active{background:var(--color-charcoal);color:#fff}
+    .view-btn:hover{background:var(--color-silk)}
+    .view-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+    /* PRODUCT GRID */
+    .product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .product-grid.list-view{grid-template-columns:1fr}
+    .product-grid.list-view .p-card{display:flex;flex-direction:row}
+    .product-grid.list-view .p-card-img{width:200px;height:200px;flex-shrink:0}
+    .product-grid.list-view .p-card-body{padding:20px}
+
+    .p-card{background:#fff;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-subtle);transition:var(--transition);cursor:pointer;position:relative}
+    .p-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+    .p-card-img{height:260px;position:relative;overflow:hidden}
+    .p-card-badge{position:absolute;top:12px;left:12px;padding:4px 10px;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;border-radius:var(--radius-sm);color:#fff}
+    .badge-bs{background:var(--color-gold)}
+    .badge-new{background:var(--color-emerald)}
+    .badge-sale{background:var(--color-crimson)}
+    .p-card-heart{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;opacity:0;transition:var(--transition);cursor:pointer}
+    .p-card:hover .p-card-heart{opacity:1}
+    .p-card-heart svg{width:18px;height:18px;stroke:var(--color-charcoal);fill:none;stroke-width:1.8}
+    .p-card-body{padding:16px}
+    .p-card-cat{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--color-ash);margin-bottom:4px}
+    .p-card-title{font-family:var(--font-display);font-size:16px;margin-bottom:6px;line-height:1.3}
+    .p-card-rating{font-size:12px;color:var(--color-gold);margin-bottom:8px}
+    .p-card-price-row{display:flex;align-items:center;gap:8px}
+    .p-card-price{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--color-gold)}
+    .p-card-price-old{font-family:var(--font-mono);font-size:12px;color:var(--color-ash);text-decoration:line-through}
+    .p-card-add{margin-top:12px;width:100%;padding:10px;background:var(--color-obsidian);color:#fff;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;border-radius:var(--radius-sm)}
+    .p-card-add:hover{background:var(--color-gold)}
+
+    /* PAGINATION */
+    .pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:40px}
+    .page-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:14px;font-weight:500;background:#fff;color:var(--color-charcoal);border:1px solid var(--color-silk)}
+    .page-btn:hover{border-color:var(--color-gold);color:var(--color-gold)}
+    .page-btn.active{background:var(--color-gold);color:#fff;border-color:var(--color-gold)}
+    .page-btn.nav-arrow{font-size:18px}
+
+    /* FOOTER */
+    .footer{background:var(--color-obsidian);color:rgba(248,245,240,0.7);padding:64px 0 32px;margin-top:64px}
+    .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .footer-brand h3{font-family:var(--font-display);font-size:22px;color:var(--color-ivory);letter-spacing:3px;margin-bottom:12px}
+    .footer-brand p{font-size:14px;line-height:1.7}
+    .footer h4{font-family:var(--font-body);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-ivory);margin-bottom:20px}
+    .footer ul{list-style:none}.footer li{margin-bottom:10px}.footer a{font-size:14px;color:rgba(248,245,240,0.5)}.footer a:hover{color:var(--color-gold)}
+    .footer-bottom{border-top:1px solid rgba(248,245,240,0.1);padding-top:24px;text-align:center;font-size:13px;color:rgba(248,245,240,0.3)}
+
+    /* CHAT */
+    .chat-bubble{position:fixed;bottom:24px;right:24px;z-index:9999;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--color-gold),#b8973f);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(201,168,76,0.4);transition:var(--transition)}
+    .chat-bubble:hover{transform:scale(1.08)}.chat-bubble svg{width:26px;height:26px;fill:#fff}
+    .chat-bubble-label{position:absolute;right:72px;top:50%;transform:translateY(-50%);background:var(--color-charcoal);color:#fff;padding:6px 14px;border-radius:8px;font-size:13px;white-space:nowrap;opacity:0;transition:var(--transition);pointer-events:none}
+    .chat-bubble:hover .chat-bubble-label{opacity:1}
+    .chat-bubble-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--color-gold);opacity:0;animation:chatPulse 2s ease-out infinite}
+    @keyframes chatPulse{0%{transform:scale(1);opacity:0.6}100%{transform:scale(1.5);opacity:0}}
+    .chat-panel{position:fixed;bottom:96px;right:24px;z-index:9999;width:380px;height:520px;border-radius:var(--radius-lg);background:#fff;box-shadow:0 8px 40px rgba(0,0,0,0.15);display:none;flex-direction:column;overflow:hidden;animation:chatSlideUp 0.3s ease}
+    .chat-panel.open{display:flex}
+    @keyframes chatSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .chat-header{background:var(--color-obsidian);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+    .chat-header-info h3{font-family:var(--font-display);font-size:16px;color:var(--color-ivory);margin-bottom:2px}
+    .chat-header-info small{font-size:11px;color:var(--color-gold)}
+    .chat-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);color:var(--color-ivory);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:none}
+    .chat-close:hover{background:rgba(255,255,255,0.2)}
+    .chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+    .chat-msg{display:flex;gap:8px;max-width:85%}.chat-msg.bot{align-self:flex-start}.chat-msg.user{align-self:flex-end;flex-direction:row-reverse}
+    .chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--color-obsidian);color:var(--color-gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:14px;font-weight:700;flex-shrink:0}
+    .chat-msg.user .chat-avatar{background:var(--color-gold);color:#fff}
+    .chat-msg-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5}
+    .chat-msg.bot .chat-msg-bubble{background:var(--color-cream);color:var(--color-charcoal);border-bottom-left-radius:4px}
+    .chat-msg.user .chat-msg-bubble{background:var(--color-gold);color:#fff;border-bottom-right-radius:4px}
+    .chat-typing{display:flex;gap:4px;padding:4px 0;align-items:center}.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--color-ash);animation:typingDot 1.4s infinite}
+    .chat-typing span:nth-child(2){animation-delay:0.2s}.chat-typing span:nth-child(3){animation-delay:0.4s}
+    @keyframes typingDot{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+    .chat-quick-replies{padding:0 16px 8px;display:flex;gap:8px;flex-wrap:wrap}
+    .chat-quick-btn{padding:6px 14px;border:1px solid var(--color-silk);border-radius:50px;font-size:12px;color:var(--color-charcoal);background:#fff;cursor:pointer}
+    .chat-quick-btn:hover{border-color:var(--color-gold);color:var(--color-gold)}
+    .chat-input-area{padding:12px 16px;border-top:1px solid var(--color-silk);display:flex;gap:8px}
+    .chat-input{flex:1;padding:10px 14px;border:1px solid var(--color-silk);border-radius:var(--radius-md);font-family:var(--font-body);font-size:14px;outline:none;background:var(--color-ivory)}
+    .chat-input:focus{border-color:var(--color-gold)}
+    .chat-send{width:40px;height:40px;border-radius:var(--radius-md);background:var(--color-gold);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+    .chat-send:hover{background:#b8973f}.chat-send svg{width:18px;height:18px;fill:#fff}
+
+    @media(max-width:1024px){.product-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:768px){.listing-layout{flex-direction:column}.sidebar{width:100%}.product-grid{grid-template-columns:repeat(2,1fr)}.nav-links{display:none}.footer-grid{grid-template-columns:1fr;gap:32px}.chat-panel{width:calc(100vw - 32px);right:16px;bottom:88px;height:60vh}}
+    @media(max-width:480px){.product-grid{grid-template-columns:1fr}}
+    .fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}.fade-in.visible{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar"><div class="navbar-inner">
+    <a href="/" class="nav-logo">LUMIÈRE</a>
+    <ul class="nav-links"><li><a href="/listing/">Sách</a></li><li><a href="/listing/">Thời Trang</a></li><li><a href="/#about">Về Chúng Tôi</a></li></ul>
+    <div class="nav-icons">
+      <div class="nav-icon" title="Tìm kiếm" onclick="location.href='/listing/'"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="nav-icon" title="Yêu thích"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div class="nav-icon" title="Giỏ hàng" onclick="location.href='/cart/'"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-badge">3</span></div>
+      <div class="nav-icon" title="Tài khoản" onclick="location.href='/auth/'"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    </div>
+  </div></nav>
+
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Trang chủ</a> <span>›</span> <span style="color:var(--color-charcoal)">Tất cả sản phẩm</span></div>
+
+    <div class="listing-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <h3>Bộ Lọc</h3>
+        <div class="filter-group">
+          <div class="filter-title" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden')">Danh mục Sách</div>
+          <div class="filter-body">
+            {% for cat in categories %}
+            <label class="filter-check"><input type="checkbox" class="cat-filter" value="{{ cat.name }}"> {{ cat.name }}</label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-title" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden')">Thương hiệu Thời trang</div>
+          <div class="filter-body">
+            {% for brand in brands %}
+            <label class="filter-check"><input type="checkbox" class="brand-filter" value="{{ brand }}"> {{ brand }}</label>
+            {% endfor %}
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <div class="listing-main">
+        <div class="toolbar">
+          <span class="toolbar-count">Hiển thị <strong>12</strong> sản phẩm</span>
+          <div class="toolbar-right">
+            <select class="sort-select" id="sort-select">
+              <option>Mới nhất</option><option>Giá tăng dần</option><option>Giá giảm dần</option><option>Bán chạy</option>
+            </select>
+            <div class="view-toggle">
+              <button class="view-btn active" id="grid-view"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+              <button class="view-btn" id="list-view"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-grid" id="product-grid">
+          <!-- Rendered via JS -->
+        </div>
+
+        <div class="pagination" id="pagination">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer"><div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3>LUMIÈRE</h3><p>Nơi trí tuệ hòa quyện cùng phong cách.</p></div>
+      <div><h4>Chăm Sóc KH</h4><ul><li><a href="#">Liên hệ hỗ trợ</a></li><li><a href="#">Theo dõi đơn hàng</a></li></ul></div>
+      <div><h4>Chính Sách</h4><ul><li><a href="#">Đổi trả & Hoàn tiền</a></li><li><a href="#">Vận chuyển</a></li></ul></div>
+      <div><h4>Kết Nối</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2026 LUMIÈRE. All rights reserved.</div>
+  </div></footer>
+
+  <!-- CHAT -->
+  <div class="chat-bubble" id="chat-bubble"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="chat-bubble-label">Tư vấn AI</span><div class="chat-bubble-pulse"></div></div>
+  <div class="chat-panel" id="chat-panel">
+    <div class="chat-header"><div class="chat-header-info"><h3>Trợ Lý LUMIÈRE</h3><small>Powered by AI</small></div><button class="chat-close" id="chat-close">&times;</button></div>
+    <div class="chat-messages" id="chat-messages"><div class="chat-msg bot"><div class="chat-avatar">L</div><div class="chat-msg-bubble">Xin chào! Bạn đang tìm sách hay thời trang? Tôi có thể giúp bạn lọc và gợi ý sản phẩm phù hợp.</div></div></div>
+    <div class="chat-quick-replies" id="chat-quick-replies">
+      <button class="chat-quick-btn" data-msg="Gợi ý sách hay cho tôi">Gợi ý sách</button>
+      <button class="chat-quick-btn" data-msg="Thời trang nào đang giảm giá?">Sale?</button>
+      <button class="chat-quick-btn" data-msg="Có gì mới trong tuần này?">Hàng mới</button>
+    </div>
+    <div class="chat-input-area"><input type="text" class="chat-input" id="chat-input" placeholder="Nhập câu hỏi..." autocomplete="off"><button class="chat-send" id="chat-send"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
+  </div>
+
+  <script>
+    const track=(e,d)=>{console.log('%c[BEHAVIOR]','color:#2D6A4F;font-weight:bold',e,d)};
+    track('page_view',{page:'listing',timestamp:Date.now()});
+
+    // Navbar scroll
+    window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)});
+
+    // Data and State
+    const allProducts = {{ products_json|safe }};
+    let filteredProducts = [...allProducts];
+    let currentPage = 1;
+    const itemsPerPage = 9;
+
+    function formatPrice(price) {
+      if (!price) return '0 ₫';
+      // Convert to number, check if ends in .00, remove it
+      let p = parseFloat(price);
+      return p.toLocaleString('vi-VN') + ' ₫';
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '';
+      
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const visibleProducts = filteredProducts.slice(start, end);
+
+      if (visibleProducts.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--color-ash);">Không tìm thấy sản phẩm phù hợp.</p>';
+        document.querySelector('.toolbar-count').innerHTML = `Hiển thị <strong>0</strong> sản phẩm`;
+        renderPagination();
+        return;
+      }
+
+      visibleProducts.forEach(p => {
+        const isBook = p.type === 'book';
+        const fallbackBg = isBook ? 'linear-gradient(135deg,#2D6A4F,#1B4332)' : 'linear-gradient(135deg,#1a1a2e,#16213e)';
+        const imgStyle = p.image_url ? `background: url(${p.image_url}) center/cover no-repeat;` : `background: ${fallbackBg};`;
+        
+        const card = document.createElement('div');
+        card.className = 'p-card fade-in visible';
+        card.dataset.id = p.product_id || p.id;
+        card.dataset.name = p.title;
+        card.dataset.category = p.category_name;
+        // Direct link to product_detail logic in gateway
+        card.onclick = () => location.href = `/product/${p.product_id || p.id}/`;
+
+        card.innerHTML = `
+          <div class="p-card-img" style="${imgStyle}">
+            ${p.stock > 0 ? '' : '<span class="p-card-badge" style="background:var(--color-ash)">Hết hàng</span>'}
+            <div class="p-card-heart"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          </div>
+          <div class="p-card-body">
+            <p class="p-card-cat">${p.category_name || (isBook ? 'Sách' : 'Thời Trang')}</p>
+            <h4 class="p-card-title">${p.title}</h4>
+            <div class="p-card-rating">★★★★★ 5.0</div>
+            <div class="p-card-price-row">
+              <span class="p-card-price">${formatPrice(p.price)}</span>
+            </div>
+            <button class="p-card-add" data-id="${p.product_id || p.id}" data-price="${p.price}">Thêm vào giỏ</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Update count & re-bind
+      document.querySelector('.toolbar-count').innerHTML = `Hiển thị <strong>${filteredProducts.length}</strong> sản phẩm`;
+      renderPagination();
+      bindCardEvents();
+    }
+
+    function renderPagination() {
+      const pag = document.getElementById('pagination');
+      pag.innerHTML = '';
+      const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+      if (totalPages <= 1) return;
+
+      pag.innerHTML += `<button class="page-btn nav-arrow" onclick="changePage(${currentPage - 1})">‹</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        pag.innerHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+      }
+      pag.innerHTML += `<button class="page-btn nav-arrow" onclick="changePage(${currentPage + 1})">›</button>`;
+    }
+
+    function changePage(page) {
+      const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+      renderProducts();
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+    }
+
+    function applyFilters() {
+      const selectedCats = Array.from(document.querySelectorAll('.cat-filter:checked')).map(cb => cb.value);
+      const selectedBrands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
+
+      filteredProducts = allProducts.filter(p => {
+        let passCat = selectedCats.length === 0 || (p.type === 'book' && selectedCats.includes(p.category_name));
+        let passBrand = selectedBrands.length === 0 || (p.type === 'cloth' && selectedBrands.includes(p.category_name));
+        
+        // If they checked BOTH a book category and a clothes brand, show matches for either
+        if (selectedCats.length > 0 && selectedBrands.length > 0) {
+          if (!passCat && !passBrand) return false;
+        } else if (selectedCats.length > 0) {
+          if (!passCat) return false;
+        } else if (selectedBrands.length > 0) {
+          if (!passBrand) return false;
+        }
+
+        return true;
+      });
+
+      currentPage = 1; // Reset to first page
+      renderProducts();
+    }
+
+    // Bind event listeners to checkboxes
+    document.querySelectorAll('.cat-filter, .brand-filter').forEach(cb => {
+      cb.addEventListener('change', applyFilters);
+    });
+
+    function bindCardEvents() {
+      document.querySelectorAll('.p-card-add').forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          track('add_to_cart',{id:btn.dataset.id,price:btn.dataset.price});
+          btn.textContent='✓ Đã thêm';btn.style.background='var(--color-emerald)';
+          setTimeout(()=>{btn.textContent='Thêm vào giỏ';btn.style.background='var(--color-obsidian)'},1500);
+        });
+      });
+      document.querySelectorAll('.p-card').forEach(card=>{
+        card.addEventListener('click',()=>{track('product_click',{id:card.dataset.id,name:card.dataset.name,category:card.dataset.category})});
+      });
+    }
+
+    // Initial render
+    renderProducts();
+
+    // Grid/List view
+    document.getElementById('grid-view').addEventListener('click',()=>{
+      document.getElementById('product-grid').classList.remove('list-view');
+      document.getElementById('grid-view').classList.add('active');
+      document.getElementById('list-view').classList.remove('active');
+    });
+    document.getElementById('list-view').addEventListener('click',()=>{
+      document.getElementById('product-grid').classList.add('list-view');
+      document.getElementById('list-view').classList.add('active');
+      document.getElementById('grid-view').classList.remove('active');
+    });
+
+
+
+    // Section tracking
+    const sObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){track('section_view',{section:'product_grid'});sObs.unobserve(e.target)}})},{threshold:0.3});
+    sObs.observe(document.getElementById('product-grid'));
+
+    // Fade in
+    const fadeEls=document.querySelectorAll('.fade-in');
+    const fadeObs=new IntersectionObserver(entries=>{entries.forEach((entry,i)=>{if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add('visible'),i*80);fadeObs.unobserve(entry.target)}})},{threshold:0.1});
+    fadeEls.forEach(el=>fadeObs.observe(el));
+
+    // Chat
+    (function(){
+      const AI_API='http://localhost:8020',API_KEY='bookstore-ai-secret-key-2024';
+      const userId=localStorage.getItem('lumiere_uid')||('user_'+Date.now());localStorage.setItem('lumiere_uid',userId);
+      const bubble=document.getElementById('chat-bubble'),panel=document.getElementById('chat-panel'),closeBtn=document.getElementById('chat-close'),input=document.getElementById('chat-input'),sendBtn=document.getElementById('chat-send'),msgs=document.getElementById('chat-messages'),qr=document.getElementById('chat-quick-replies');
+      bubble.addEventListener('click',()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))input.focus()});
+      closeBtn.addEventListener('click',()=>panel.classList.remove('open'));
+      function addMsg(t,u){const d=document.createElement('div');d.className='chat-msg '+(u?'user':'bot');d.innerHTML=`<div class="chat-avatar">${u?'B':'L'}</div><div class="chat-msg-bubble">${t}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+      function showTyping(){const d=document.createElement('div');d.className='chat-msg bot';d.id='typing-indicator';d.innerHTML='<div class="chat-avatar">L</div><div class="chat-msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>';msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+      function hideTyping(){const el=document.getElementById('typing-indicator');if(el)el.remove()}
+      async function send(msg){if(!msg.trim())return;addMsg(msg,true);input.value='';qr.style.display='none';showTyping();track('chat_message',{user_id:userId,message:msg});try{const r=await fetch(AI_API+'/chat',{method:'POST',headers:{'Content-Type':'application/json','X-API-Key':API_KEY},body:JSON.stringify({user_id:userId,message:msg})});const d=await r.json();hideTyping();addMsg(d.answer||d.detail||'Xin lỗi, có lỗi xảy ra.',false)}catch(e){hideTyping();addMsg('Không kết nối được AI. Vui lòng thử lại.',false)}}
+      sendBtn.addEventListener('click',()=>send(input.value));input.addEventListener('keydown',e=>{if(e.key==='Enter')send(input.value)});
+      document.querySelectorAll('.chat-quick-btn').forEach(b=>{b.addEventListener('click',()=>send(b.dataset.msg))});
+    })();
+  </script>
+</body>
+</html>

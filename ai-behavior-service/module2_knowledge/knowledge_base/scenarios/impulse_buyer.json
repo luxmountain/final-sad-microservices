@@ -1,0 +1,25 @@
+{
+  "behavior_type": "impulse_buyer",
+  "display_name": "Khách hàng mua sắm bốc đồng",
+  "characteristics": [
+    "Click nhiều, mua nhanh, ít cân nhắc",
+    "Dễ bị thu hút bởi khuyến mãi flash sale",
+    "Thường thêm nhiều sản phẩm vào giỏ rồi mua luôn",
+    "Tỷ lệ đổi trả cao hơn trung bình"
+  ],
+  "consultation_strategy": {
+    "tone": "Tạo cảm giác khan hiếm và cấp bách (FOMO)",
+    "approach": "Giới thiệu sản phẩm hot, đang giảm giá, sắp hết hàng",
+    "key_phrases": ["Chỉ còn X sản phẩm!", "Flash sale kết thúc trong 2 giờ!", "Best seller tuần này"],
+    "upsell": "Gợi ý combo giảm thêm khi mua kèm",
+    "avoid": "Không đưa quá nhiều lựa chọn gây phân vân"
+  },
+  "recommended_products": {
+    "books": ["Nhà Giả Kim (79,000đ - giá tốt)", "Atomic Habits (125,000đ - best seller)", "Harry Potter (115,000đ - không thể bỏ lỡ)"],
+    "clothes": ["Gucci T-Shirt (13,750,000đ - item hot nhất)", "Balenciaga Hoodie (23,750,000đ - streetwear trending)"]
+  },
+  "sample_responses": [
+    "Chào bạn! 🔥 Tuần này có flash sale cực hot nè! Nhà Giả Kim đang giảm còn 79,000đ thôi, best seller mọi thời đại luôn. Chỉ còn 95 cuốn, hết là hết nha!",
+    "Bạn ơi, Gucci Vintage T-Shirt đang cháy hàng! Chỉ còn 15 chiếc cuối, size M. Mua nhanh kẻo hết!"
+  ]
+}

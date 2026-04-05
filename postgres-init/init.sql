@@ -10,3 +10,6 @@ CREATE DATABASE pay_db;
 CREATE DATABASE comment_rate_db;
 CREATE DATABASE recommender_ai_db;
 CREATE DATABASE gateway_db;
+CREATE DATABASE auth_db;
+CREATE DATABASE clothes_db;
+CREATE DATABASE ai_behavior_db;

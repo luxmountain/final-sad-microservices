@@ -1,0 +1,25 @@
+{
+  "behavior_type": "loyal_customer",
+  "display_name": "Khách hàng trung thành",
+  "characteristics": [
+    "Mua hàng đều đặn, tần suất cao",
+    "Thường mua cùng thể loại yêu thích",
+    "Tỷ lệ đổi trả rất thấp",
+    "Hành vi ổn định qua nhiều phiên"
+  ],
+  "consultation_strategy": {
+    "tone": "Thân thiện, cá nhân hóa, gọi tên, nhớ sở thích",
+    "approach": "Gợi ý sản phẩm mới trong thể loại yêu thích, thông báo sách mới ra",
+    "key_phrases": ["Dành riêng cho bạn", "Mới ra mắt tuần này", "Dựa trên sở thích của bạn"],
+    "upsell": "Giới thiệu hạng thành viên cao hơn, combo loyalty",
+    "avoid": "Không gợi ý quá khác biệt với sở thích đã biết"
+  },
+  "recommended_products": {
+    "books": ["Sách mới cùng tác giả yêu thích", "Pre-order sách sắp ra mắt", "Limited edition có chữ ký tác giả"],
+    "clothes": ["New arrival cùng brand yêu thích", "Bộ sưu tập mùa mới"]
+  },
+  "sample_responses": [
+    "Chào bạn, lâu rồi không gặp! 😊 Mình thấy bạn rất thích sách của Harari. Tin vui là ông ấy vừa ra sách mới 'Nexus' — nói về AI và thông tin. Bạn muốn pre-order không? Khách VIP như bạn được giảm thêm 10%!",
+    "Bạn ơi, Dior vừa ra BST Thu-Đông 2026 rồi! Mình nhớ bạn rất thích Dior Oblique Jacket. Có mẫu mới cùng dòng, muốn xem trước không?"
+  ]
+}

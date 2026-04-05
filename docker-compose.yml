@@ -10,6 +10,12 @@ services:
     volumes:
       - ./postgres-init:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
+    # ---- THÊM ĐOẠN NÀY ----
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d default_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api-gateway:
     build: ./api-gateway
@@ -17,6 +23,19 @@ services:
       - "8000:8000"
     volumes:
       - ./api-gateway:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8012:8000"
+    volumes:
+      - ./auth-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   customer-service:
     build: ./customer-service
@@ -24,6 +43,9 @@ services:
       - "8001:8000"
     volumes:
       - ./customer-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   book-service:
     build: ./book-service
@@ -31,6 +53,19 @@ services:
       - "8002:8000"
     volumes:
       - ./book-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  clothes-service:
+    build: ./clothes-service
+    ports:
+      - "8013:8000"
+    volumes:
+      - ./clothes-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   cart-service:
     build: ./cart-service
@@ -38,6 +73,9 @@ services:
       - "8003:8000"
     volumes:
       - ./cart-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   staff-service:
     build: ./staff-service
@@ -45,6 +83,9 @@ services:
       - "8004:8000"
     volumes:
       - ./staff-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   manager-service:
     build: ./manager-service
@@ -52,6 +93,9 @@ services:
       - "8005:8000"
     volumes:
       - ./manager-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   catalog-service:
     build: ./catalog-service
@@ -59,6 +103,9 @@ services:
       - "8006:8000"
     volumes:
       - ./catalog-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   order-service:
     build: ./order-service
@@ -66,6 +113,9 @@ services:
       - "8007:8000"
     volumes:
       - ./order-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   ship-service:
     build: ./ship-service
@@ -73,6 +123,9 @@ services:
       - "8008:8000"
     volumes:
       - ./ship-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   pay-service:
     build: ./pay-service
@@ -80,6 +133,44 @@ services:
       - "8009:8000"
     volumes:
       - ./pay-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  # --- THÊM WORKERS ĐỂ LẮNG NGHE RABBITMQ ---
+  order-worker:
+    build: ./order-service
+    command: python manage.py run_consumer
+    volumes:
+      - ./order-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  pay-worker:
+    build: ./pay-service
+    command: python manage.py run_consumer
+    volumes:
+      - ./pay-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  ship-worker:
+    build: ./ship-service
+    command: python manage.py run_consumer
+    volumes:
+      - ./ship-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+  # ------------------------------------------
 
   comment-rate-service:
     build: ./comment-rate-service
@@ -87,6 +178,9 @@ services:
       - "8010:8000"
     volumes:
       - ./comment-rate-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   recommender-ai-service:
     build: ./recommender-ai-service
@@ -94,6 +188,53 @@ services:
       - "8011:8000"
     volumes:
       - ./recommender-ai-service:/app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5673:5672" # Cổng giao tiếp Message Broker
+      - "15673:15672" # Cổng giao diện UI quản lý
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---- AI BEHAVIOR ANALYSIS SERVICE ----
+  ai-behavior-service:
+    build: ./ai-behavior-service
+    env_file: ./ai-behavior-service/.env
+    ports:
+      - "8020:8020"
+    volumes:
+      - ./ai-behavior-service:/app
+      - ai_models:/app/models
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - POSTGRES_HOST=postgres-db
 
 volumes:
   postgres_data:
+  ai_models:

@@ -1,0 +1,25 @@
+{
+  "behavior_type": "price_sensitive",
+  "display_name": "Khách hàng nhạy cảm về giá",
+  "characteristics": [
+    "Tìm kiếm nhiều, so sánh giá giữa các sản phẩm",
+    "Thêm vào giỏ nhiều nhưng chỉ mua khi có giảm giá",
+    "Avg price viewed thấp, ưu tiên sản phẩm giá rẻ-trung bình",
+    "Phản ứng mạnh với mã giảm giá và flash sale"
+  ],
+  "consultation_strategy": {
+    "tone": "Nhấn mạnh giá trị, tiết kiệm, deal tốt",
+    "approach": "Giới thiệu sản phẩm giá tốt, combo tiết kiệm, mã giảm giá",
+    "key_phrases": ["Giá tốt nhất", "Tiết kiệm X%", "Combo giảm thêm", "Mã giảm giá"],
+    "upsell": "Gợi ý mua combo để tiết kiệm hơn mua lẻ",
+    "avoid": "Không giới thiệu hàng hiệu đắt tiền ngay từ đầu"
+  },
+  "recommended_products": {
+    "books": ["Hoàng Tử Bé (65,000đ - rẻ nhất)", "Nhà Giả Kim (79,000đ)", "Đắc Nhân Tâm (88,000đ)", "1984 (88,000đ)"],
+    "clothes": ["Gucci T-Shirt (13,750,000đ - entry level luxury)", "Balenciaga Hoodie (23,750,000đ - giá tốt nhất dòng streetwear luxury)"]
+  },
+  "sample_responses": [
+    "Bạn ơi, tháng 4 đang có sale sách 20% nè! Mình gợi ý combo siêu tiết kiệm:\n🔥 Nhà Giả Kim + Đắc Nhân Tâm + Hoàng Tử Bé = 232,000đ → chỉ còn 185,600đ (tiết kiệm 46,400đ!)\nDùng thêm mã THANG4SACH giảm thêm 15% nữa!",
+    "Muốn sở hữu hàng hiệu mà không 'cháy túi'? 😄 Gucci T-Shirt 13,750,000đ là entry point tốt nhất để bước vào thế giới luxury. Chất lượng xịn, giữ giá tốt!"
+  ]
+}

@@ -1,0 +1,13 @@
+[
+  {"id": 1, "name": "Văn học trong nước", "description": "Tiểu thuyết, truyện ngắn, thơ của tác giả Việt Nam", "type": "book"},
+  {"id": 2, "name": "Văn học nước ngoài", "description": "Tuyển tập danh tác thế giới dịch sang tiếng Việt", "type": "book"},
+  {"id": 3, "name": "Khoa học - Công nghệ", "description": "Lập trình, AI, khoa học dữ liệu", "type": "book"},
+  {"id": 4, "name": "Kinh tế - Kinh doanh", "description": "Quản lý tài chính, khởi nghiệp, đầu tư", "type": "book"},
+  {"id": 5, "name": "Kỹ năng sống", "description": "Phát triển bản thân, tư duy tích cực", "type": "book"},
+  {"id": 6, "name": "Tâm lý học", "description": "Tâm trí con người, hành vi và cảm xúc", "type": "book"},
+  {"id": 7, "name": "Lịch sử - Địa lý", "description": "Lịch sử văn minh nhân loại, Việt Nam", "type": "book"},
+  {"id": 8, "name": "Thiếu nhi", "description": "Sách giáo dục, giải trí cho trẻ em", "type": "book"},
+  {"id": 9, "name": "Thời Trang Nam", "description": "Quần áo thời trang dành cho nam giới", "type": "clothes"},
+  {"id": 10, "name": "Thời Trang Nữ", "description": "Quần áo thời trang dành cho nữ giới", "type": "clothes"},
+  {"id": 11, "name": "Thời Trang Hàng Hiệu", "description": "Đồ hiệu xa xỉ từ Gucci, Dior, Chanel, LV...", "type": "clothes"}
+]

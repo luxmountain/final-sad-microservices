@@ -1,212 +1,424 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giỏ hàng - QuyStore</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-    body { background-color: #f5f5fa; font-family: 'Segoe UI', sans-serif; }
-    .navbar { background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%); }
-    .cart-img { width:80px; height:110px; object-fit:cover; border-radius:8px; }
-    .summary-box { background:#fff; border-radius:12px; border:1px solid #eee; position:sticky; top:90px; }
-    .btn-checkout { background:#ff424e; color:white; font-weight:bold; font-size:1.1rem; border-radius:8px; }
-    .btn-checkout:hover { background:#e0202e; color:white; }
-    .user-avatar {
-        width:36px; height:36px; border-radius:50%;
-        background:linear-gradient(135deg,#ff424e,#ff6b35);
-        display:flex; align-items:center; justify-content:center;
-        font-weight:700; color:#fff; font-size:0.9rem;
-        cursor:pointer; border:2px solid rgba(255,255,255,0.4);
-    }
-    .user-avatar:hover { border-color:#fff; }
-    .user-dropdown-menu {
-        position:absolute; top:calc(100% + 10px); right:0;
-        background:#fff; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.15);
-        min-width:200px; padding:8px 0; z-index:9999; display:none;
-    }
-    .user-dropdown-menu.show { display:block; }
-    .drop-header { padding:12px 16px; border-bottom:1px solid #f0f0f5; }
-    .drop-header strong { display:block; color:#1a1a2e; font-size:0.9rem; }
-    .drop-header span { font-size:0.75rem; color:#888; }
-    .drop-item { display:flex; align-items:center; gap:10px; padding:10px 16px; color:#333; font-size:0.875rem; cursor:pointer; text-decoration:none; }
-    .drop-item:hover { background:#f8f9fa; }
-    .drop-item.danger { color:#dc3545; }
-    .drop-item.danger:hover { background:#fff5f5; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ Hàng — LUMIÈRE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);font-size:15px;line-height:1.6;color:var(--color-charcoal);background:var(--color-ivory);-webkit-font-smoothing:antialiased}
+    h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.2}
+    a{text-decoration:none;color:inherit;transition:var(--transition)}button{font-family:var(--font-body);cursor:pointer;border:none;outline:none;transition:var(--transition)}
+    .container{max-width:1000px;margin:0 auto;padding:0 24px}
+
+    /* NAVBAR */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(248,245,240,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--color-silk)}
+    .navbar-inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 24px;height:72px}
+    .nav-logo{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:3px}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{font-size:14px;font-weight:500;letter-spacing:0.5px;color:var(--color-ash);text-transform:uppercase}
+    .nav-links a:hover{color:var(--color-gold)}
+    .nav-icons{display:flex;align-items:center;gap:20px}
+    .nav-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--color-charcoal);cursor:pointer;position:relative}
+    .nav-icon:hover{background:var(--color-silk)}
+    .nav-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+    .cart-badge{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:var(--color-gold);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+    /* STEPS */
+    .steps-wrap{padding:96px 0 40px}
+    .steps{display:flex;align-items:center;justify-content:center;gap:0}
+    .step{display:flex;align-items:center;gap:10px}
+    .step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;background:var(--color-silk);color:var(--color-ash);transition:var(--transition)}
+    .step.active .step-num{background:var(--color-gold);color:#fff}
+    .step.done .step-num{background:var(--color-emerald);color:#fff}
+    .step-label{font-size:14px;font-weight:500;color:var(--color-ash)}
+    .step.active .step-label{color:var(--color-charcoal);font-weight:600}
+    .step.done .step-label{color:var(--color-emerald)}
+    .step-line{width:80px;height:2px;background:var(--color-silk);margin:0 16px}
+    .step-line.done{background:var(--color-emerald)}
+
+    /* CART LAYOUT */
+    .cart-layout{display:grid;grid-template-columns:1fr 340px;gap:32px;padding-bottom:64px}
+
+    /* CART ITEMS */
+    .cart-items{background:#fff;border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-subtle)}
+    .cart-item{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--color-silk)}
+    .cart-item:last-child{border-bottom:none}
+    .cart-item-img{width:100px;height:120px;border-radius:4px;flex-shrink:0}
+    .cart-item-info{flex:1}
+    .cart-item-brand{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--color-ash);margin-bottom:4px}
+    .cart-item-name{font-family:var(--font-display);font-size:16px;margin-bottom:4px}
+    .cart-item-variant{font-size:13px;color:var(--color-ash);margin-bottom:12px}
+    .cart-item-bottom{display:flex;align-items:center;justify-content:space-between}
+    .cart-item-price{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--color-gold)}
+    .qty-spinner{display:flex;align-items:center;border:1px solid var(--color-silk);border-radius:var(--radius-sm)}
+    .qty-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;background:#fff;cursor:pointer}
+    .qty-btn:hover{background:var(--color-silk)}
+    .qty-val{width:36px;height:32px;text-align:center;border:none;border-left:1px solid var(--color-silk);border-right:1px solid var(--color-silk);font-family:var(--font-mono);font-size:14px;outline:none}
+    .cart-item-remove{font-size:12px;color:var(--color-ash);cursor:pointer;margin-top:8px}
+    .cart-item-remove:hover{color:var(--color-crimson)}
+
+    /* COUPON */
+    .coupon-row{display:flex;gap:8px;margin-top:20px;padding-top:20px;border-top:1px solid var(--color-silk)}
+    .coupon-input{flex:1;padding:10px 14px;border:1px solid var(--color-silk);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;outline:none;background:var(--color-ivory)}
+    .coupon-input:focus{border-color:var(--color-gold)}
+    .coupon-btn{padding:10px 20px;background:var(--color-charcoal);color:#fff;font-size:13px;font-weight:600;border-radius:var(--radius-sm)}
+    .coupon-btn:hover{background:var(--color-gold)}
+
+    /* SUMMARY */
+    .order-summary{background:#fff;border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-subtle);height:fit-content;position:sticky;top:96px}
+    .summary-title{font-size:18px;margin-bottom:20px}
+    .summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
+    .summary-row.discount{color:var(--color-emerald)}
+    .summary-divider{height:1px;background:var(--color-silk);margin:12px 0}
+    .summary-total{display:flex;justify-content:space-between;padding:8px 0;font-size:18px;font-weight:700}
+    .summary-total .total-price{font-family:var(--font-mono);color:var(--color-gold);font-size:22px}
+    .btn-checkout{width:100%;padding:16px;background:var(--color-gold);color:#fff;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:var(--radius-sm);margin-top:20px}
+    .btn-checkout:hover{background:#b8973f;transform:translateY(-1px);box-shadow:var(--shadow-hover)}
+    .btn-back{width:100%;padding:12px;background:transparent;border:1.5px solid var(--color-silk);color:var(--color-ash);font-size:13px;font-weight:500;border-radius:var(--radius-sm);margin-top:8px}
+    .btn-back:hover{border-color:var(--color-charcoal);color:var(--color-charcoal)}
+
+    /* STEP PANELS */
+    .step-panel{display:none}.step-panel.active{display:block}
+
+    /* SHIPPING FORM */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group.full{grid-column:1/-1}
+    .form-label{font-size:13px;font-weight:600;color:var(--color-charcoal)}
+    .form-input{padding:12px 14px;border:1px solid var(--color-silk);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;outline:none;background:#fff}
+    .form-input:focus{border-color:var(--color-gold)}
+
+    /* DELIVERY OPTIONS */
+    .delivery-options{margin-top:24px}
+    .delivery-card{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--color-silk);border-radius:var(--radius-md);margin-bottom:10px;cursor:pointer;transition:var(--transition)}
+    .delivery-card:hover{border-color:var(--color-ash)}
+    .delivery-card.selected{border-color:var(--color-gold);background:rgba(201,168,76,0.03)}
+    .delivery-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--color-silk);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .delivery-card.selected .delivery-radio{border-color:var(--color-gold)}
+    .delivery-card.selected .delivery-radio::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--color-gold)}
+    .delivery-info{flex:1}
+    .delivery-name{font-weight:600;font-size:14px;margin-bottom:2px}
+    .delivery-desc{font-size:12px;color:var(--color-ash)}
+    .delivery-price{font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--color-gold)}
+
+    /* PAYMENT */
+    .payment-methods{display:flex;flex-direction:column;gap:10px}
+    .pay-card{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--color-silk);border-radius:var(--radius-md);cursor:pointer;transition:var(--transition)}
+    .pay-card:hover{border-color:var(--color-ash)}
+    .pay-card.selected{border-color:var(--color-gold);background:rgba(201,168,76,0.03)}
+    .pay-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--color-silk);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .pay-card.selected .pay-radio{border-color:var(--color-gold)}
+    .pay-card.selected .pay-radio::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--color-gold)}
+    .pay-icon{font-size:24px;width:40px;text-align:center}
+    .pay-name{font-weight:600;font-size:14px}
+    .card-form{margin-top:16px;padding:20px;background:var(--color-ivory);border-radius:var(--radius-md);display:none}
+    .card-form.show{display:block}
+
+    /* REVIEW ORDER */
+    .review-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--color-silk);font-size:14px}
+    .review-item:last-child{border-bottom:none}
+    .review-thumb{width:48px;height:56px;border-radius:4px;flex-shrink:0}
+
+    /* SUCCESS MODAL */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(10,10,10,0.5);z-index:10000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+    .modal-bg.show{display:flex}
+    .modal{background:#fff;border-radius:var(--radius-lg);padding:48px;text-align:center;max-width:420px;width:90%;animation:chatSlideUp 0.3s ease}
+    @keyframes chatSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .modal-check{width:64px;height:64px;border-radius:50%;background:var(--color-emerald);color:#fff;font-size:32px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+    .modal h2{font-size:24px;margin-bottom:8px}
+    .modal p{color:var(--color-ash);font-size:14px;margin-bottom:4px}
+    .modal .order-code{font-family:var(--font-mono);font-size:18px;font-weight:600;color:var(--color-gold);margin:12px 0 24px}
+    .modal-btns{display:flex;gap:12px;justify-content:center}
+    .modal-btn{padding:12px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;letter-spacing:0.5px}
+    .modal-btn.primary{background:var(--color-gold);color:#fff}
+    .modal-btn.primary:hover{background:#b8973f}
+    .modal-btn.secondary{background:transparent;border:1.5px solid var(--color-silk);color:var(--color-charcoal)}
+    .modal-btn.secondary:hover{border-color:var(--color-charcoal)}
+
+    /* CHAT */
+    .chat-bubble{position:fixed;bottom:24px;right:24px;z-index:9999;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--color-gold),#b8973f);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(201,168,76,0.4);transition:var(--transition)}
+    .chat-bubble:hover{transform:scale(1.08)}.chat-bubble svg{width:26px;height:26px;fill:#fff}
+    .chat-bubble-label{position:absolute;right:72px;top:50%;transform:translateY(-50%);background:var(--color-charcoal);color:#fff;padding:6px 14px;border-radius:8px;font-size:13px;white-space:nowrap;opacity:0;transition:var(--transition);pointer-events:none}
+    .chat-bubble:hover .chat-bubble-label{opacity:1}
+    .chat-bubble-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--color-gold);opacity:0;animation:chatPulse 2s ease-out infinite}
+    @keyframes chatPulse{0%{transform:scale(1);opacity:0.6}100%{transform:scale(1.5);opacity:0}}
+    .chat-panel{position:fixed;bottom:96px;right:24px;z-index:9999;width:380px;height:520px;border-radius:var(--radius-lg);background:#fff;box-shadow:0 8px 40px rgba(0,0,0,0.15);display:none;flex-direction:column;overflow:hidden}
+    .chat-panel.open{display:flex}
+    .chat-header{background:var(--color-obsidian);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+    .chat-header-info h3{font-family:var(--font-display);font-size:16px;color:var(--color-ivory);margin-bottom:2px}.chat-header-info small{font-size:11px;color:var(--color-gold)}
+    .chat-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);color:var(--color-ivory);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:none}.chat-close:hover{background:rgba(255,255,255,0.2)}
+    .chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+    .chat-msg{display:flex;gap:8px;max-width:85%}.chat-msg.bot{align-self:flex-start}.chat-msg.user{align-self:flex-end;flex-direction:row-reverse}
+    .chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--color-obsidian);color:var(--color-gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:14px;font-weight:700;flex-shrink:0}
+    .chat-msg.user .chat-avatar{background:var(--color-gold);color:#fff}
+    .chat-msg-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5}
+    .chat-msg.bot .chat-msg-bubble{background:var(--color-cream);border-bottom-left-radius:4px}.chat-msg.user .chat-msg-bubble{background:var(--color-gold);color:#fff;border-bottom-right-radius:4px}
+    .chat-typing{display:flex;gap:4px;padding:4px 0;align-items:center}.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--color-ash);animation:typingDot 1.4s infinite}
+    .chat-typing span:nth-child(2){animation-delay:0.2s}.chat-typing span:nth-child(3){animation-delay:0.4s}
+    @keyframes typingDot{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+    .chat-quick-replies{padding:0 16px 8px;display:flex;gap:8px;flex-wrap:wrap}
+    .chat-quick-btn{padding:6px 14px;border:1px solid var(--color-silk);border-radius:50px;font-size:12px;color:var(--color-charcoal);background:#fff;cursor:pointer}.chat-quick-btn:hover{border-color:var(--color-gold);color:var(--color-gold)}
+    .chat-input-area{padding:12px 16px;border-top:1px solid var(--color-silk);display:flex;gap:8px}
+    .chat-input{flex:1;padding:10px 14px;border:1px solid var(--color-silk);border-radius:var(--radius-md);font-family:var(--font-body);font-size:14px;outline:none;background:var(--color-ivory)}.chat-input:focus{border-color:var(--color-gold)}
+    .chat-send{width:40px;height:40px;border-radius:var(--radius-md);background:var(--color-gold);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}.chat-send:hover{background:#b8973f}.chat-send svg{width:18px;height:18px;fill:#fff}
+
+    /* FOOTER */
+    .footer{background:var(--color-obsidian);color:rgba(248,245,240,0.7);padding:48px 0 24px;margin-top:64px}
+    .footer-bottom{text-align:center;font-size:13px;color:rgba(248,245,240,0.3)}
+
+    @media(max-width:768px){.cart-layout{grid-template-columns:1fr}.nav-links{display:none}.form-grid{grid-template-columns:1fr}.steps{gap:0}.step-line{width:40px;margin:0 8px}.chat-panel{width:calc(100vw - 32px);right:16px;bottom:88px;height:60vh}}
+  </style>
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="/"><i class="fas fa-book-open me-2"></i>QuyStore</a>
-            <div class="d-flex align-items-center gap-3" id="navbarRight"></div>
-        </div>
-    </nav>
+  <nav class="navbar"><div class="navbar-inner">
+    <a href="/" class="nav-logo">LUMIÈRE</a>
+    <ul class="nav-links"><li><a href="/listing/">Sách</a></li><li><a href="/listing/">Thời Trang</a></li><li><a href="/#about">Về Chúng Tôi</a></li></ul>
+    <div class="nav-icons">
+      <div class="nav-icon" title="Tìm kiếm" onclick="location.href='/listing/'"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="nav-icon" title="Yêu thích"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div class="nav-icon" title="Giỏ hàng" onclick="location.href='/cart/'"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-badge">3</span></div>
+      <div class="nav-icon" title="Tài khoản" onclick="location.href='/auth/'"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    </div>
+  </div></nav>
 
-    <div class="container mt-5">
-        <h2 class="fw-bold mb-4"><i class="fas fa-shopping-cart text-primary me-2"></i>Giỏ Hàng Của Bạn</h2>
-
-        <div class="row">
-            <div class="col-md-8 mb-4">
-                <div class="bg-white rounded shadow-sm p-4">
-                    {% if cart_items %}
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Sản phẩm</th>
-                                    <th>Đơn giá</th>
-                                    <th>Số lượng</th>
-                                    <th>Thành tiền</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in cart_items %}
-                                <tr id="row-{{ item.item_id }}">
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            {% if item.image_url %}
-                                            <img src="{{ item.image_url }}" class="cart-img me-3" alt="Cover">
-                                            {% else %}
-                                            <img src="https://dummyimage.com/80x110/e0e0e0/666666.png&text=No+Img"
-                                                class="cart-img me-3">
-                                            {% endif %}
-                                            <a href="/book/{{ item.book_id }}/"
-                                                class="fw-bold text-dark text-decoration-none fs-6">{{ item.title }}</a>
-                                        </div>
-                                    </td>
-
-                                    <td class="fw-bold text-secondary">{{ item.price|floatformat:0 }}đ</td>
-
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <input type="number" class="form-control text-center fw-bold text-dark"
-                                                style="width: 70px;" value="{{ item.quantity }}" min="1" 
-                                                onchange="updateQuantity({{ item.item_id }}, this.value)">
-                                        </div>
-                                    </td>
-
-                                    <td class="fw-bold text-danger">{{ item.subtotal|floatformat:0 }}đ</td>
-
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-danger"
-                                            onclick="removeCartItem({{ item.item_id }})">
-                                            <i class="fas fa-trash-alt"></i> Xóa
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="text-center py-5">
-                        <i class="fas fa-cart-arrow-down text-muted" style="font-size: 5rem;"></i>
-                        <h4 class="mt-3 text-muted">Giỏ hàng đang trống</h4>
-                        <a href="/" class="btn btn-primary mt-3"><i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm</a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="summary-box shadow-sm p-4">
-                    <h5 class="fw-bold border-bottom pb-3 mb-3">Tóm tắt đơn hàng</h5>
-
-                    <div class="d-flex justify-content-between mb-4">
-                        <span class="fs-5 fw-bold">Tổng cộng:</span>
-                        <span class="fs-4 fw-bold text-danger">{{ total_price|floatformat:0 }}đ</span>
-                    </div>
-
-                    {% if cart_items %}
-                    <a href="/checkout/" class="btn btn-checkout w-100 py-2">
-                        Tiến Hành Thanh Toán <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                    {% else %}
-                    <button class="btn btn-secondary w-100 py-2" disabled>Vui lòng chọn sản phẩm</button>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <!-- STEPS -->
+    <div class="steps-wrap">
+      <div class="steps" id="steps-nav">
+        <div class="step active" data-step="1"><div class="step-num">1</div><span class="step-label">Giỏ hàng</span></div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step" data-step="2"><div class="step-num">2</div><span class="step-label">Giao hàng</span></div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step" data-step="3"><div class="step-num">3</div><span class="step-label">Thanh toán</span></div>
+      </div>
     </div>
 
-    <script>
-        (function() {
-            const user = JSON.parse(localStorage.getItem('quystore_user') || 'null');
-            const nav = document.getElementById('navbarRight');
-            if (!nav) return;
-            if (!user) {
-                nav.innerHTML = `<a href="/login/" class="btn btn-outline-light btn-sm rounded-pill"><i class="fas fa-sign-in-alt me-1"></i>Đăng nhập</a>`;
-            } else {
-                nav.innerHTML = `
-                <div style="position:relative" id="udw">
-                    <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="document.getElementById('udw').querySelector('.user-dropdown-menu').classList.toggle('show')">
-                        <div class="user-avatar">${user.avatar || user.name[0]}</div>
-                        <span style="color:#fff;font-size:0.875rem;font-weight:500">${user.name}</span>
-                        <i class="fas fa-chevron-down" style="color:rgba(255,255,255,0.6);font-size:0.7rem"></i>
-                    </div>
-                    <div class="user-dropdown-menu">
-                        <div class="drop-header"><strong>${user.name}</strong><span>${user.role === 'customer' ? 'Khách hàng' : user.role}</span></div>
-                        <a href="/orders/" class="drop-item"><i class="fas fa-box-open"></i> Đơn hàng của tôi</a>
-                        <div style="border-top:1px solid #f0f0f5;margin:4px 0"></div>
-                        <div class="drop-item danger" onclick="localStorage.removeItem('quystore_user');location.href='/login/'">
-                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                        </div>
-                    </div>
-                </div>`;
-                document.addEventListener('click', e => {
-                    const w = document.getElementById('udw');
-                    if (w && !w.contains(e.target)) w.querySelector('.user-dropdown-menu')?.classList.remove('show');
-                });
-            }
-        })();
+    <div class="cart-layout">
+      <div>
+        <!-- STEP 1: CART -->
+        <div class="step-panel active" id="panel-1">
+          <div class="cart-items">
+            <div class="cart-item" data-id="C1" data-price="32500000">
+              <img class="cart-item-img" src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=300&q=80" style="object-fit:cover;border-radius:4px" alt="Áo Blazer">
+              <div class="cart-item-info">
+                <p class="cart-item-brand">Gucci</p>
+                <h4 class="cart-item-name">Áo Blazer Wool Classic</h4>
+                <p class="cart-item-variant">Size: M · Màu: Navy</p>
+                <div class="cart-item-bottom">
+                  <span class="cart-item-price">32.500.000 ₫</span>
+                  <div class="qty-spinner"><button class="qty-btn qm">−</button><input class="qty-val" value="1" readonly><button class="qty-btn qp">+</button></div>
+                </div>
+                <div class="cart-item-remove">Xóa</div>
+              </div>
+            </div>
+            <div class="cart-item" data-id="C2" data-price="88000">
+              <img class="cart-item-img" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=300&q=80" style="object-fit:cover;border-radius:4px" alt="Sách">
+              <div class="cart-item-info">
+                <p class="cart-item-brand">Sách</p>
+                <h4 class="cart-item-name">Đắc Nhân Tâm</h4>
+                <p class="cart-item-variant">Bìa mềm · Dale Carnegie</p>
+                <div class="cart-item-bottom">
+                  <span class="cart-item-price">88.000 ₫</span>
+                  <div class="qty-spinner"><button class="qty-btn qm">−</button><input class="qty-val" value="2" readonly><button class="qty-btn qp">+</button></div>
+                </div>
+                <div class="cart-item-remove">Xóa</div>
+              </div>
+            </div>
+            <div class="cart-item" data-id="C3" data-price="59500000">
+              <img class="cart-item-img" src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=300&q=80" style="object-fit:cover;border-radius:4px" alt="Túi">
+              <div class="cart-item-info">
+                <p class="cart-item-brand">Dior</p>
+                <h4 class="cart-item-name">Book Tote Oblique</h4>
+                <p class="cart-item-variant">Size: Medium · Canvas</p>
+                <div class="cart-item-bottom">
+                  <span class="cart-item-price">59.500.000 ₫</span>
+                  <div class="qty-spinner"><button class="qty-btn qm">−</button><input class="qty-val" value="1" readonly><button class="qty-btn qp">+</button></div>
+                </div>
+                <div class="cart-item-remove">Xóa</div>
+              </div>
+            </div>
+            <div class="coupon-row">
+              <input type="text" class="coupon-input" placeholder="Nhập mã giảm giá...">
+              <button class="coupon-btn">Áp dụng</button>
+            </div>
+          </div>
+        </div>
 
-        // 1. Hàm Xóa (Giữ nguyên)
-        async function removeCartItem(itemId) {
-            if (!confirm("Bạn có chắc muốn xóa món này khỏi giỏ?")) return;
-            try {
-                const res = await fetch(`/api/cart/cart-items/${itemId}/`, { method: "DELETE" });
-                if (res.ok || res.status === 204) {
-                    window.location.reload();
-                } else {
-                    alert("❌ Lỗi khi xóa!");
-                }
-            } catch (e) { alert("⚠️ Lỗi kết nối đến Cart Service!"); }
-        }
+        <!-- STEP 2: SHIPPING -->
+        <div class="step-panel" id="panel-2">
+          <div class="cart-items">
+            <h3 style="margin-bottom:20px">Thông Tin Giao Hàng</h3>
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">Họ tên</label><input class="form-input" placeholder="Nguyễn Văn A"></div>
+              <div class="form-group"><label class="form-label">Số điện thoại</label><input class="form-input" placeholder="0901 234 567"></div>
+              <div class="form-group full"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="email@example.com"></div>
+              <div class="form-group full"><label class="form-label">Địa chỉ</label><input class="form-input" placeholder="Số nhà, tên đường"></div>
+              <div class="form-group"><label class="form-label">Quận / Huyện</label><input class="form-input" placeholder="Quận 1"></div>
+              <div class="form-group"><label class="form-label">Tỉnh / Thành phố</label><input class="form-input" placeholder="TP. Hồ Chí Minh"></div>
+            </div>
+            <div class="delivery-options">
+              <h4 style="margin-bottom:12px">Phương thức vận chuyển</h4>
+              <div class="delivery-card selected" data-ship="30000" onclick="selectDelivery(this)">
+                <div class="delivery-radio"></div>
+                <div class="delivery-info"><div class="delivery-name">Giao tiêu chuẩn</div><div class="delivery-desc">3-5 ngày làm việc</div></div>
+                <div class="delivery-price">30.000 ₫</div>
+              </div>
+              <div class="delivery-card" data-ship="60000" onclick="selectDelivery(this)">
+                <div class="delivery-radio"></div>
+                <div class="delivery-info"><div class="delivery-name">Giao nhanh</div><div class="delivery-desc">1-2 ngày làm việc</div></div>
+                <div class="delivery-price">60.000 ₫</div>
+              </div>
+              <div class="delivery-card" data-ship="120000" onclick="selectDelivery(this)">
+                <div class="delivery-radio"></div>
+                <div class="delivery-info"><div class="delivery-name">Hỏa tốc</div><div class="delivery-desc">Trong ngày (nội thành)</div></div>
+                <div class="delivery-price">120.000 ₫</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        // 2. HÀM MỚI: Cập nhật số lượng
-        async function updateQuantity(itemId, newQuantity) {
-            // Chống trường hợp nhập số âm hoặc số 0
-            if (newQuantity < 1) {
-                alert("Số lượng ít nhất phải là 1. Nếu muốn bỏ, vui lòng bấm Xóa!");
-                window.location.reload(); // Tải lại để trả về số cũ
-                return;
-            }
+        <!-- STEP 3: PAYMENT -->
+        <div class="step-panel" id="panel-3">
+          <div class="cart-items">
+            <h3 style="margin-bottom:20px">Thanh Toán</h3>
+            <div class="payment-methods">
+              <div class="pay-card selected" onclick="selectPay(this,'bank')"><div class="pay-radio"></div><div class="pay-icon">🏦</div><div><div class="pay-name">Thẻ ngân hàng</div></div></div>
+              <div class="pay-card" onclick="selectPay(this,'momo')"><div class="pay-radio"></div><div class="pay-icon" style="color:#A50064;font-weight:700">M</div><div><div class="pay-name">Ví MoMo</div></div></div>
+              <div class="pay-card" onclick="selectPay(this,'zalo')"><div class="pay-radio"></div><div class="pay-icon" style="color:#0068FF;font-weight:700">Z</div><div><div class="pay-name">ZaloPay</div></div></div>
+              <div class="pay-card" onclick="selectPay(this,'cod')"><div class="pay-radio"></div><div class="pay-icon">📦</div><div><div class="pay-name">Thanh toán khi nhận hàng (COD)</div></div></div>
+            </div>
+            <div class="card-form show" id="card-form">
+              <div class="form-grid">
+                <div class="form-group full"><label class="form-label">Số thẻ</label><input class="form-input" placeholder="•••• •••• •••• ••••" maxlength="19"></div>
+                <div class="form-group"><label class="form-label">Tháng/Năm</label><input class="form-input" placeholder="MM/YY" maxlength="5"></div>
+                <div class="form-group"><label class="form-label">CVV</label><input class="form-input" placeholder="•••" maxlength="3" type="password"></div>
+              </div>
+            </div>
+            <h4 style="margin-top:24px;margin-bottom:12px">Tóm Tắt Đơn Hàng</h4>
+            <div class="review-item"><img class="review-thumb" src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=150&q=80" style="object-fit:cover" alt="Áo"><div><strong>Áo Blazer Wool Classic</strong><br><span style="font-size:12px;color:var(--color-ash)">Size M · Navy · x1</span></div><div style="margin-left:auto;font-family:var(--font-mono);color:var(--color-gold)">32.500.000 ₫</div></div>
+            <div class="review-item"><img class="review-thumb" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=150&q=80" style="object-fit:cover" alt="Sách"><div><strong>Đắc Nhân Tâm</strong><br><span style="font-size:12px;color:var(--color-ash)">Bìa mềm · x2</span></div><div style="margin-left:auto;font-family:var(--font-mono);color:var(--color-gold)">176.000 ₫</div></div>
+            <div class="review-item"><img class="review-thumb" src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=150&q=80" style="object-fit:cover" alt="Túi"><div><strong>Book Tote Oblique</strong><br><span style="font-size:12px;color:var(--color-ash)">Medium · x1</span></div><div style="margin-left:auto;font-family:var(--font-mono);color:var(--color-gold)">59.500.000 ₫</div></div>
+          </div>
+        </div>
+      </div>
 
-            try {
-                // Gọi PUT sang Cart Service qua Cỗ Máy Vạn Năng
-                const res = await fetch(`/api/cart/cart-items/${itemId}/`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ quantity: parseInt(newQuantity) })
-                });
+      <!-- SUMMARY SIDEBAR -->
+      <div class="order-summary">
+        <h3 class="summary-title">Đơn Hàng</h3>
+        <div class="summary-row"><span>Tạm tính (4 sản phẩm)</span><span id="subtotal" style="font-family:var(--font-mono)">92.176.000 ₫</span></div>
+        <div class="summary-row"><span>Phí vận chuyển</span><span id="ship-cost" style="font-family:var(--font-mono)">30.000 ₫</span></div>
+        <div class="summary-row discount"><span>Giảm giá</span><span id="discount" style="font-family:var(--font-mono)">-0 ₫</span></div>
+        <div class="summary-divider"></div>
+        <div class="summary-total"><span>Tổng cộng</span><span class="total-price" id="total">92.206.000 ₫</span></div>
+        <button class="btn-checkout" id="btn-next">Tiếp tục</button>
+        <button class="btn-back" id="btn-prev" style="display:none">← Quay lại</button>
+      </div>
+    </div>
+  </div>
 
-                if (res.ok) {
-                    // Cập nhật thành công thì cho tải lại trang để tính tổng tiền mới
-                    window.location.reload();
-                } else {
-                    alert("❌ Cập nhật thất bại. Kho không đủ hoặc lỗi hệ thống!");
-                    window.location.reload();
-                }
-            } catch (e) {
-                alert("⚠️ Lỗi kết nối đến Cart Service!");
-            }
-        }
-    </script>
+  <!-- SUCCESS MODAL -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <div class="modal-check">✓</div>
+      <h2>Đặt Hàng Thành Công!</h2>
+      <p>Cảm ơn bạn đã mua sắm tại LUMIÈRE</p>
+      <div class="order-code">#LM260405</div>
+      <p style="font-size:13px">Chúng tôi sẽ gửi email xác nhận đơn hàng cho bạn.</p>
+      <div class="modal-btns" style="margin-top:20px">
+        <a href="/" class="modal-btn primary">Về trang chủ</a>
+        <a href="/listing/" class="modal-btn secondary">Tiếp tục mua</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-bubble" id="chat-bubble"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="chat-bubble-label">Tư vấn AI</span><div class="chat-bubble-pulse"></div></div>
+  <div class="chat-panel" id="chat-panel">
+    <div class="chat-header"><div class="chat-header-info"><h3>Trợ Lý LUMIÈRE</h3><small>Powered by AI</small></div><button class="chat-close" id="chat-close">&times;</button></div>
+    <div class="chat-messages" id="chat-messages"><div class="chat-msg bot"><div class="chat-avatar">L</div><div class="chat-msg-bubble">Xin chào! Bạn cần hỗ trợ gì về đơn hàng hoặc thanh toán?</div></div></div>
+    <div class="chat-quick-replies" id="chat-quick-replies">
+      <button class="chat-quick-btn" data-msg="Có mã giảm giá nào không?">Mã giảm giá</button>
+      <button class="chat-quick-btn" data-msg="Phí vận chuyển như thế nào?">Phí ship</button>
+      <button class="chat-quick-btn" data-msg="Chính sách đổi trả như thế nào?">Đổi trả</button>
+    </div>
+    <div class="chat-input-area"><input type="text" class="chat-input" id="chat-input" placeholder="Nhập câu hỏi..." autocomplete="off"><button class="chat-send" id="chat-send"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer"><div class="container"><div class="footer-bottom">© 2026 LUMIÈRE. All rights reserved. | Tri thức · Phong cách · Đẳng cấp</div></div></footer>
+
+  <script>
+    const track=(e,d)=>{console.log('%c[BEHAVIOR]','color:#2D6A4F;font-weight:bold',e,d)};
+    track('page_view',{page:'cart',timestamp:Date.now()});
+
+    let currentStep=1;
+    const panels=[null,document.getElementById('panel-1'),document.getElementById('panel-2'),document.getElementById('panel-3')];
+    const steps=document.querySelectorAll('.step');
+    const btnNext=document.getElementById('btn-next');
+    const btnPrev=document.getElementById('btn-prev');
+
+    function goToStep(n){
+      currentStep=n;
+      panels.forEach((p,i)=>{if(p)p.classList.toggle('active',i===n)});
+      steps.forEach((s,i)=>{
+        s.classList.remove('active','done');
+        if(i+1<n)s.classList.add('done');
+        if(i+1===n)s.classList.add('active');
+      });
+      document.getElementById('line-1').classList.toggle('done',n>1);
+      document.getElementById('line-2').classList.toggle('done',n>2);
+      btnPrev.style.display=n>1?'block':'none';
+      if(n===3){btnNext.textContent='ĐẶT HÀNG'}
+      else{btnNext.textContent='TIẾP TỤC'}
+      window.scrollTo({top:0,behavior:'smooth'});
+      track('checkout_step',{step:n});
+    }
+
+    btnNext.addEventListener('click',()=>{
+      if(currentStep<3)goToStep(currentStep+1);
+      else{document.getElementById('modal').classList.add('show');track('order_placed',{total:'92.206.000 ₫'})}
+    });
+    btnPrev.addEventListener('click',()=>{if(currentStep>1)goToStep(currentStep-1)});
+
+    // Qty buttons
+    document.querySelectorAll('.qp').forEach(b=>{b.addEventListener('click',()=>{const i=b.previousElementSibling;if(+i.value<10)i.value=+i.value+1})});
+    document.querySelectorAll('.qm').forEach(b=>{b.addEventListener('click',()=>{const i=b.nextElementSibling;if(+i.value>1)i.value=+i.value-1})});
+
+    // Remove item
+    document.querySelectorAll('.cart-item-remove').forEach(r=>{r.addEventListener('click',()=>{r.closest('.cart-item').style.display='none';track('remove_from_cart',{})})});
+
+    // Delivery select
+    window.selectDelivery=function(el){
+      document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('ship-cost').textContent=parseInt(el.dataset.ship).toLocaleString('vi-VN')+' ₫';
+    };
+
+    // Payment select
+    window.selectPay=function(el,type){
+      document.querySelectorAll('.pay-card').forEach(c=>c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('card-form').classList.toggle('show',type==='bank');
+    };
+
+    // Chat
+    (function(){
+      const AI='http://localhost:8020',KEY='bookstore-ai-secret-key-2024';
+      const uid=localStorage.getItem('lumiere_uid')||('user_'+Date.now());localStorage.setItem('lumiere_uid',uid);
+      const bubble=document.getElementById('chat-bubble'),panel=document.getElementById('chat-panel'),close=document.getElementById('chat-close'),input=document.getElementById('chat-input'),send=document.getElementById('chat-send'),msgs=document.getElementById('chat-messages'),qr=document.getElementById('chat-quick-replies');
+      bubble.addEventListener('click',()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))input.focus()});
+      close.addEventListener('click',()=>panel.classList.remove('open'));
+      function addMsg(t,u){const d=document.createElement('div');d.className='chat-msg '+(u?'user':'bot');d.innerHTML=`<div class="chat-avatar">${u?'B':'L'}</div><div class="chat-msg-bubble">${t}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+      function showT(){const d=document.createElement('div');d.className='chat-msg bot';d.id='ti';d.innerHTML='<div class="chat-avatar">L</div><div class="chat-msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>';msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+      function hideT(){const e=document.getElementById('ti');if(e)e.remove()}
+      async function sm(m){if(!m.trim())return;addMsg(m,true);input.value='';qr.style.display='none';showT();try{const r=await fetch(AI+'/chat',{method:'POST',headers:{'Content-Type':'application/json','X-API-Key':KEY},body:JSON.stringify({user_id:uid,message:m})});const d=await r.json();hideT();addMsg(d.answer||'Xin lỗi, có lỗi.',false)}catch(e){hideT();addMsg('Không kết nối được AI.',false)}}
+      send.addEventListener('click',()=>sm(input.value));input.addEventListener('keydown',e=>{if(e.key==='Enter')sm(input.value)});
+      document.querySelectorAll('.chat-quick-btn').forEach(b=>{b.addEventListener('click',()=>sm(b.dataset.msg))});
+    })();
+  </script>
 </body>
-
 </html>

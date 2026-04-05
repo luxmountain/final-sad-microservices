@@ -1,1103 +1,262 @@
 <!DOCTYPE html>
-<!-- categories from Django context: {{ categories|length }} items -->
 <html lang="vi">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Portal - QuyStore</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard — LUMIÈRE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--font-body);font-size:14px;line-height:1.6;color:var(--color-charcoal);background:#f4f1ec;-webkit-font-smoothing:antialiased;display:flex;min-height:100vh}
+    h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.2}
+    a{text-decoration:none;color:inherit;transition:var(--transition)}
+    button{font-family:var(--font-body);cursor:pointer;border:none;outline:none;transition:var(--transition)}
 
-        * { box-sizing: border-box; }
+    /* SIDEBAR */
+    .sidebar{width:260px;background:var(--color-obsidian);color:var(--color-ivory);padding:24px 0;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;z-index:100}
+    .sidebar-logo{font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:3px;padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,0.08)}
+    .sidebar-logo small{display:block;font-family:var(--font-body);font-size:11px;font-weight:400;letter-spacing:1px;color:var(--color-gold);margin-top:4px;text-transform:uppercase}
+    .sidebar-nav{flex:1;padding:16px 0}
+    .nav-section{padding:0 24px;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin:20px 0 8px}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:14px;color:rgba(255,255,255,0.5);cursor:pointer;transition:var(--transition)}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:var(--color-ivory)}
+    .nav-item.active{background:rgba(201,168,76,0.1);color:var(--color-gold);border-right:3px solid var(--color-gold)}
+    .nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+    .sidebar-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px}
+    .avatar{width:36px;height:36px;border-radius:50%;background:var(--color-gold);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:15px;font-weight:700}
+    .sidebar-footer .info{font-size:13px}.sidebar-footer .info small{display:block;font-size:11px;color:var(--color-ash)}
 
-        body {
-            background: #f0f2f5;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            min-height: 100vh;
-        }
+    /* MAIN */
+    .main{flex:1;margin-left:260px;padding:24px 32px}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .top-bar h1{font-size:24px}
+    .top-bar-right{display:flex;align-items:center;gap:16px}
+    .search-box{padding:8px 16px;border:1px solid var(--color-silk);border-radius:var(--radius-md);font-family:var(--font-body);font-size:13px;background:#fff;outline:none;width:240px}
+    .search-box:focus{border-color:var(--color-gold)}
+    .notif-btn{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:var(--shadow-subtle)}
+    .notif-btn svg{width:18px;height:18px;stroke:var(--color-charcoal);fill:none;stroke-width:1.8}
+    .notif-dot{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--color-crimson)}
 
-        /* ========== SIDEBAR ========== */
-        .sidebar {
-            background: linear-gradient(160deg, #1a2744 0%, #2d4a8a 100%);
-            min-height: 100vh;
-            width: 270px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
-        }
+    /* STAT CARDS */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .stat-card{background:#fff;border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-subtle);position:relative;overflow:hidden}
+    .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+    .stat-card:nth-child(1)::after{background:var(--color-gold)}
+    .stat-card:nth-child(2)::after{background:var(--color-emerald)}
+    .stat-card:nth-child(3)::after{background:#533483}
+    .stat-card:nth-child(4)::after{background:var(--color-crimson)}
+    .stat-label{font-size:12px;font-weight:600;letter-spacing:0.5px;color:var(--color-ash);margin-bottom:6px;text-transform:uppercase}
+    .stat-value{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--color-charcoal);margin-bottom:4px}
+    .stat-change{font-size:12px;display:flex;align-items:center;gap:4px}
+    .stat-change.up{color:var(--color-emerald)}.stat-change.down{color:var(--color-crimson)}
 
-        .sidebar-brand {
-            padding: 28px 24px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
+    /* CHART AREA */
+    .charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+    .chart-card{background:#fff;border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-subtle)}
+    .chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .chart-header h3{font-size:16px}
+    .chart-tabs{display:flex;gap:4px}
+    .chart-tab{padding:6px 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;color:var(--color-ash);background:transparent}
+    .chart-tab.active{background:var(--color-gold);color:#fff}
+    .chart-tab:hover{background:var(--color-silk)}
 
-        .sidebar-brand h3 {
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin: 0;
-        }
+    /* AI INSIGHTS */
+    .ai-section{margin-bottom:24px}
+    .ai-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .ai-header h3{font-size:18px}
+    .ai-badge{padding:4px 12px;border:1px solid var(--color-gold);border-radius:50px;font-size:11px;font-weight:600;color:var(--color-gold);letter-spacing:0.5px}
+    .ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .ai-card{background:#fff;border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-subtle);border-left:3px solid var(--color-gold)}
+    .ai-card h4{font-size:14px;margin-bottom:8px;color:var(--color-charcoal)}
+    .ai-card p{font-size:13px;color:var(--color-ash);line-height:1.6}
+    .ai-card .tag{display:inline-block;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-top:8px}
+    .tag-segment{background:rgba(201,168,76,0.1);color:var(--color-gold)}
+    .tag-action{background:rgba(45,106,79,0.1);color:var(--color-emerald)}
+    .tag-alert{background:rgba(139,26,26,0.1);color:var(--color-crimson)}
 
-        .sidebar-brand small {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.75rem;
-        }
+    /* BEHAVIOR TABLE */
+    .table-card{background:#fff;border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-subtle);margin-bottom:24px}
+    .table-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .table-top h3{font-size:16px}
+    .btn-refresh{padding:8px 16px;background:var(--color-charcoal);color:#fff;font-size:12px;font-weight:600;border-radius:var(--radius-sm);display:flex;align-items:center;gap:6px}
+    .btn-refresh:hover{background:var(--color-gold)}
+    .data-table{width:100%;border-collapse:collapse}
+    .data-table th{text-align:left;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--color-ash);padding:10px 12px;border-bottom:2px solid var(--color-silk)}
+    .data-table td{padding:12px;border-bottom:1px solid var(--color-silk);font-size:13px;vertical-align:middle}
+    .data-table tr:hover{background:rgba(248,245,240,0.5)}
+    .segment-badge{padding:4px 10px;border-radius:50px;font-size:11px;font-weight:600;display:inline-block}
+    .seg-loyal{background:rgba(45,106,79,0.1);color:var(--color-emerald)}
+    .seg-window{background:rgba(107,107,107,0.1);color:var(--color-ash)}
+    .seg-impulse{background:rgba(201,168,76,0.1);color:var(--color-gold)}
+    .seg-premium{background:rgba(83,52,131,0.1);color:#533483}
+    .seg-price{background:rgba(139,26,26,0.1);color:var(--color-crimson)}
+    .score-bar{width:80px;height:6px;background:var(--color-silk);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}
+    .score-fill{height:100%;border-radius:3px}
 
-        .nav-section {
-            padding: 20px 16px;
-        }
+    /* RECENT ORDERS */
+    .orders-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .order-card{background:#fff;border-radius:var(--radius-md);padding:16px;box-shadow:var(--shadow-subtle);display:flex;gap:12px}
+    .order-thumb{width:48px;height:48px;border-radius:8px;flex-shrink:0}
+    .order-info{flex:1}
+    .order-info h4{font-size:14px;margin-bottom:2px}
+    .order-info p{font-size:12px;color:var(--color-ash)}
+    .order-status{font-size:11px;font-weight:600;padding:4px 8px;border-radius:4px;align-self:flex-start;white-space:nowrap}
+    .status-done{background:rgba(45,106,79,0.1);color:var(--color-emerald)}
+    .status-ship{background:rgba(201,168,76,0.1);color:var(--color-gold)}
+    .status-pending{background:rgba(107,107,107,0.1);color:var(--color-ash)}
 
-        .nav-section-label {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 0 8px;
-            margin-bottom: 8px;
-        }
-
-        .nav-pills .nav-link {
-            color: rgba(255,255,255,0.75);
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-pills .nav-link i { width: 18px; text-align: center; }
-
-        .nav-pills .nav-link:hover {
-            background: rgba(255,255,255,0.12);
-            color: #fff;
-        }
-
-        .nav-pills .nav-link.active {
-            background: linear-gradient(90deg, #ff424e, #ff6b35);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(255, 66, 78, 0.35);
-        }
-
-        .sidebar-footer {
-            padding: 20px 16px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: auto;
-        }
-
-        /* ========== CONTENT ========== */
-        .content-area {
-            flex: 1;
-            padding: 32px;
-            min-width: 0;
-        }
-
-        .page-header {
-            margin-bottom: 28px;
-        }
-
-        .page-header h2 {
-            font-weight: 700;
-            font-size: 1.6rem;
-            color: #1a2744;
-            margin-bottom: 4px;
-        }
-
-        .page-header p {
-            color: #6c757d;
-            font-size: 0.875rem;
-            margin: 0;
-        }
-
-        /* ========== STAT CARDS ========== */
-        .stat-card {
-            background: #fff;
-            border-radius: 14px;
-            padding: 22px 24px;
-            border: none;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a2744;
-            line-height: 1;
-            margin-top: 12px;
-        }
-
-        .stat-label {
-            color: #6c757d;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* ========== MAIN CARD ========== */
-        .main-card {
-            background: #fff;
-            border-radius: 14px;
-            border: none;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-        }
-
-        .card-head {
-            padding: 20px 24px 0;
-            border-bottom: 1px solid #f0f2f5;
-            padding-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .card-head h5 {
-            font-weight: 700;
-            margin: 0;
-            font-size: 1rem;
-            color: #1a2744;
-        }
-
-        /* ========== TABLE ========== */
-        .table thead th {
-            background: #f8f9fa;
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: #6c757d;
-            border: none;
-            padding: 12px 16px;
-        }
-
-        .table tbody td {
-            padding: 12px 16px;
-            vertical-align: middle;
-            border-color: #f0f2f5;
-            font-size: 0.9rem;
-        }
-
-        .table tbody tr:hover { background: #fafbff; }
-
-        .table-book-img {
-            width: 42px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 1px solid #e9ecef;
-        }
-
-        /* ========== BADGES ========== */
-        .badge-status {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
-
-        .badge-pending   { background: #fff3cd; color: #856404; }
-        .badge-approved  { background: #d1e7dd; color: #0a3622; }
-        .badge-shipping  { background: #d0e7ff; color: #0a3474; }
-        .badge-delivered { background: #c8f5e8; color: #0d5c3a; }
-        .badge-cancelled { background: #f8d7da; color: #58151c; }
-        .badge-default   { background: #e9ecef; color: #495057; }
-
-        /* ========== FILTER BAR ========== */
-        .filter-bar {
-            padding: 12px 24px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid #f0f2f5;
-        }
-
-        .filter-bar .btn-filter {
-            font-size: 0.8rem;
-            padding: 5px 14px;
-            border-radius: 20px;
-            border: 1px solid #dee2e6;
-            background: #fff;
-            color: #495057;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-weight: 500;
-        }
-
-        .filter-bar .btn-filter:hover,
-        .filter-bar .btn-filter.active {
-            background: #1a2744;
-            color: #fff;
-            border-color: #1a2744;
-        }
-
-        /* ========== TOAST ========== */
-        #toastContainer {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .custom-toast {
-            min-width: 280px;
-            max-width: 360px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 0.875rem;
-            font-weight: 500;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to   { transform: translateY(0);    opacity: 1; }
-        }
-
-        .toast-success { background: linear-gradient(135deg, #28a745, #20c997); }
-        .toast-error   { background: linear-gradient(135deg, #dc3545, #e83e8c); }
-        .toast-info    { background: linear-gradient(135deg, #007bff, #6f42c1); }
-
-        /* ========== BUTTONS ========== */
-        .btn-approve {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 5px 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .btn-approve:hover { opacity: 0.85; color: #fff; }
-
-        .btn-cancel-order {
-            background: #fff;
-            color: #dc3545;
-            border: 1px solid #dc3545;
-            border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-        }
-
-        .btn-cancel-order:hover { background: #dc3545; color: #fff; }
-
-        .btn-edit-book {
-            background: #fff;
-            color: #0d6efd;
-            border: 1px solid #0d6efd;
-            border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-        }
-
-        .btn-edit-book:hover { background: #0d6efd; color: #fff; }
-
-        .btn-delete-book {
-            background: #fff;
-            color: #dc3545;
-            border: 1px solid #dc3545;
-            border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-        }
-
-        .btn-delete-book:hover { background: #dc3545; color: #fff; }
-
-        /* Loading spinner inline */
-        .spinner-sm {
-            width: 14px; height: 14px;
-            border: 2px solid rgba(255,255,255,0.4);
-            border-top-color: #fff;
-            border-radius: 50%;
-            display: inline-block;
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+    @media(max-width:1024px){.stats-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr}.orders-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}}
+  </style>
 </head>
-
 <body>
-    <!-- Toast Container -->
-    <div id="toastContainer"></div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">LUMIÈRE<small>Staff Dashboard</small></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Tổng quan</div>
+      <div class="nav-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg> Đơn hàng</div>
+      <div class="nav-section">Quản lý</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Sách</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2 12 5.5 8 2l-4.38 1.46A1 1 0 003 4.41V20a1 1 0 001.56.83L8 18.5l4 3.5 4-3.5 3.44 2.33A1 1 0 0021 20V4.41a1 1 0 00-.62-.95z"/></svg> Thời Trang</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Khách hàng</div>
+      <div class="nav-section">AI & Analytics</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> AI Behavior</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Báo cáo</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="avatar">Q</div>
+      <div class="info"><strong>Quy Admin</strong><small>Super Admin</small></div>
+    </div>
+  </aside>
 
-    <div class="d-flex">
-        <!-- ===== SIDEBAR ===== -->
-        <div class="sidebar d-flex flex-column">
-            <div class="sidebar-brand">
-                <h3><i class="fas fa-book-reader me-2" style="color:#ff424e"></i>Staff Portal</h3>
-                <small>QuyStore Management</small>
-            </div>
-
-            <div class="nav-section flex-grow-1">
-                <div class="nav-section-label">Nghiệp vụ</div>
-                <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active w-100 text-start" id="pills-orders-tab"
-                            data-bs-toggle="pill" data-bs-target="#pills-orders" type="button">
-                            <i class="fas fa-clipboard-list"></i> Quản lý Đơn hàng
-                        </button>
-                    </li>
-                    <li class="nav-item mt-1" role="presentation">
-                        <button class="nav-link w-100 text-start" id="pills-books-tab"
-                            data-bs-toggle="pill" data-bs-target="#pills-books" type="button">
-                            <i class="fas fa-boxes"></i> Quản lý Kho sách
-                        </button>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="sidebar-footer">
-                <div class="d-flex align-items-center mb-3 px-1">
-                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#ff424e,#ff6b35);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;margin-right:10px;font-size:0.9rem;">S</div>
-                    <div>
-                        <div style="color:#fff;font-size:0.875rem;font-weight:600;">Staff Admin</div>
-                        <div style="color:rgba(255,255,255,0.45);font-size:0.75rem;">Nhân viên</div>
-                    </div>
-                </div>
-                <a href="/login/" class="btn btn-outline-light w-100" style="font-size:0.875rem;">
-                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                </a>
-            </div>
-        </div>
-
-        <!-- ===== MAIN CONTENT ===== -->
-        <div class="content-area">
-            <div class="page-header">
-                <h2>Bảng điều khiển Nhân viên</h2>
-                <p>Quản lý đơn hàng và kho sách của QuyStore</p>
-            </div>
-
-            <!-- STATS CARDS -->
-            <div class="row g-3 mb-4">
-                <div class="col-6 col-xl-3">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background:#fff0f0"><i class="fas fa-shopping-bag" style="color:#ff424e"></i></div>
-                        <div class="stat-value" id="statTotalOrders">{{ orders|length }}</div>
-                        <div class="stat-label">Tổng Đơn hàng</div>
-                    </div>
-                </div>
-                <div class="col-6 col-xl-3">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background:#fff8e1"><i class="fas fa-clock" style="color:#ffc107"></i></div>
-                        <div class="stat-value" id="statPendingOrders">
-                            {% with pending_count=0 %}
-                                {% for order in orders %}{% if order.status == 'PENDING' %}{% with pending_count=pending_count|add:1 %}{% endwith %}{% endif %}{% endfor %}
-                            {% endwith %}
-                            {{ orders|length }}
-                        </div>
-                        <div class="stat-label">Đơn Chờ xử lý</div>
-                    </div>
-                </div>
-                <div class="col-6 col-xl-3">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background:#e8f5e9"><i class="fas fa-book" style="color:#28a745"></i></div>
-                        <div class="stat-value" id="statTotalBooks">{{ books|length }}</div>
-                        <div class="stat-label">Tổng Đầu sách</div>
-                    </div>
-                </div>
-                <div class="col-6 col-xl-3">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background:#e3f2fd"><i class="fas fa-warehouse" style="color:#2196f3"></i></div>
-                        <div class="stat-value" id="statTotalStock">
-                            {% with total=0 %}
-                            {% for book in books %}{% endfor %}
-                            —
-                            {% endwith %}
-                        </div>
-                        <div class="stat-label">Tổng Tồn kho</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TABS CONTENT -->
-            <div class="tab-content" id="pills-tabContent">
-
-                <!-- ===== TAB: ĐƠN HÀNG ===== -->
-                <div class="tab-pane fade show active" id="pills-orders" role="tabpanel">
-                    <div class="main-card">
-                        <div class="card-head">
-                            <h5><i class="fas fa-clipboard-list me-2 text-primary"></i>Danh sách Đơn hàng</h5>
-                            <span class="text-muted" style="font-size:0.8rem;">Tổng <strong id="orderCount">{{ orders|length }}</strong> đơn</span>
-                        </div>
-
-                        <!-- Filter Bar -->
-                        <div class="filter-bar">
-                            <button class="btn-filter active" onclick="filterOrders('ALL', this)">Tất cả</button>
-                            <button class="btn-filter" onclick="filterOrders('PENDING', this)">⏳ Chờ xử lý</button>
-                            <button class="btn-filter" onclick="filterOrders('APPROVED', this)">✅ Đã duyệt</button>
-                            <button class="btn-filter" onclick="filterOrders('PAID_AND_SHIPPING', this)">🚚 Đang giao</button>
-                            <button class="btn-filter" onclick="filterOrders('DELIVERED', this)">🎉 Hoàn thành</button>
-                            <button class="btn-filter" onclick="filterOrders('CANCELLED', this)">❌ Đã hủy</button>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table mb-0" id="ordersTable">
-                                <thead>
-                                    <tr>
-                                        <th>Mã đơn</th>
-                                        <th>Khách hàng</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Địa chỉ giao</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Trạng thái</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ordersBody">
-                                    {% for order in orders %}
-                                    <tr data-order-id="{{ order.id }}" data-status="{{ order.status }}">
-                                        <td><span class="fw-bold text-primary">#{{ order.id }}</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div style="width:30px;height:30px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;font-weight:700;">
-                                                    {{ order.customer_id }}
-                                                </div>
-                                                <span>KH_{{ order.customer_id }}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold" style="color:#ff424e">
-                                                {{ order.total_price|floatformat:0 }}đ
-                                            </span>
-                                        </td>
-                                        <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{ order.address }}">
-                                            {{ order.address }}
-                                        </td>
-                                        <td style="font-size:0.8rem;color:#6c757d;">
-                                            {{ order.created_at|default:"—" }}
-                                        </td>
-                                        <td>
-                                            <span class="badge-status
-                                                {% if order.status == 'PENDING' %}badge-pending
-                                                {% elif order.status == 'APPROVED' %}badge-approved
-                                                {% elif order.status == 'PAID_AND_SHIPPING' %}badge-shipping
-                                                {% elif order.status == 'DELIVERED' %}badge-delivered
-                                                {% elif order.status == 'CANCELLED' %}badge-cancelled
-                                                {% else %}badge-default{% endif %}"
-                                                id="orderStatus{{ order.id }}">
-                                                {% if order.status == 'PENDING' %}⏳ Chờ xử lý
-                                                {% elif order.status == 'APPROVED' %}✅ Đã duyệt
-                                                {% elif order.status == 'PAID_AND_SHIPPING' %}🚚 Đang giao
-                                                {% elif order.status == 'DELIVERED' %}🎉 Đã giao
-                                                {% elif order.status == 'CANCELLED' %}❌ Đã hủy
-                                                {% else %}{{ order.status }}{% endif %}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                {% if order.status == 'PENDING' or order.status == 'PAID_AND_SHIPPING' %}
-                                                <button class="btn-approve" id="approveBtn{{ order.id }}"
-                                                    onclick="updateOrderStatus({{ order.id }}, 'APPROVED', this)">
-                                                    <i class="fas fa-check me-1"></i>Duyệt
-                                                </button>
-                                                {% endif %}
-                                                {% if order.status != 'CANCELLED' and order.status != 'DELIVERED' %}
-                                                <button class="btn-cancel-order" id="cancelBtn{{ order.id }}"
-                                                    onclick="updateOrderStatus({{ order.id }}, 'CANCELLED', this)">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr id="emptyOrderRow">
-                                        <td colspan="7" class="text-center py-5 text-muted">
-                                            <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-                                            Chưa có đơn hàng nào!
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== TAB: KHO SÁCH ===== -->
-                <div class="tab-pane fade" id="pills-books" role="tabpanel">
-                    <div class="main-card">
-                        <div class="card-head">
-                            <h5><i class="fas fa-book me-2 text-success"></i>Kho sách hiện tại</h5>
-                            <button class="btn btn-success btn-sm px-3" style="border-radius:8px;" data-bs-toggle="modal" data-bs-target="#addBookModal">
-                                <i class="fas fa-plus me-2"></i>Nhập sách mới
-                            </button>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Ảnh bìa</th>
-                                        <th>Tên sách</th>
-                                        <th>Tác giả</th>
-                                        <th>Giá bán</th>
-                                        <th>Tồn kho</th>
-                                        <th>Danh mục</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="booksBody">
-                                    {% for book in books %}
-                                    <tr id="bookRow{{ book.id }}" data-book-id="{{ book.id }}">
-                                        <td><span class="text-muted fw-bold">#{{ book.id }}</span></td>
-                                        <td>
-                                            {% if book.image_url %}
-                                            <img src="{{ book.image_url }}" class="table-book-img" alt="{{ book.title }}">
-                                            {% else %}
-                                            <div class="table-book-img d-flex align-items-center justify-content-center bg-light"
-                                                style="font-size:0.6rem;color:#999;text-align:center;">No<br>Img</div>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <div class="fw-bold" style="font-size:0.9rem;">{{ book.title }}</div>
-                                        </td>
-                                        <td style="color:#6c757d;font-size:0.875rem;">{{ book.author }}</td>
-                                        <td>
-                                            <span class="fw-bold" style="color:#ff424e;">{{ book.price|floatformat:0 }}đ</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge {% if book.stock < 5 %}bg-danger{% elif book.stock < 20 %}bg-warning text-dark{% else %}bg-success{% endif %}">
-                                                {{ book.stock }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {% if book.category_id %}
-                                                {% for cat in categories %}
-                                                    {% if cat.id == book.category_id %}
-                                                    <span class="badge" style="background:#e8f5e9;color:#2d6a4f;" title="ID: {{ cat.id }}">
-                                                        {{ cat.name }}
-                                                    </span>
-                                                    {% endif %}
-                                                {% empty %}
-                                                <span class="badge" style="background:#e8f5e9;color:#2d6a4f;">CAT #{{ book.category_id }}</span>
-                                                {% endfor %}
-                                            {% else %}
-                                            <span class="text-muted" style="font-size:0.8rem;">—</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn-edit-book" title="Sửa sách"
-                                                    onclick="openEditBook({{ book.id }}, '{{ book.title|escapejs }}', '{{ book.author|escapejs }}', {{ book.price }}, {{ book.stock }}, {{ book.category_id|default:'null' }}, '{{ book.image_url|default:''|escapejs }}')">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn-delete-book" title="Xóa sách"
-                                                    onclick="deleteBook({{ book.id }}, '{{ book.title|escapejs }}')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="8" class="text-center py-5 text-muted">
-                                            <i class="fas fa-book fa-2x mb-2 d-block"></i>
-                                            Kho sách đang trống!
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div><!-- end tab-content -->
-        </div><!-- end content-area -->
-    </div><!-- end d-flex -->
-
-
-    <!-- ===== MODAL: THÊM SÁCH MỚI ===== -->
-    <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius:16px;border:none;">
-                <div class="modal-header" style="border-bottom:1px solid #f0f2f5;">
-                    <h5 class="modal-title fw-bold" style="color:#1a2744;">
-                        <i class="fas fa-book-medical me-2 text-success"></i>Nhập Sách Mới vào Kho
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="addBookForm" onsubmit="submitNewBook(event)">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Tên cuốn sách <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="newBookTitle" required placeholder="VD: Đắc Nhân Tâm">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Tác giả <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="newBookAuthor" required placeholder="VD: Dale Carnegie">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Giá bán ($) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" min="0" class="form-control" id="newBookPrice" required placeholder="15.99">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Số lượng tồn kho <span class="text-danger">*</span></label>
-                                <input type="number" min="1" class="form-control" id="newBookStock" required placeholder="50">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Danh mục</label>
-                                <select class="form-select" id="newBookCategory">
-                                    <option value="">— Không có danh mục —</option>
-                                    {% for cat in categories %}
-                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Link ảnh bìa (URL)</label>
-                                <input type="url" class="form-control" id="newBookImage" placeholder="https://...">
-                                <div class="form-text">Dán link ảnh từ Google vào đây.</div>
-                            </div>
-                        </div>
-                        <button type="submit" id="addBookSubmitBtn" class="btn btn-success w-100 mt-4 fw-bold">
-                            <i class="fas fa-save me-2"></i>Lưu Sách Vào Kho
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top-bar">
+      <h1>Dashboard</h1>
+      <div class="top-bar-right">
+        <input type="text" class="search-box" placeholder="Tìm kiếm...">
+        <div class="notif-btn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><div class="notif-dot"></div></div>
+      </div>
     </div>
 
-    <!-- ===== MODAL: SỬA SÁCH ===== -->
-    <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius:16px;border:none;">
-                <div class="modal-header" style="border-bottom:1px solid #f0f2f5;">
-                    <h5 class="modal-title fw-bold" style="color:#1a2744;">
-                        <i class="fas fa-edit me-2 text-primary"></i>Sửa thông tin Sách
-                        <span id="editBookIdLabel" class="text-muted fw-normal" style="font-size:0.9rem;"></span>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="editBookForm" onsubmit="submitEditBook(event)">
-                        <input type="hidden" id="editBookId">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Tên cuốn sách</label>
-                                <input type="text" class="form-control" id="editBookTitle" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Tác giả</label>
-                                <input type="text" class="form-control" id="editBookAuthor" required>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Giá bán ($)</label>
-                                <input type="number" step="0.01" min="0" class="form-control" id="editBookPrice" required>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Tồn kho</label>
-                                <input type="number" min="0" class="form-control" id="editBookStock" required>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Danh mục</label>
-                                <select class="form-select" id="editBookCategory">
-                                    <option value="">— Không có danh mục —</option>
-                                    {% for cat in categories %}
-                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Link ảnh bìa (URL)</label>
-                                <input type="url" class="form-control" id="editBookImage" placeholder="https://...">
-                            </div>
-                        </div>
-                        <button type="submit" id="editBookSubmitBtn" class="btn btn-primary w-100 mt-4 fw-bold">
-                            <i class="fas fa-save me-2"></i>Lưu thay đổi
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Doanh thu tháng</div><div class="stat-value">1.2B ₫</div><div class="stat-change up">↑ 12.5% so với tháng trước</div></div>
+      <div class="stat-card"><div class="stat-label">Đơn hàng</div><div class="stat-value">847</div><div class="stat-change up">↑ 8.3% so với tháng trước</div></div>
+      <div class="stat-card"><div class="stat-label">Khách hàng mới</div><div class="stat-value">1,234</div><div class="stat-change up">↑ 23.1% so với tháng trước</div></div>
+      <div class="stat-card"><div class="stat-label">Tỷ lệ hoàn trả</div><div class="stat-value">2.1%</div><div class="stat-change down">↑ 0.3% so với tháng trước</div></div>
     </div>
 
-    <!-- ===== JAVASCRIPT ===== -->
-    <script>
-        // ==========================================
-        // TOAST NOTIFICATION
-        // ==========================================
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-            toast.className = `custom-toast toast-${type}`;
-            toast.innerHTML = `<i class="fas ${icons[type] || icons.success}"></i><span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(10px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
+    <!-- CHARTS -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Doanh Thu</h3>
+          <div class="chart-tabs"><button class="chart-tab active" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">7 ngày</button><button class="chart-tab" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">30 ngày</button><button class="chart-tab" onclick="this.parentNode.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">90 ngày</button></div>
+        </div>
+        <canvas id="revenueChart" height="100"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><h3>Phân Khúc KH</h3></div>
+        <canvas id="segmentChart" height="160"></canvas>
+      </div>
+    </div>
 
-        // ==========================================
-        // FILTER ĐƠN HÀNG
-        // ==========================================
-        function filterOrders(statusFilter, btn) {
-            // Cập nhật nút active
-            document.querySelectorAll('.filter-bar .btn-filter').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    <!-- AI INSIGHTS -->
+    <div class="ai-section">
+      <div class="ai-header"><h3>AI Insights</h3><span class="ai-badge">✦ Powered by AI</span></div>
+      <div class="ai-grid">
+        <div class="ai-card">
+          <h4>📈 Xu hướng mua sắm</h4>
+          <p>Nhóm "Loyal Customer" tăng 15% trong tuần. Sách self-help và thời trang Gucci là combo phổ biến nhất.</p>
+          <span class="tag tag-segment">Loyal +15%</span>
+        </div>
+        <div class="ai-card">
+          <h4>🎯 Đề xuất marketing</h4>
+          <p>243 khách "Window Shopper" chưa mua. Gợi ý: push notification combo "Sách + Phụ kiện" giảm 10%.</p>
+          <span class="tag tag-action">Cần hành động</span>
+        </div>
+        <div class="ai-card">
+          <h4>⚠️ Cảnh báo tồn kho</h4>
+          <p>"Đắc Nhân Tâm" còn 12 cuốn (dự kiến hết trong 3 ngày). "Gucci Blazer" size M hết hàng.</p>
+          <span class="tag tag-alert">Sắp hết hàng</span>
+        </div>
+      </div>
+    </div>
 
-            const rows = document.querySelectorAll('#ordersBody tr[data-order-id]');
-            let visible = 0;
-            rows.forEach(row => {
-                const rowStatus = row.getAttribute('data-status');
-                if (statusFilter === 'ALL' || rowStatus === statusFilter) {
-                    row.style.display = '';
-                    visible++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+    <!-- BEHAVIOR TABLE -->
+    <div class="table-card">
+      <div class="table-top">
+        <h3>Phân Tích Hành Vi Khách Hàng (AI)</h3>
+        <button class="btn-refresh" id="btn-refresh">🔄 Cập nhật từ AI</button>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Khách hàng</th><th>Phân khúc</th><th>Điểm AI</th><th>Hành vi gần nhất</th><th>Đơn hàng</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nguyễn Minh Anh</strong><br><span style="font-size:11px;color:var(--color-ash)">user_001</span></td><td><span class="segment-badge seg-loyal">Loyal Customer</span></td><td>0.95 <div class="score-bar"><div class="score-fill" style="width:95%;background:var(--color-emerald)"></div></div></td><td>Mua "Sapiens" + "Gucci Blazer"</td><td style="font-family:var(--font-mono)">12</td></tr>
+          <tr><td><strong>Trần Hữu Nghĩa</strong><br><span style="font-size:11px;color:var(--color-ash)">user_002</span></td><td><span class="segment-badge seg-premium">Premium Buyer</span></td><td>0.88 <div class="score-bar"><div class="score-fill" style="width:88%;background:#533483"></div></div></td><td>Xem Dior Book Tote (3 lần)</td><td style="font-family:var(--font-mono)">8</td></tr>
+          <tr><td><strong>Lê Thị Hương</strong><br><span style="font-size:11px;color:var(--color-ash)">user_003</span></td><td><span class="segment-badge seg-impulse">Impulse Buyer</span></td><td>0.72 <div class="score-bar"><div class="score-fill" style="width:72%;background:var(--color-gold)"></div></div></td><td>Add-to-cart "Atomic Habits"</td><td style="font-family:var(--font-mono)">5</td></tr>
+          <tr><td><strong>Phạm Đức Huy</strong><br><span style="font-size:11px;color:var(--color-ash)">user_004</span></td><td><span class="segment-badge seg-window">Window Shopper</span></td><td>0.34 <div class="score-bar"><div class="score-fill" style="width:34%;background:var(--color-ash)"></div></div></td><td>Browse 15 sản phẩm, 0 mua</td><td style="font-family:var(--font-mono)">0</td></tr>
+          <tr><td><strong>Võ Thanh Tùng</strong><br><span style="font-size:11px;color:var(--color-ash)">user_005</span></td><td><span class="segment-badge seg-price">Price Sensitive</span></td><td>0.51 <div class="score-bar"><div class="score-fill" style="width:51%;background:var(--color-crimson)"></div></div></td><td>Lọc "Giá giảm dần" 5 lần</td><td style="font-family:var(--font-mono)">3</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-            document.getElementById('orderCount').textContent = statusFilter === 'ALL'
-                ? rows.length
-                : visible + ' / ' + rows.length;
-        }
+    <!-- RECENT ORDERS -->
+    <div class="table-card">
+      <div class="table-top"><h3>Đơn Hàng Gần Đây</h3></div>
+      <div class="orders-grid">
+        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#1a1a2e,#533483);border-radius:8px"></div><div class="order-info"><h4>#LM260401</h4><p>Gucci Blazer · 32.500.000 ₫</p></div><span class="order-status status-done">Đã giao</span></div>
+        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#2D6A4F,#081C15);border-radius:8px"></div><div class="order-info"><h4>#LM260402</h4><p>Đắc Nhân Tâm x2 · 176.000 ₫</p></div><span class="order-status status-ship">Đang ship</span></div>
+        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:8px"></div><div class="order-info"><h4>#LM260403</h4><p>Dior Book Tote · 59.500.000 ₫</p></div><span class="order-status status-pending">Chờ xử lý</span></div>
+        <div class="order-card"><div class="order-thumb" style="background:linear-gradient(135deg,#8B4513,#F4A460);border-radius:8px"></div><div class="order-info"><h4>#LM260404</h4><p>Hermès Birkin · 85.000.000 ₫</p></div><span class="order-status status-done">Đã giao</span></div>
+      </div>
+    </div>
+  </div>
 
-        // ==========================================
-        // DUYỆT / HỦY ĐƠN HÀNG
-        // ==========================================
-        async function updateOrderStatus(orderId, newStatus, btn) {
-            const actionText = newStatus === 'APPROVED' ? 'duyệt' : 'hủy';
-            if (!confirm(`Xác nhận ${actionText} đơn hàng #${orderId}?`)) return;
+  <script>
+    /* REVENUE CHART */
+    new Chart(document.getElementById('revenueChart'),{
+      type:'line',
+      data:{
+        labels:['T2','T3','T4','T5','T6','T7','CN'],
+        datasets:[{
+          label:'Sách',data:[45,62,38,71,49,88,66],
+          borderColor:'#2D6A4F',backgroundColor:'rgba(45,106,79,0.08)',tension:0.4,fill:true,pointRadius:4,pointBackgroundColor:'#2D6A4F'
+        },{
+          label:'Thời Trang',data:[120,95,145,110,160,130,175],
+          borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.08)',tension:0.4,fill:true,pointRadius:4,pointBackgroundColor:'#C9A84C'
+        }]
+      },
+      options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:12},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'JetBrains Mono',size:11},callback:v=>v+'M'}},x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:12}}}}}
+    });
 
-            // Loading state
-            const originalContent = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `<span class="spinner-sm"></span>`;
+    /* SEGMENT CHART */
+    new Chart(document.getElementById('segmentChart'),{
+      type:'doughnut',
+      data:{
+        labels:['Loyal Customer','Premium Buyer','Impulse Buyer','Window Shopper','Price Sensitive'],
+        datasets:[{data:[35,20,18,15,12],backgroundColor:['#2D6A4F','#533483','#C9A84C','#6B6B6B','#8B1A1A'],borderWidth:0,hoverOffset:8}]
+      },
+      options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:11},usePointStyle:true,pointStyle:'circle',padding:12}}}}
+    });
 
-            try {
-                const res = await fetch(`/api/order/orders/${orderId}/status/`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ status: newStatus })
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    // Cập nhật badge trạng thái trên hàng
-                    const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
-                    if (row) {
-                        row.setAttribute('data-status', newStatus);
-                        const badgeEl = document.getElementById(`orderStatus${orderId}`);
-                        if (badgeEl) {
-                            const statusMap = {
-                                'APPROVED': { cls: 'badge-approved', text: '✅ Đã duyệt' },
-                                'CANCELLED': { cls: 'badge-cancelled', text: '❌ Đã hủy' },
-                                'DELIVERED': { cls: 'badge-delivered', text: '🎉 Đã giao' },
-                                'PENDING': { cls: 'badge-pending', text: '⏳ Chờ xử lý' },
-                                'PAID_AND_SHIPPING': { cls: 'badge-shipping', text: '🚚 Đang giao' },
-                            };
-                            const info = statusMap[newStatus] || { cls: 'badge-default', text: newStatus };
-                            badgeEl.className = `badge-status ${info.cls}`;
-                            badgeEl.textContent = info.text;
-                        }
-                        // Ẩn các nút thao tác nếu đã kết thúc
-                        if (newStatus === 'CANCELLED' || newStatus === 'DELIVERED') {
-                            const td = row.querySelector('td:last-child');
-                            if (td) td.innerHTML = '<span class="text-muted" style="font-size:0.8rem;">—</span>';
-                        } else if (newStatus === 'APPROVED') {
-                            // Ẩn nút Duyệt vì đã duyệt rồi
-                            const approveBtn = document.getElementById(`approveBtn${orderId}`);
-                            if (approveBtn) approveBtn.remove();
-                        }
-                    }
-                    showToast(`✅ Đơn #${orderId} đã được ${actionText} thành công!`, 'success');
-                } else {
-                    showToast(`❌ Lỗi: ${data.error || 'Không thể cập nhật đơn hàng'}`, 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = originalContent;
-                }
-            } catch (err) {
-                showToast('⚠️ Mất kết nối tới hệ thống!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = originalContent;
-            }
-        }
-
-        // ==========================================
-        // THÊM SÁCH MỚI
-        // ==========================================
-        async function submitNewBook(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('addBookSubmitBtn');
-            const originalText = submitBtn.innerHTML;
-
-            const categoryVal = document.getElementById('newBookCategory').value;
-            const imageVal = document.getElementById('newBookImage').value;
-
-            const bookData = {
-                title:       document.getElementById('newBookTitle').value.trim(),
-                author:      document.getElementById('newBookAuthor').value.trim(),
-                price:       parseFloat(document.getElementById('newBookPrice').value),
-                stock:       parseInt(document.getElementById('newBookStock').value),
-                category_id: categoryVal ? parseInt(categoryVal) : null,
-                image_url:   imageVal || null
-            };
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="spinner-sm me-2"></span>Đang lưu...`;
-
-            try {
-                const res = await fetch('/api/book/books/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bookData)
-                });
-
-                if (res.ok || res.status === 201) {
-                    const newBook = await res.json();
-                    showToast(`🎉 Đã nhập "${bookData.title}" vào kho thành công!`, 'success');
-
-                    // Thêm dòng mới vào bảng mà không cần reload trang
-                    const tbody = document.getElementById('booksBody');
-                    const emptyRow = tbody.querySelector('td[colspan]');
-                    if (emptyRow) emptyRow.closest('tr').remove();
-
-                    const catBadge = newBook.category_id
-                        ? `<span class="badge" style="background:#e8f5e9;color:#2d6a4f;">CAT #${newBook.category_id}</span>`
-                        : `<span class="text-muted" style="font-size:0.8rem;">—</span>`;
-
-                    const imgTag = newBook.image_url
-                        ? `<img src="${newBook.image_url}" class="table-book-img" alt="${newBook.title}">`
-                        : `<div class="table-book-img d-flex align-items-center justify-content-center bg-light" style="font-size:0.6rem;color:#999;text-align:center;">No<br>Img</div>`;
-
-                    const stockBadge = newBook.stock < 5 ? 'bg-danger' : newBook.stock < 20 ? 'bg-warning text-dark' : 'bg-success';
-
-                    const tr = document.createElement('tr');
-                    tr.id = `bookRow${newBook.id}`;
-                    tr.setAttribute('data-book-id', newBook.id);
-                    tr.innerHTML = `
-                        <td><span class="text-muted fw-bold">#${newBook.id}</span></td>
-                        <td>${imgTag}</td>
-                        <td><div class="fw-bold" style="font-size:0.9rem;">${newBook.title}</div></td>
-                        <td style="color:#6c757d;font-size:0.875rem;">${newBook.author}</td>
-                        <td><span class="fw-bold" style="color:#ff424e;">$${newBook.price}</span></td>
-                        <td><span class="badge ${stockBadge}">${newBook.stock}</span></td>
-                        <td>${catBadge}</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <button class="btn-edit-book" onclick="openEditBook(${newBook.id}, '${(newBook.title||'').replace(/'/g,"\\'")}', '${(newBook.author||'').replace(/'/g,"\\'")}', ${newBook.price}, ${newBook.stock}, ${newBook.category_id||'null'}, '${(newBook.image_url||'').replace(/'/g,"\\'")}')">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-delete-book" onclick="deleteBook(${newBook.id}, '${(newBook.title||'').replace(/'/g,"\\'")}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>`;
-                    tbody.prepend(tr);
-
-                    // Reset form và đóng modal
-                    document.getElementById('addBookForm').reset();
-                    bootstrap.Modal.getInstance(document.getElementById('addBookModal')).hide();
-
-                    // Cập nhật stat
-                    const statEl = document.getElementById('statTotalBooks');
-                    statEl.textContent = parseInt(statEl.textContent || '0') + 1;
-                } else {
-                    const err = await res.json().catch(() => ({}));
-                    showToast(`❌ Book Service từ chối: ${JSON.stringify(err)}`, 'error');
-                }
-            } catch (err) {
-                showToast('⚠️ Mất kết nối tới API Gateway!', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            }
-        }
-
-        // ==========================================
-        // MỞ MODAL SỬA SÁCH
-        // ==========================================
-        function openEditBook(id, title, author, price, stock, categoryId, imageUrl) {
-            document.getElementById('editBookId').value      = id;
-            document.getElementById('editBookIdLabel').textContent = `— #${id}`;
-            document.getElementById('editBookTitle').value   = title;
-            document.getElementById('editBookAuthor').value  = author;
-            document.getElementById('editBookPrice').value   = price;
-            document.getElementById('editBookStock').value   = stock;
-            // Chọn đúng option trong select theo categoryId
-            const catSelect = document.getElementById('editBookCategory');
-            catSelect.value = categoryId || '';
-            // Nếu không tìm thấy option khớp (vd: danh mục chưa load), fallback về trống
-            if (catSelect.value !== String(categoryId || '')) catSelect.value = '';
-            document.getElementById('editBookImage').value   = imageUrl || '';
-            new bootstrap.Modal(document.getElementById('editBookModal')).show();
-        }
-
-        async function submitEditBook(e) {
-            e.preventDefault();
-            const id = document.getElementById('editBookId').value;
-            const submitBtn = document.getElementById('editBookSubmitBtn');
-            const originalText = submitBtn.innerHTML;
-
-            const categoryVal = document.getElementById('editBookCategory').value;
-            const imageVal    = document.getElementById('editBookImage').value;
-
-            const bookData = {
-                title:       document.getElementById('editBookTitle').value.trim(),
-                author:      document.getElementById('editBookAuthor').value.trim(),
-                price:       parseFloat(document.getElementById('editBookPrice').value),
-                stock:       parseInt(document.getElementById('editBookStock').value),
-                category_id: categoryVal ? parseInt(categoryVal) : null,
-                image_url:   imageVal || null
-            };
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="spinner-sm me-2"></span>Đang lưu...`;
-
-            try {
-                const res = await fetch(`/api/book/books/${id}/`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bookData)
-                });
-
-                if (res.ok) {
-                    const updated = await res.json();
-                    showToast(`✏️ Đã cập nhật "${bookData.title}" thành công!`, 'success');
-
-                    // Làm mới dòng trong bảng
-                    const row = document.getElementById(`bookRow${id}`);
-                    if (row) {
-                        const stockBadge = updated.stock < 5 ? 'bg-danger' : updated.stock < 20 ? 'bg-warning text-dark' : 'bg-success';
-                        const catBadge = updated.category_id
-                            ? `<span class="badge" style="background:#e8f5e9;color:#2d6a4f;">CAT #${updated.category_id}</span>`
-                            : `<span class="text-muted" style="font-size:0.8rem;">—</span>`;
-                        const imgTag = updated.image_url
-                            ? `<img src="${updated.image_url}" class="table-book-img" alt="${updated.title}">`
-                            : `<div class="table-book-img d-flex align-items-center justify-content-center bg-light" style="font-size:0.6rem;color:#999;text-align:center;">No<br>Img</div>`;
-
-                        row.cells[1].innerHTML = imgTag;
-                        row.cells[2].innerHTML = `<div class="fw-bold" style="font-size:0.9rem;">${updated.title}</div>`;
-                        row.cells[3].textContent = updated.author;
-                        row.cells[4].innerHTML = `<span class="fw-bold" style="color:#ff424e;">$${updated.price}</span>`;
-                        row.cells[5].innerHTML = `<span class="badge ${stockBadge}">${updated.stock}</span>`;
-                        row.cells[6].innerHTML = catBadge;
-                        // Cập nhật lại nút Sửa với data mới
-                        row.cells[7].innerHTML = `
-                            <div class="d-flex gap-1">
-                                <button class="btn-edit-book" onclick="openEditBook(${updated.id}, '${(updated.title||'').replace(/'/g,"\\'")}', '${(updated.author||'').replace(/'/g,"\\'")}', ${updated.price}, ${updated.stock}, ${updated.category_id||'null'}, '${(updated.image_url||'').replace(/'/g,"\\'")}')">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-delete-book" onclick="deleteBook(${updated.id}, '${(updated.title||'').replace(/'/g,"\\'")}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>`;
-                    }
-
-                    bootstrap.Modal.getInstance(document.getElementById('editBookModal')).hide();
-                } else {
-                    const err = await res.json().catch(() => ({}));
-                    showToast(`❌ Lỗi cập nhật: ${JSON.stringify(err)}`, 'error');
-                }
-            } catch (err) {
-                showToast('⚠️ Mất kết nối tới API Gateway!', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            }
-        }
-
-        // ==========================================
-        // XÓA SÁCH
-        // ==========================================
-        async function deleteBook(bookId, bookTitle) {
-            if (!confirm(`Xác nhận xóa sách "${bookTitle}" (#${bookId}) khỏi kho?\n\nHành động này không thể hoàn tác!`)) return;
-
-            try {
-                const res = await fetch(`/api/book/books/${bookId}/`, {
-                    method: 'DELETE'
-                });
-
-                if (res.ok) {
-                    const row = document.getElementById(`bookRow${bookId}`);
-                    if (row) {
-                        row.style.transition = 'opacity 0.4s, transform 0.4s';
-                        row.style.opacity = '0';
-                        row.style.transform = 'translateX(20px)';
-                        setTimeout(() => row.remove(), 400);
-                    }
-                    showToast(`🗑️ Đã xóa "${bookTitle}" khỏi kho!`, 'info');
-
-                    // Cập nhật stat
-                    const statEl = document.getElementById('statTotalBooks');
-                    const current = parseInt(statEl.textContent || '0');
-                    if (current > 0) statEl.textContent = current - 1;
-                } else {
-                    const err = await res.json().catch(() => ({}));
-                    showToast(`❌ Không thể xóa: ${err.error || 'Lỗi không xác định'}`, 'error');
-                }
-            } catch (err) {
-                showToast('⚠️ Mất kết nối tới API Gateway!', 'error');
-            }
-        }
-
-        // ==========================================
-        // TÍNH TỔNG TỒN KHO KHI TẢI TRANG
-        // ==========================================
-        (function calcStock() {
-            let total = 0;
-            document.querySelectorAll('#booksBody tr[data-book-id]').forEach(row => {
-                const stockEl = row.cells[5]?.querySelector('.badge');
-                if (stockEl) total += parseInt(stockEl.textContent) || 0;
-            });
-            document.getElementById('statTotalStock').textContent = total.toLocaleString('vi-VN');
-        })();
-
-        // Tính đơn chờ xử lý
-        (function calcPending() {
-            let pending = 0;
-            document.querySelectorAll('#ordersBody tr[data-order-id]').forEach(row => {
-                if (row.getAttribute('data-status') === 'PENDING') pending++;
-            });
-            document.getElementById('statPendingOrders').textContent = pending;
-        })();
-    </script>
+    /* REFRESH AI DATA */
+    document.getElementById('btn-refresh').addEventListener('click',async function(){
+      this.textContent='⏳ Đang tải...';
+      try{
+        const r=await fetch('http://localhost:8020/analyze-behavior',{method:'POST',headers:{'Content-Type':'application/json','X-API-Key':'bookstore-ai-secret-key-2024'},body:JSON.stringify({user_id:'user_001',sessions:[{click_count:15,view_count:30,purchase_count:5,time_on_page:120.5,cart_add_count:8,search_count:3,session_duration:600.0,avg_price_viewed:5000000,category_diversity:0.8,return_rate:0.02}]})});
+        const d=await r.json();
+        this.textContent='✅ Đã cập nhật';
+        console.log('[AI]',d);
+      }catch(e){this.textContent='❌ Lỗi kết nối'}
+      setTimeout(()=>{this.textContent='🔄 Cập nhật từ AI'},2000);
+    });
+  </script>
 </body>
-
 </html>

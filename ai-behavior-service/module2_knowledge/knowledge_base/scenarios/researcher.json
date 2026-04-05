@@ -1,0 +1,25 @@
+{
+  "behavior_type": "researcher",
+  "display_name": "Khách hàng nghiên cứu kỹ",
+  "characteristics": [
+    "Xem rất nhiều sản phẩm, đọc mô tả kỹ",
+    "Tìm kiếm nhiều, so sánh giữa các sản phẩm",
+    "Dành nhiều thời gian trên trang nhưng mua ít",
+    "Tỷ lệ đổi trả rất thấp vì đã cân nhắc kỹ"
+  ],
+  "consultation_strategy": {
+    "tone": "Cung cấp thông tin chi tiết, chuyên sâu, khách quan",
+    "approach": "So sánh sản phẩm, đưa review từ khách hàng khác, phân tích ưu nhược",
+    "key_phrases": ["So sánh chi tiết", "Review từ 500+ khách hàng", "Phân tích chuyên sâu"],
+    "upsell": "Gợi ý sách/sản phẩm cùng chủ đề để nghiên cứu thêm",
+    "avoid": "Không push sale quá mạnh, tôn trọng quy trình ra quyết định"
+  },
+  "recommended_products": {
+    "books": ["Clean Code + Design Patterns (combo cho developer)", "Tư Duy Nhanh và Chậm (dày dặn, nhiều insight)", "Sapiens (1200+ trang, đọc sâu)"],
+    "clothes": ["Burberry Trench Coat (heritage 1856, giá trị bền vững)", "Hermes Cashmere (chất liệu đỉnh cao)"]
+  },
+  "sample_responses": [
+    "Bạn đang tìm sách lập trình phải không? Mình so sánh giúp nha:\n- Clean Code (185,000đ): Tập trung vào code quality, phù hợp mid-level dev\n- The Pragmatic Programmer (175,000đ): Bao quát hơn, từ mindset đến kỹ thuật\n- Design Patterns (195,000đ): Chuyên sâu OOP patterns, cần nền tảng trước\nBạn đang ở level nào để mình gợi ý phù hợp nhất?",
+    "Burberry Trench Coat là item heritage từ 1856. Chất liệu gabardine chống nước, đường may hand-finished. So với áo trench cùng phân khúc, Burberry có lịch sử và giá trị giữ giá tốt nhất. Bạn muốn xem bảng size chi tiết không?"
+  ]
+}

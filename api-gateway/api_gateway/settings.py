@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +49,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middlewares.RequestLoggingMiddleware',  # Đưa lên đầu để đếm giờ chính xác nhất
+    'app.middlewares.RateLimitMiddleware',       # Đứng trước JWT để block spam ngay cửa
+    'app.middlewares.JWTAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'api_gateway.urls'
@@ -124,3 +129,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# Spectacular settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Bookstore Microservices API',
+    'DESCRIPTION': 'API Documentation for Bookstore Microservices including API Gateway routing.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
+
+# The secret key running inside Auth Service to decode its JWT token locally inside the Gateway
+AUTH_SERVICE_SECRET_KEY = 'django-insecure-tnv8eas6y43adx@c#47opn0pyfo+_^el&6-ibr*%6#7dh9s=%y'

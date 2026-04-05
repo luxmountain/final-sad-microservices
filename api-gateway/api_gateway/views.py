@@ -7,11 +7,19 @@ import json
 # KHU VỰC 1: CUSTOMER (KHÁCH HÀNG)
 # ==========================================
 
-# 1. Đăng ký / Đăng nhập
+# 1. Khám sức khỏe (Health Check)
+def health_check(request):
+    return JsonResponse({
+        "status": "ok",
+        "service": "api-gateway",
+        "message": "Gateway is running smoothly!"
+    }, status=200)
+
+# 2. Đăng ký / Đăng nhập
 def auth_view(request):
     return render(request, 'login.html')
 
-# 2. Trang chủ (Book List & AI)
+# 3. Trang chủ (Book List & AI)
 import random
 
 def home(request):
@@ -67,28 +75,108 @@ def home(request):
         'ai_reason': ai_reason,
         'max_price': max_price,
     })
-# 3. Trang Chi tiết Sách & Review
-def book_detail(request, book_id):
-    # 1. Gateway chạy sang kho sách tìm đúng cuốn khách đang xem
-    try:
-        res = requests.get("http://book-service:8000/books/")
-        books = res.json() if res.status_code == 200 else []
-        # Lọc ra cuốn sách có ID trùng khớp
-        book = next((b for b in books if str(b['id']) == str(book_id)), None)
-    except Exception:
-        book = None
+# 3. Trang Chi tiết Sản phẩm & Review
+def product_detail(request, product_id):
+    product = None
+    product_type = None
+    real_id = product_id
 
-    # 2. Gateway chạy sang kho Review gom toàn bộ bình luận của cuốn sách này
+    # Parse prefix: book_1 → type='book', id='1' | cloth_3 → type='cloth', id='3'
+    if product_id.startswith('book_'):
+        product_type = 'book'
+        real_id = product_id.replace('book_', '')
+    elif product_id.startswith('cloth_'):
+        product_type = 'cloth'
+        real_id = product_id.replace('cloth_', '')
+
+    # Tìm trong Books
+    if product_type in (None, 'book'):
+        try:
+            book_res = requests.get(f"http://book-service:8000/books/{real_id}/")
+            if book_res.status_code == 200:
+                product = book_res.json()
+                product['type'] = 'book'
+                try:
+                    cat_res = requests.get(f"http://catalog-service:8000/categories/{product.get('category_id')}/")
+                    if cat_res.status_code == 200:
+                        product['category_name'] = cat_res.json().get('name')
+                except:
+                    pass
+        except: pass
+
+    # Tìm trong Clothes
+    if not product and product_type in (None, 'cloth'):
+        try:
+            cloth_res = requests.get(f"http://clothes-service:8000/clothes/{real_id}/")
+            if cloth_res.status_code == 200:
+                product = cloth_res.json()
+                product['type'] = 'cloth'
+                product['title'] = product.get('name')
+                product['author'] = product.get('brand')
+        except: pass
+
+    # Lấy Reviews
     try:
         cmt_res = requests.get("http://comment-rate-service:8000/reviews/")
         all_reviews = cmt_res.json() if cmt_res.status_code == 200 else []
-        # Lọc comment theo book_id
-        reviews = [r for r in all_reviews if str(r['book_id']) == str(book_id)]
+        reviews = [r for r in all_reviews if str(r.get('book_id', '')) == str(real_id)]
     except Exception:
         reviews = []
 
-    # 3. Đóng gói ném ra giao diện
-    return render(request, 'detail.html', {'book': book, 'reviews': reviews})
+    return render(request, 'detail.html', {'product': product, 'reviews': reviews})
+
+# Trang danh sách sản phẩm
+def listing_view(request):
+    products = []
+    brands = set()
+    categories = []
+
+    # Danh mục sách
+    try:
+        cat_res = requests.get("http://catalog-service:8000/categories/")
+        if cat_res.status_code == 200:
+            categories = cat_res.json()
+    except Exception: pass
+    
+    cat_dict = {str(c['id']): c['name'] for c in categories}
+
+    # Fetch books
+    try:
+        book_res = requests.get("http://book-service:8000/books/")
+        if book_res.status_code == 200:
+            books = book_res.json()
+            for b in books:
+                b['type'] = 'book'
+                b['product_id'] = f"book_{b['id']}"
+                b['category_name'] = cat_dict.get(str(b.get('category_id')), "Sách Khảo Cứu")
+                products.append(b)
+    except: pass
+
+    # Fetch clothes
+    try:
+        cloth_res = requests.get("http://clothes-service:8000/clothes/")
+        if cloth_res.status_code == 200:
+            clothes = cloth_res.json()
+            for c in clothes:
+                c['type'] = 'cloth'
+                c['product_id'] = f"cloth_{c['id']}"
+                c['title'] = c.get('name')
+                brand = c.get('brand', 'Khác')
+                c['category_name'] = brand
+                brands.add(brand)
+                products.append(c)
+    except: pass
+    
+    # Shuffle the products slightly for a mixed look
+    import random
+    random.shuffle(products)
+
+    context = {
+        'products_json': json.dumps(products),
+        'categories': categories,
+        'brands': list(brands)
+    }
+    return render(request, 'listing.html', context)
 
 # 4. Trang Giỏ hàng
 def cart_view(request):
@@ -206,41 +294,54 @@ import requests
 # ==========================================
 @csrf_exempt
 def universal_proxy(request, service_name, path):
-    # 1. Danh bạ các nhà trong xóm Microservices
     directory = {
         'cart': 'http://cart-service:8000',
         'book': 'http://book-service:8000',
+        'clothes': 'http://clothes-service:8000',
         'order': 'http://order-service:8000',
         'pay': 'http://pay-service:8000',
         'ship': 'http://ship-service:8000',
         'ai': 'http://recommender-ai-service:8000',
         'catalog': 'http://catalog-service:8000',
         'comment': 'http://comment-rate-service:8000',
+        'auth': 'http://auth-service:8000',
     }
 
     # 2. Kiểm tra xem Frontend có gọi đúng nhà không
     if service_name not in directory:
         return JsonResponse({"error": "Service không tồn tại trong danh bạ Gateway!"}, status=404)
 
-    # 3. Lắp ráp địa chỉ thực tế (Ví dụ: http://cart-service:8000/cart-items/1/)
-    target_url = f"{directory[service_name]}/{path}"
+    # 3. Lắp ráp địa chỉ thực tế
+    if service_name == 'auth':
+        target_url = f"{directory[service_name]}/api/auth/{path}"
+    else:
+        # Đường hầm cổ điển: Các service cũ nội bộ chỉ khai báo /carts/, /books/ chứ không có /api/
+        target_url = f"{directory[service_name]}/{path}"
+
+    # Đặt Radar để soi
+    print(f"🔥 [GATEWAY PROXY] Đang chuyển hướng tới: {target_url}")
+
+    # Forward headers (bỏ qua Host và Content-Length rác để tránh lỗi treo mạng)
+    headers = {key: value for key, value in request.headers.items() if key.lower() not in ['host', 'content-length']}
+    if hasattr(request, 'user_id'):
+        headers['X-User-Id'] = str(request.user_id)
+    if hasattr(request, 'user_role'):
+        headers['X-User-Role'] = request.user_role
 
     try:
-        # 4. Copy y nguyên lệnh của Frontend ném sang Backend
         if request.method == 'GET':
-            res = requests.get(target_url, params=request.GET)
+            res = requests.get(target_url, headers=headers, params=request.GET)
         elif request.method == 'POST':
             payload = json.loads(request.body) if request.body else {}
-            res = requests.post(target_url, json=payload)
+            res = requests.post(target_url, headers=headers, json=payload)
         elif request.method == 'PUT':
             payload = json.loads(request.body) if request.body else {}
-            res = requests.put(target_url, json=payload)
+            res = requests.put(target_url, headers=headers, json=payload)
         elif request.method == 'DELETE':
-            res = requests.delete(target_url)
+            res = requests.delete(target_url, headers=headers)
         else:
             return JsonResponse({"error": "Method không hỗ trợ"}, status=405)
 
-        # 5. Bê nguyên xi câu trả lời của Backend ném lại cho Frontend
         return HttpResponse(
             res.content, 
             status=res.status_code, 
@@ -336,6 +437,15 @@ def staff_dashboard(request):
         print("Lỗi Book Service:", e)
         books = []
 
+    # Gom danh sách Quần áo từ nhà Clothes
+    try:
+        clothes_res = requests.get("http://clothes-service:8000/clothes/")
+        clothes = clothes_res.json() if clothes_res.status_code == 200 else []
+        clothes.reverse()
+    except Exception as e:
+        print("Lỗi Clothes Service:", e)
+        clothes = []
+
     # 3. Gom danh sách Danh mục từ Catalog Service
     try:
         cat_res = requests.get("http://catalog-service:8000/categories/")
@@ -345,4 +455,9 @@ def staff_dashboard(request):
         categories = []
 
     # 4. Ném toàn bộ Data ra cho cái file HTML nó hiển thị
-    return render(request, 'staff_dashboard.html', {'orders': orders, 'books': books, 'categories': categories})
+    return render(request, 'staff_dashboard.html', {
+        'orders': orders, 
+        'books': books, 
+        'clothes': clothes, 
+        'categories': categories
+    })

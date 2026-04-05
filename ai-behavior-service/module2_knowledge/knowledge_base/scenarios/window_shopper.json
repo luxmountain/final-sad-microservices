@@ -1,0 +1,25 @@
+{
+  "behavior_type": "window_shopper",
+  "display_name": "Khách hàng chỉ xem",
+  "characteristics": [
+    "View nhiều nhưng click ít, gần như không mua",
+    "Không thêm sản phẩm vào giỏ hàng",
+    "Session ngắn, lướt nhanh qua nhiều trang",
+    "Có thể là khách hàng tiềm năng chưa tìm được sản phẩm phù hợp"
+  ],
+  "consultation_strategy": {
+    "tone": "Nhẹ nhàng, không áp lực, kích thích tò mò",
+    "approach": "Tìm hiểu nhu cầu thật sự, gợi ý sản phẩm phổ biến, tạo lý do để quay lại",
+    "key_phrases": ["Bạn đang tìm gì?", "Nhiều người cũng thích", "Dùng thử miễn phí"],
+    "upsell": "Không upsell mạnh, tập trung vào first conversion",
+    "avoid": "Tuyệt đối không push sale, không gây áp lực mua"
+  },
+  "recommended_products": {
+    "books": ["Hoàng Tử Bé (65,000đ - nhẹ nhàng, giá thấp nhất)", "Nhà Giả Kim (79,000đ - dễ đọc)"],
+    "clothes": ["Balenciaga Hoodie (23,750,000đ - casual, dễ mặc)"]
+  },
+  "sample_responses": [
+    "Chào bạn! 👋 Mình thấy bạn đang lướt xem nhiều sản phẩm. Bạn đang tìm sách hay thời trang? Mình có thể gợi ý vài món hot nhất tuần này nếu bạn muốn!",
+    "Nếu chưa biết bắt đầu từ đâu, Hoàng Tử Bé chỉ 65,000đ thôi — cuốn sách nhỏ nhưng ai đọc xong cũng thích. Hoặc nếu thích thời trang, Balenciaga Hoodie đang là hot trend năm nay. Dạo thêm thoải mái nhé! 😊"
+  ]
+}

@@ -1,349 +1,1435 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ - QuyStore</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            background-color: #f5f5fa;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-        }
-        .navbar { background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%); }
-        .book-card {
-            border: none; border-radius: 12px;
-            transition: all 0.3s ease; height: 100%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-            border: 1px solid #ff424e;
-        }
-        .book-cover { height: 260px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .section-title {
-            position: relative; display: inline-block;
-            margin-bottom: 25px; padding-bottom: 10px;
-            font-weight: bold; color: #333;
-        }
-        .section-title::after {
-            content: ""; position: absolute; left: 0; bottom: 0;
-            width: 60px; height: 4px;
-            background-color: #ff424e; border-radius: 2px;
-        }
-        a { text-decoration: none; color: inherit; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LUMIÈRE — Nền tảng mua sắm sách và thời trang hàng hiệu cao cấp. Tri thức gặp xa xỉ.">
+  <title>LUMIÈRE — Sách & Thời Trang Hàng Hiệu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       DESIGN TOKENS
+       ============================================ */
+    :root {
+      --color-obsidian: #0A0A0A;
+      --color-ivory: #F8F5F0;
+      --color-cream: #EDE8E0;
+      --color-gold: #C9A84C;
+      --color-gold-light: #E8D5A3;
+      --color-charcoal: #2C2C2C;
+      --color-ash: #6B6B6B;
+      --color-silk: #F0EBE3;
+      --color-emerald: #2D6A4F;
+      --color-crimson: #8B1A1A;
 
-        /* User dropdown */
-        .user-avatar {
-            width: 36px; height: 36px; border-radius: 50%;
-            background: linear-gradient(135deg, #ff424e, #ff6b35);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; color: #fff; font-size: 0.9rem;
-            cursor: pointer; border: 2px solid rgba(255,255,255,0.4);
-            transition: border-color 0.2s;
-        }
-        .user-avatar:hover { border-color: #fff; }
-        .user-dropdown-menu {
-            position: absolute; top: calc(100% + 10px); right: 0;
-            background: #fff; border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            min-width: 200px; padding: 8px 0;
-            z-index: 9999; display: none;
-            border: 1px solid rgba(0,0,0,0.05);
-            animation: dropIn 0.2s ease;
-        }
-        .user-dropdown-menu.show { display: block; }
-        @keyframes dropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
-        .user-dropdown-menu .drop-header {
-            padding: 12px 16px; border-bottom: 1px solid #f0f0f5;
-        }
-        .user-dropdown-menu .drop-header strong { display:block; color:#1a1a2e; font-size:0.9rem; }
-        .user-dropdown-menu .drop-header span { font-size:0.75rem; color:#888; }
-        .drop-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 16px; color: #333; font-size: 0.875rem;
-            cursor: pointer; transition: background 0.15s;
-            text-decoration: none;
-        }
-        .drop-item:hover { background: #f8f9fa; color: #333; }
-        .drop-item.danger { color: #dc3545; }
-        .drop-item.danger:hover { background: #fff5f5; }
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
 
-        .form-control:focus, .form-select:focus {
-            border-color: #ff424e;
-            box-shadow: 0 0 0 0.25rem rgba(255, 66, 78, 0.25);
-        }
-    </style>
+      --shadow-subtle: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-hover: 0 4px 12px rgba(0,0,0,0.10);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-sm: 2px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-charcoal);
+      background: var(--color-ivory);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height: 1.2; }
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+    button { font-family: var(--font-body); cursor: pointer; border: none; outline: none; transition: var(--transition); }
+    img { max-width: 100%; display: block; }
+
+    /* Utility */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 96px 0; }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ============================================
+       NAVBAR
+       ============================================ */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(248, 245, 240, 0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-silk);
+      transition: var(--transition);
+    }
+    .navbar.scrolled { box-shadow: var(--shadow-subtle); }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 72px;
+    }
+    .nav-logo {
+      font-family: var(--font-display); font-size: 24px; font-weight: 700;
+      letter-spacing: 3px; color: var(--color-charcoal);
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; letter-spacing: 0.5px;
+      color: var(--color-ash); text-transform: uppercase;
+    }
+    .nav-links a:hover { color: var(--color-gold); }
+    .nav-icons { display: flex; align-items: center; gap: 20px; }
+    .nav-icon {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; background: transparent; color: var(--color-charcoal);
+      cursor: pointer; position: relative;
+    }
+    .nav-icon:hover { background: var(--color-silk); }
+    .nav-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+    .cart-badge {
+      position: absolute; top: 2px; right: 2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--color-gold); color: #fff;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: 8px;
+    }
+    .nav-hamburger span {
+      width: 22px; height: 2px; background: var(--color-charcoal);
+      transition: var(--transition);
+    }
+    .mobile-menu {
+      display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+      background: var(--color-ivory); padding: 32px 24px; z-index: 999;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block; padding: 16px 0; font-size: 18px; font-weight: 500;
+      border-bottom: 1px solid var(--color-silk); color: var(--color-charcoal);
+    }
+    
+    /* Search Dropdown */
+    .search-dropdown {
+      position: absolute; top: calc(100% + 15px); right: -80px; width: 300px;
+      background: #fff; padding: 16px; border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hover); opacity: 0; visibility: hidden;
+      transform: translateY(-10px); transition: var(--transition);
+      cursor: default; z-index: 1001; pointer-events: none;
+    }
+    .nav-icon.search-active .search-dropdown {
+      opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+    }
+    .search-dropdown::before {
+      content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%) rotate(45deg);
+      width: 12px; height: 12px; background: #fff;
+    }
+    .search-input-wrapper { display: flex; gap: 8px; }
+    .search-input-wrapper input {
+      flex: 1; padding: 8px 12px; border: 1px solid var(--color-silk);
+      border-radius: var(--radius-sm); font-family: var(--font-body);
+      font-size: 14px; outline: none;
+    }
+    .search-input-wrapper input:focus { border-color: var(--color-gold); }
+    .search-input-wrapper button {
+      padding: 8px 16px; background: var(--color-obsidian); color: #fff;
+      border-radius: var(--radius-sm); font-weight: 600;
+    }
+    .search-input-wrapper button:hover { background: var(--color-gold); }
+
+    /* Profile Dropdown */
+    .profile-dropdown {
+      position: absolute; top: calc(100% + 15px); right: 0; width: 220px;
+      background: #fff; padding: 8px 0; border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hover); opacity: 0; visibility: hidden;
+      transform: translateY(-10px); transition: var(--transition);
+      cursor: default; z-index: 1001; pointer-events: none;
+    }
+    .nav-icon.profile-active .profile-dropdown {
+      opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+    }
+    .profile-dropdown::before {
+      content: ''; position: absolute; top: -6px; right: 14px; transform: rotate(45deg);
+      width: 12px; height: 12px; background: #fff;
+    }
+    .profile-dropdown-header {
+      padding: 12px 20px; border-bottom: 1px solid var(--color-silk); margin-bottom: 8px;
+    }
+    .profile-dropdown-header strong { display: block; font-size: 15px; color: var(--color-obsidian); }
+    .profile-dropdown-header span { font-size: 13px; color: var(--color-ash); }
+    .profile-dropdown a {
+      display: flex; align-items: center; gap: 12px; padding: 10px 20px;
+      font-size: 14px; color: var(--color-charcoal); text-decoration: none;
+      transition: background 0.2s;
+    }
+    .profile-dropdown a:hover { background: var(--color-ivory); color: var(--color-gold); }
+    .profile-dropdown a.text-red { color: var(--color-crimson); }
+    .profile-dropdown a.text-red:hover { background: #ffebeb; }
+
+    /* Alert Toast */
+    .toast-notification {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--color-obsidian); color: #fff; padding: 12px 24px;
+      border-radius: var(--radius-lg); font-size: 14px; font-weight: 500;
+      box-shadow: var(--shadow-hover); opacity: 0; transition: var(--transition);
+      z-index: 2000; pointer-events: none;
+    }
+    .toast-notification.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ============================================
+       HERO SECTION
+       ============================================ */
+    .hero {
+      position: relative; min-height: 100vh; display: flex; align-items: center;
+      overflow: hidden; background: var(--color-ivory);
+    }
+    .hero-bg {
+      position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr;
+    }
+    .hero-bg-left {
+      background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-silk) 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg-left::after {
+      content: ''; position: absolute; width: 300px; height: 400px;
+      background: linear-gradient(145deg, #d4c5a9 0%, #c2b280 30%, #a89060 60%, #8b7355 100%);
+      border-radius: 4px; transform: rotate(-5deg);
+      box-shadow: -8px 8px 0 rgba(0,0,0,0.05), 15px -5px 0 var(--color-cream);
+    }
+    .hero-bg-left::before {
+      content: ''; position: absolute; width: 280px; height: 380px;
+      background: linear-gradient(145deg, #e8dcc8 0%, #d4c8a8 40%, #bfad82 100%);
+      border-radius: 4px; transform: rotate(3deg) translate(20px, -10px); z-index: 1;
+      box-shadow: 5px 5px 20px rgba(0,0,0,0.08);
+    }
+    .hero-bg-right {
+      background: linear-gradient(135deg, var(--color-obsidian) 0%, #1a1a1a 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg-right::after {
+      content: ''; position: absolute; width: 200px; height: 500px;
+      background: linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.1) 30%, rgba(201,168,76,0.15) 50%, rgba(201,168,76,0.05) 80%, transparent 100%);
+      border-radius: 100px; transform: rotate(-8deg);
+    }
+    .hero-bg-right::before {
+      content: ''; position: absolute; width: 1px; height: 300px;
+      background: linear-gradient(180deg, transparent, var(--color-gold), transparent);
+      left: 50%; opacity: 0.3;
+    }
+    .hero-content {
+      position: relative; z-index: 10; text-align: center;
+      max-width: 800px; margin: 0 auto; padding: 0 24px; padding-top: 72px;
+    }
+    .hero-title {
+      font-size: clamp(48px, 8vw, 100px); font-weight: 700;
+      margin-bottom: 24px; line-height: 1.1; width: 100%;
+    }
+    .hero-title .title-row {
+      display: flex; width: 100%;
+    }
+    .hero-title .title-row.mt {
+      margin-top: 48px;
+    }
+    .hero-title .left {
+      flex: 1; text-align: right; padding-right: 16px; color: var(--color-charcoal);
+    }
+    .hero-title .right {
+      flex: 1; text-align: left; padding-left: 16px; color: var(--color-gold);
+    }
+    .hero-subtitle {
+      font-size: 18px; color: var(--color-ash); margin-bottom: 40px;
+      font-weight: 300; letter-spacing: 0.5px;
+    }
+    .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-outline {
+      padding: 14px 32px; border: 1.5px solid var(--color-charcoal);
+      color: var(--color-charcoal); font-size: 14px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; border-radius: var(--radius-sm);
+      background: transparent;
+    }
+    .btn-outline:hover {
+      background: var(--color-charcoal); color: var(--color-ivory);
+      transform: translateY(-2px); box-shadow: var(--shadow-hover);
+    }
+    .btn-gold {
+      padding: 14px 32px; background: var(--color-gold); color: #fff;
+      font-size: 14px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; border-radius: var(--radius-sm); border: 1.5px solid var(--color-gold);
+    }
+    .btn-gold:hover {
+      background: #b8973f; border-color: #b8973f;
+      transform: translateY(-2px); box-shadow: var(--shadow-hover);
+    }
+    .hero-countdown {
+      margin-top: 48px; display: inline-flex; align-items: center; gap: 12px;
+      background: rgba(10,10,10,0.05); padding: 12px 24px; border-radius: var(--radius-md);
+    }
+    .hero-countdown .label {
+      font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--color-crimson);
+    }
+    .countdown-timer {
+      display: flex; gap: 4px; font-family: var(--font-mono);
+      font-size: 16px; font-weight: 500; color: var(--color-charcoal);
+    }
+    .countdown-timer .sep { color: var(--color-ash); }
+
+    /* ============================================
+       SECTION: BESTSELLER BOOKS
+       ============================================ */
+    .section-books { background: var(--color-ivory); }
+    .section-header {
+      text-align: center; margin-bottom: 48px;
+    }
+    .section-header h2 {
+      font-size: clamp(28px, 3vw, 40px); color: var(--color-charcoal);
+      position: relative; display: inline-block;
+    }
+    .section-header h2::after {
+      content: ''; position: absolute; bottom: -8px; left: 50%;
+      transform: translateX(-50%); width: 60px; height: 2px;
+      background: var(--color-gold);
+    }
+    .section-header p {
+      margin-top: 16px; color: var(--color-ash); font-size: 15px;
+    }
+
+    .books-carousel-wrap { position: relative; }
+    .books-carousel {
+      display: flex; gap: 24px; overflow-x: auto;
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+      padding-bottom: 16px; scrollbar-width: none;
+    }
+    .books-carousel::-webkit-scrollbar { display: none; }
+
+    .book-card {
+      flex: 0 0 220px; scroll-snap-align: start;
+      background: #fff; border-radius: var(--radius-md);
+      overflow: hidden; box-shadow: var(--shadow-subtle);
+      transition: var(--transition); cursor: pointer;
+    }
+    .book-card:hover {
+      transform: translateY(-4px); box-shadow: var(--shadow-hover);
+    }
+    .book-cover {
+      height: 280px; position: relative; overflow: hidden;
+    }
+    .book-cover .cover-art {
+      width: 100%; height: 100%;
+    }
+    .book-badge {
+      position: absolute; top: 12px; left: 12px;
+      padding: 4px 10px; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      border-radius: var(--radius-sm); color: #fff;
+    }
+    .badge-bestseller { background: var(--color-gold); }
+    .badge-new { background: var(--color-emerald); }
+    .book-info { padding: 16px; }
+    .book-info h4 {
+      font-family: var(--font-display); font-size: 16px;
+      margin-bottom: 4px; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .book-author { font-size: 13px; color: var(--color-ash); margin-bottom: 12px; }
+    .book-bottom { display: flex; align-items: center; justify-content: space-between; }
+    .book-price {
+      font-family: var(--font-mono); font-size: 15px;
+      font-weight: 600; color: var(--color-gold);
+    }
+    .btn-add-sm {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--color-obsidian); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .btn-add-sm:hover { background: var(--color-gold); }
+
+    .view-all-link {
+      display: block; text-align: center; margin-top: 32px;
+      font-size: 14px; font-weight: 600; letter-spacing: 0.5px;
+      color: var(--color-charcoal); text-transform: uppercase;
+    }
+    .view-all-link:hover { color: var(--color-gold); }
+
+    /* ============================================
+       SECTION: LUXURY FASHION
+       ============================================ */
+    .section-fashion {
+      background: var(--color-obsidian); color: var(--color-ivory);
+    }
+    .section-fashion .section-header h2 { color: var(--color-ivory); }
+    .section-fashion .section-header p { color: rgba(248,245,240,0.5); letter-spacing: 3px; font-size: 13px; }
+    .fashion-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    .fashion-card {
+      position: relative; overflow: hidden; border-radius: var(--radius-md);
+      cursor: pointer; background: #1a1a1a;
+    }
+    .fashion-card:first-child {
+      grid-column: 1 / 3; grid-row: 1 / 3;
+    }
+    .fashion-art {
+      width: 100%; padding-bottom: 100%; position: relative;
+    }
+    .fashion-card:first-child .fashion-art { padding-bottom: 100%; }
+    .fashion-art-inner {
+      position: absolute; inset: 0;
+    }
+    .fashion-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10,10,10,0.85) 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 24px; transition: var(--transition);
+    }
+    .fashion-card:hover .fashion-overlay { background: linear-gradient(180deg, transparent 20%, rgba(10,10,10,0.9) 100%); }
+    .fashion-tag {
+      position: absolute; top: 16px; right: 16px;
+      padding: 4px 12px; font-size: 10px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      border: 1px solid var(--color-gold); color: var(--color-gold);
+      border-radius: var(--radius-sm);
+    }
+    .fashion-brand {
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--color-gold-light);
+      margin-bottom: 4px;
+    }
+    .fashion-name {
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--color-ivory); margin-bottom: 8px;
+    }
+    .fashion-card:nth-child(n+2) .fashion-name { font-size: 16px; }
+    .fashion-price-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fashion-price {
+      font-family: var(--font-mono); font-size: 16px;
+      color: var(--color-gold); font-weight: 500;
+    }
+    .fashion-cta {
+      font-size: 12px; color: var(--color-ivory);
+      opacity: 0; transform: translateY(8px);
+      transition: var(--transition);
+    }
+    .fashion-card:hover .fashion-cta { opacity: 1; transform: translateY(0); }
+
+    /* ============================================
+       SECTION: AI RECOMMENDATIONS
+       ============================================ */
+    .section-ai { background: var(--color-ivory); }
+    .ai-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 16px; border: 1px solid var(--color-gold);
+      border-radius: 50px; font-size: 12px; font-weight: 600;
+      color: var(--color-gold); margin-bottom: 16px; letter-spacing: 0.5px;
+    }
+    .ai-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    }
+    .ai-note {
+      text-align: center; margin-top: 24px;
+      font-style: italic; font-size: 13px; color: var(--color-ash);
+    }
+
+    /* Reusable product card (used in AI + listing) */
+    .product-card {
+      background: #fff; border-radius: var(--radius-md);
+      overflow: hidden; box-shadow: var(--shadow-subtle);
+      transition: var(--transition); cursor: pointer;
+      position: relative;
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .product-card .card-img {
+      height: 240px; overflow: hidden; position: relative;
+    }
+    .product-card .card-body { padding: 16px; }
+    .product-card .card-category {
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--color-ash); margin-bottom: 4px;
+    }
+    .product-card .card-title {
+      font-family: var(--font-display); font-size: 16px;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    .product-card .card-price {
+      font-family: var(--font-mono); font-size: 15px;
+      font-weight: 600; color: var(--color-gold);
+    }
+    .product-card .card-heart {
+      position: absolute; top: 12px; right: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.9); display: flex;
+      align-items: center; justify-content: center;
+      opacity: 0; transition: var(--transition); cursor: pointer;
+    }
+    .product-card:hover .card-heart { opacity: 1; }
+    .product-card .card-heart svg { width: 18px; height: 18px; stroke: var(--color-charcoal); fill: none; stroke-width: 1.8; }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      background: var(--color-obsidian); color: rgba(248,245,240,0.7);
+      padding: 64px 0 32px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand h3 {
+      font-family: var(--font-display); font-size: 22px;
+      color: var(--color-ivory); letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .footer-brand p { font-size: 14px; line-height: 1.7; }
+    .footer h4 {
+      font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--color-ivory); margin-bottom: 20px;
+    }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 10px; }
+    .footer a { font-size: 14px; color: rgba(248,245,240,0.5); }
+    .footer a:hover { color: var(--color-gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(248,245,240,0.1);
+      padding-top: 24px; text-align: center; font-size: 13px;
+      color: rgba(248,245,240,0.3);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .ai-grid { grid-template-columns: repeat(2, 1fr); }
+      .fashion-grid { grid-template-columns: repeat(2, 1fr); }
+      .fashion-card:first-child { grid-column: 1 / 3; grid-row: auto; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-bg { grid-template-columns: 1fr; }
+      .hero-bg-right { display: none; }
+      .hero-content h1 { font-size: 32px; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .fashion-grid { grid-template-columns: 1fr; }
+      .fashion-card:first-child { grid-column: auto; grid-row: auto; }
+      .ai-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .book-card { flex: 0 0 180px; }
+      .book-cover { height: 230px; }
+    }
+    @media (max-width: 480px) {
+      .ai-grid { grid-template-columns: 1fr; }
+      .hero-countdown { flex-direction: column; gap: 8px; }
+    }
+
+    /* ============================================
+       AI CHAT WIDGET
+       ============================================ */
+    .chat-bubble {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-gold) 0%, #b8973f 100%);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+      transition: var(--transition);
+    }
+    .chat-bubble:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(201,168,76,0.5); }
+    .chat-bubble svg { width: 26px; height: 26px; fill: #fff; }
+    .chat-bubble-label {
+      position: absolute; right: 72px; top: 50%; transform: translateY(-50%);
+      background: var(--color-charcoal); color: #fff; padding: 6px 14px;
+      border-radius: 8px; font-size: 13px; font-weight: 500;
+      white-space: nowrap; opacity: 0; transition: var(--transition);
+      pointer-events: none;
+    }
+    .chat-bubble:hover .chat-bubble-label { opacity: 1; }
+    .chat-bubble-pulse {
+      position: absolute; inset: -4px; border-radius: 50%;
+      border: 2px solid var(--color-gold); opacity: 0;
+      animation: chatPulse 2s ease-out infinite;
+    }
+    @keyframes chatPulse {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .chat-panel {
+      position: fixed; bottom: 96px; right: 24px; z-index: 9999;
+      width: 380px; height: 520px; border-radius: var(--radius-lg);
+      background: #fff; box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      display: none; flex-direction: column; overflow: hidden;
+      animation: chatSlideUp 0.3s ease;
+    }
+    .chat-panel.open { display: flex; }
+    @keyframes chatSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-header {
+      background: var(--color-obsidian); padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .chat-header-info h3 {
+      font-family: var(--font-display); font-size: 16px;
+      color: var(--color-ivory); margin-bottom: 2px;
+    }
+    .chat-header-info small {
+      font-size: 11px; color: var(--color-gold); letter-spacing: 0.5px;
+    }
+    .chat-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); color: var(--color-ivory);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; cursor: pointer; border: none;
+    }
+    .chat-close:hover { background: rgba(255,255,255,0.2); }
+
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--color-silk); border-radius: 4px; }
+
+    .chat-msg { display: flex; gap: 8px; max-width: 85%; }
+    .chat-msg.bot { align-self: flex-start; }
+    .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--color-obsidian); color: var(--color-gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 14px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .chat-msg.user .chat-avatar {
+      background: var(--color-gold); color: #fff;
+    }
+    .chat-msg-bubble {
+      padding: 10px 14px; border-radius: 12px;
+      font-size: 14px; line-height: 1.5;
+    }
+    .chat-msg.bot .chat-msg-bubble {
+      background: var(--color-cream); color: var(--color-charcoal);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-msg.user .chat-msg-bubble {
+      background: var(--color-gold); color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-typing { display: flex; gap: 4px; padding: 4px 0; align-items: center; }
+    .chat-typing span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--color-ash); animation: typingDot 1.4s infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingDot {
+      0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    .chat-quick-replies {
+      padding: 0 16px 8px; display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .chat-quick-btn {
+      padding: 6px 14px; border: 1px solid var(--color-silk);
+      border-radius: 50px; font-size: 12px; color: var(--color-charcoal);
+      background: #fff; cursor: pointer;
+    }
+    .chat-quick-btn:hover {
+      border-color: var(--color-gold); color: var(--color-gold);
+    }
+
+    .chat-input-area {
+      padding: 12px 16px; border-top: 1px solid var(--color-silk);
+      display: flex; gap: 8px;
+    }
+    .chat-input {
+      flex: 1; padding: 10px 14px; border: 1px solid var(--color-silk);
+      border-radius: var(--radius-md); font-family: var(--font-body);
+      font-size: 14px; outline: none; background: var(--color-ivory);
+    }
+    .chat-input:focus { border-color: var(--color-gold); }
+    .chat-send {
+      width: 40px; height: 40px; border-radius: var(--radius-md);
+      background: var(--color-gold); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: none;
+    }
+    .chat-send:hover { background: #b8973f; }
+    .chat-send svg { width: 18px; height: 18px; fill: #fff; }
+
+    @media (max-width: 480px) {
+      .chat-panel { width: calc(100vw - 32px); right: 16px; bottom: 88px; height: 60vh; }
+      .chat-bubble { bottom: 16px; right: 16px; }
+    }
+  </style>
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="/"><i class="fas fa-book-open me-2"></i>QuyStore</a>
-            <div class="d-flex align-items-center gap-3" id="navbarRight">
-                </div>
-        </div>
-    </nav>
 
-    <div class="container mt-4">
-
-        <div class="card shadow-sm border-0 mb-5 rounded-4">
-            <div class="card-body p-4">
-                <div class="row g-3 align-items-end">
-                    
-                    <div class="col-lg-3 col-md-6">
-                        <label class="form-label fw-bold text-secondary small"><i class="fas fa-search me-1"></i>Tìm kiếm</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-font"></i></span>
-                            <input type="text" id="searchInput" class="form-control border-start-0 ps-0 bg-light" 
-                                placeholder="Tên sách, tác giả..." oninput="filterBooks()">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-2 col-md-6">
-                        <label class="form-label fw-bold text-secondary small"><i class="fas fa-tags me-1"></i>Thể loại</label>
-                        <select id="categorySelect" class="form-select bg-light" onchange="filterBooks()">
-                            <option value="all">📚 Tất cả thể loại</option>
-                            {% for cat in categories %}
-                            <option value="{{ cat.id }}">{{ cat.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col-lg-4 col-md-8">
-                        <label class="form-label fw-bold text-secondary small"><i class="fas fa-coins me-1"></i>Khoảng giá (đ)</label>
-                        <div class="input-group">
-                            <input type="number" id="priceMinInput" class="form-control bg-light" placeholder="Từ giá..." min="0" onchange="filterBooks()" onkeyup="filterBooks()">
-                            <span class="input-group-text bg-white border-0 text-muted px-2">-</span>
-                            <input type="number" id="priceMaxInput" class="form-control bg-light" placeholder="Đến giá..." min="0" onchange="filterBooks()" onkeyup="filterBooks()">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-2 col-md-4">
-                        <label class="form-label fw-bold text-secondary small"><i class="fas fa-sort me-1"></i>Sắp xếp</label>
-                        <select id="sortSelect" class="form-select bg-light" onchange="filterBooks()">
-                            <option value="default">Mặc định</option>
-                            <option value="price_asc">Giá tăng dần ↑</option>
-                            <option value="price_desc">Giá giảm dần ↓</option>
-                            <option value="name_asc">Tên A → Z</option>
-                            <option value="stock_desc">Tồn kho nhiều</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-1 col-md-12 text-end">
-                        <button class="btn btn-outline-danger w-100 py-2" onclick="resetFilters()" title="Xóa bộ lọc">
-                            <i class="fas fa-undo"></i>
-                        </button>
-                    </div>
-                </div>
+  <!-- ============================================
+       NAVBAR
+       ============================================ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="nav-logo">LUMIÈRE</a>
+      <ul class="nav-links">
+        <li><a href="/listing/">Sách</a></li>
+        <li><a href="/listing/">Thời Trang</a></li>
+        <li><a href="#about">Về Chúng Tôi</a></li>
+      </ul>
+      <div class="nav-icons">
+        <div class="nav-icon" id="nav-search" title="Tìm kiếm">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div class="search-dropdown" id="search-dropdown">
+            <div class="search-input-wrapper">
+              <input type="text" id="search-input" placeholder="Tìm sách, túi xách, thương hiệu..." onclick="event.stopPropagation()">
+              <button onclick="window.location.href='/listing/?q=' + document.getElementById('search-input').value; event.stopPropagation()">Tìm</button>
             </div>
+          </div>
         </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="section-title mb-0">🔥 Tất Cả Sản Phẩm</h3>
-            <span id="resultCount" class="badge bg-secondary rounded-pill py-2 px-3 fs-6"></span>
+        <div class="nav-icon" id="nav-favorite" title="Yêu thích">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
-
-        <div class="row g-4 mb-5" id="bookListContainer">
-            {% if books %}
-            {% for book in books %}
-            <div class="col-xl-3 col-lg-4 col-md-6 book-item"
-                data-category="{{ book.category_id }}"
-                data-price="{{ book.price }}"
-                data-title="{{ book.title|lower }}"
-                data-author="{{ book.author|lower }}"
-                data-stock="{{ book.stock }}">
-                <div class="card book-card bg-white">
-                    <a href="/book/{{ book.id }}/">
-                        {% if book.image_url %}
-                        <img src="{{ book.image_url }}" class="card-img-top book-cover" alt="Cover">
-                        {% else %}
-                        <img src="https://dummyimage.com/300x400/e0e0e0/666666.png&text=Chưa+có+ảnh"
-                            class="card-img-top book-cover" alt="No image">
-                        {% endif %}
-                    </a>
-                    <div class="card-body d-flex flex-column">
-                        <a href="/book/{{ book.id }}/">
-                            <h5 class="card-title fw-bold text-dark text-truncate">{{ book.title }}</h5>
-                        </a>
-                        <p class="text-muted small mb-2"><i class="fas fa-pen-nib me-1"></i>{{ book.author }}</p>
-                        <h4 class="text-danger fw-bold my-2">{{ book.price|floatformat:0 }}đ</h4>
-                        <span class="badge bg-success bg-opacity-10 text-success mb-3 w-50">Kho: {{ book.stock }}</span>
-                        <button class="btn btn-outline-danger w-100 mt-auto fw-bold" onclick="addToCart({{ book.id }})">
-                            <i class="fas fa-cart-plus me-1"></i>Thêm vào giỏ
-                        </button>
-                    </div>
-                </div>
+        <div class="nav-icon" id="nav-cart" title="Giỏ hàng" onclick="location.href='/cart/'">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-badge">3</span>
+        </div>
+        <div class="nav-icon" id="nav-profile" title="Tài khoản">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <div class="profile-dropdown-header">
+              <strong id="profile-name">Khách hàng</strong>
+              <span id="profile-email">Đang đăng nhập</span>
             </div>
-            {% endfor %}
-            {% else %}
-            <div class="alert alert-danger w-100 text-center">Kho sách đang trống!</div>
-            {% endif %}
+            <a href="/profile/" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Hồ sơ của tôi</a>
+            <a href="/orders/" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>Đơn hàng của tôi</a>
+            <a href="/listing/" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Sản phẩm đã thích</a>
+            <a href="#" class="text-red" id="logout-btn" onclick="event.stopPropagation(); handleLogout()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Đăng xuất</a>
+          </div>
         </div>
-
-        {% if ai_books %}
-        <div class="mt-5 p-4 bg-white rounded-4 shadow-sm border border-danger border-opacity-25 mb-5">
-            <h3 class="section-title text-danger mb-1"><i class="fas fa-magic me-2"></i>Gợi Ý Hôm Nay</h3>
-            <p class="text-muted mb-4">{{ ai_reason }}</p>
-
-            <div class="row g-4">
-                {% for ai_b in ai_books %}
-                <div class="col-md-3">
-                    <div class="card book-card bg-light">
-                        <a href="/book/{{ ai_b.id }}/">
-                            {% if ai_b.image_url %}
-                            <img src="{{ ai_b.image_url }}" class="card-img-top book-cover" style="height: 200px;" alt="Cover">
-                            {% else %}
-                            <img src="https://dummyimage.com/200x300/e0e0e0/666666.png&text=Chưa+có+ảnh" class="card-img-top book-cover" style="height: 200px;" alt="No image">
-                            {% endif %}
-                        </a>
-                        <div class="card-body text-center">
-                            <a href="/book/{{ ai_b.id }}/">
-                                <h6 class="card-title fw-bold text-truncate">{{ ai_b.title }}</h6>
-                            </a>
-                            <div class="text-danger fw-bold mb-2">{{ ai_b.price|floatformat:0 }}đ</div>
-                            <button class="btn btn-sm btn-outline-danger w-100" onclick="addToCart({{ ai_b.id }})">
-                                <i class="fas fa-cart-plus me-1"></i>Thêm vào giỏ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
+      </div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </nav>
 
-    <script>
-        // ===== USER SESSION NAVBAR =====
-        (function renderNavbar() {
-            const user = JSON.parse(localStorage.getItem('quystore_user') || 'null');
-            const nav = document.getElementById('navbarRight');
-            if (!nav) return;
-            if (!user) {
-                nav.innerHTML = `
-                    <a href="/orders/" class="btn btn-outline-light btn-sm rounded-pill"><i class="fas fa-box-open me-1"></i>Đơn hàng</a>
-                    <a href="/cart/" class="btn btn-warning btn-sm fw-bold text-dark rounded-pill"><i class="fas fa-shopping-cart me-2"></i>Giỏ Hàng</a>
-                    <a href="/login/" class="btn btn-outline-light btn-sm rounded-pill"><i class="fas fa-sign-in-alt me-1"></i>Đăng nhập</a>`;
-            } else {
-                nav.innerHTML = `
-                    <a href="/orders/" class="btn btn-outline-light btn-sm rounded-pill"><i class="fas fa-box-open me-1"></i>Đơn hàng</a>
-                    <a href="/cart/" class="btn btn-warning btn-sm fw-bold text-dark rounded-pill"><i class="fas fa-shopping-cart me-2"></i>Giỏ Hàng</a>
-                    <div style="position:relative" id="userDropdownWrap">
-                        <div class="user-avatar" id="userAvatarBtn" onclick="toggleDropdown()" title="${user.name}">${user.avatar || user.name.charAt(0)}</div>
-                        <div class="user-dropdown-menu" id="userDropdownMenu">
-                            <div class="drop-header"><strong>${user.name}</strong><span>${user.role==='admin'?'Nhân viên':user.role==='manager'?'Quản lý':'Khách hàng'}</span></div>
-                            ${user.role==='admin'?'<a href="/staff/" class="drop-item"><i class="fas fa-cogs"></i> Trang Nhân viên</a>':''}
-                            ${user.role==='manager'?'<a href="/manager/" class="drop-item"><i class="fas fa-chart-line"></i> Trang Quản lý</a>':''}
-                            <a href="/orders/" class="drop-item"><i class="fas fa-box-open"></i> Đơn hàng của tôi</a>
-                            <div style="border-top:1px solid #f0f0f5;margin:4px 0"></div>
-                            <div class="drop-item danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</div>
-                        </div>
-                    </div>`;
-                document.addEventListener('click', e => {
-                    const wrap = document.getElementById('userDropdownWrap');
-                    if (wrap && !wrap.contains(e.target)) document.getElementById('userDropdownMenu')?.classList.remove('show');
-                });
-            }
-        })();
-        function toggleDropdown() { document.getElementById('userDropdownMenu')?.classList.toggle('show'); }
-        function logout() { localStorage.removeItem('quystore_user'); window.location.href='/login/'; }
+  <div id="toast-message" class="toast-notification"></div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/listing/">Sách</a>
+    <a href="/listing/">Thời Trang</a>
+    <a href="#about">Về Chúng Tôi</a>
+    <a href="/cart/">Giỏ Hàng</a>
+    <a href="/auth/">Đăng Nhập</a>
+  </div>
 
-        // ===== LOGIC BỘ LỌC ĐÃ TỐI ƯU =====
-        function filterBooks() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const sort = document.getElementById('sortSelect').value;
-            const activeCat = document.getElementById('categorySelect').value;
-            
-            const minInput = document.getElementById('priceMinInput').value;
-            const maxInput = document.getElementById('priceMaxInput').value;
-            const priceMin = minInput ? parseFloat(minInput) : 0;
-            const priceMax = maxInput ? parseFloat(maxInput) : Infinity;
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-bg-left"></div>
+      <div class="hero-bg-right"></div>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title fade-in">
+        <span class="title-row"><span class="left">Tri Thức</span><span class="right"></span></span>
+        <span class="title-row"><span class="left"></span><span class="right">Phong</span></span>
+        <span class="title-row"><span class="left"></span><span class="right">Cách</span></span>
+        <span class="title-row mt"><span class="left">Đẳng</span><span class="right">Cấp</span></span>
+      </h1>
+      <p class="hero-subtitle fade-in">Sách hay gặp thời trang hàng hiệu — nơi trí tuệ hòa quyện cùng sự xa xỉ</p>
+      <div class="hero-ctas fade-in">
+        <a href="/listing/" class="btn-outline">Khám Phá Sách</a>
+        <a href="/listing/" class="btn-gold">Thời Trang Mới</a>
+      </div>
+      <div class="hero-countdown fade-in">
+        <span class="label">SALE THÁNG 4 — Kết thúc sau:</span>
+        <div class="countdown-timer" id="countdown">
+          <span id="cd-days">00</span><span class="sep">ngày</span>
+          <span id="cd-hours">00</span><span class="sep">:</span>
+          <span id="cd-mins">00</span><span class="sep">:</span>
+          <span id="cd-secs">00</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            const items = Array.from(document.querySelectorAll('.book-item'));
-            let visible = [];
+  <!-- ============================================
+       BESTSELLER BOOKS
+       ============================================ -->
+  <section class="section-books section-pad" id="section-books">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>Sách Bán Chạy Tuần Này</h2>
+        <p>Những cuốn sách được yêu thích nhất bởi cộng đồng LUMIÈRE</p>
+      </div>
+      <div class="books-carousel-wrap">
+        <div class="books-carousel" id="books-carousel">
+          <!-- Books will be loaded dynamically from API -->
+        </div>
+      </div>
+      <a href="/listing/" class="view-all-link fade-in">Xem tất cả sách →</a>
+    </div>
+  </section>
 
-            items.forEach(item => {
-                const title  = item.dataset.title || '';
-                const author = item.dataset.author || '';
-                const price  = parseFloat(item.dataset.price) || 0;
-                const cat    = item.dataset.category || '';
-                const stock  = parseInt(item.dataset.stock) || 0;
+  <!-- ============================================
+       LUXURY FASHION
+       ============================================ -->
+  <section class="section-fashion section-pad" id="section-fashion">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>Thời Trang Hàng Hiệu</h2>
+        <p>GUCCI · DIOR · LOUIS VUITTON · HERMÈS · CHANEL</p>
+      </div>
+      <div class="fashion-grid" id="fashion-grid">
+        <!-- Clothes will be loaded dynamically from API -->
+      </div>
+    </div>
+  </section>
 
-                const matchSearch = !search || title.includes(search) || author.includes(search);
-                const matchCat    = activeCat === 'all' || String(cat) === String(activeCat);
-                const matchPrice  = price >= priceMin && price <= priceMax;
+  <!-- ============================================
+       AI RECOMMENDATIONS
+       ============================================ -->
+  <section class="section-ai section-pad" id="section-ai">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="ai-badge">✦ Powered by AI</span>
+        <h2>Gợi Ý Riêng Cho Bạn</h2>
+      </div>
+      <div class="ai-grid" id="ai-grid">
+        <!-- AI recommendations will be loaded dynamically -->
+      </div>
+      <p class="ai-note fade-in">Dựa trên lịch sử duyệt của bạn</p>
+    </div>
+  </section>
 
-                if (matchSearch && matchCat && matchPrice) {
-                    item.style.display = 'block';
-                    visible.push({ el: item, price, title, stock });
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="footer" id="about">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>LUMIÈRE</h3>
+          <p>Nơi trí tuệ hòa quyện cùng phong cách. Chúng tôi mang đến những cuốn sách hay nhất và thời trang hàng hiệu đẳng cấp nhất dành cho bạn.</p>
+        </div>
+        <div>
+          <h4>Chăm Sóc KH</h4>
+          <ul>
+            <li><a href="#">Liên hệ hỗ trợ</a></li>
+            <li><a href="#">Theo dõi đơn hàng</a></li>
+            <li><a href="#">Hướng dẫn chọn size</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Chính Sách</h4>
+          <ul>
+            <li><a href="#">Đổi trả & Hoàn tiền</a></li>
+            <li><a href="#">Vận chuyển</a></li>
+            <li><a href="#">Thanh toán</a></li>
+            <li><a href="#">Bảo mật thông tin</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Kết Nối</h4>
+          <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">TikTok</a></li>
+            <li><a href="#">Email: hello@lumiere.vn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2026 LUMIÈRE. All rights reserved. | Tri thức · Phong cách · Đẳng cấp
+      </div>
+    </div>
+  </footer>
 
-            const container = document.getElementById('bookListContainer');
-            if (sort === 'price_asc')  visible.sort((a,b) => a.price - b.price);
-            if (sort === 'price_desc') visible.sort((a,b) => b.price - a.price);
-            if (sort === 'name_asc')   visible.sort((a,b) => a.title.localeCompare(b.title));
-            if (sort === 'stock_desc') visible.sort((a,b) => b.stock - a.stock);
-            
-            visible.forEach(v => container.appendChild(v.el));
+  <!-- ============================================
+       AI CHAT WIDGET
+       ============================================ -->
+  <div class="chat-bubble" id="chat-bubble" title="Chat với AI tư vấn">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="chat-bubble-label">Tư vấn AI</span>
+    <div class="chat-bubble-pulse"></div>
+  </div>
 
-            const rc = document.getElementById('resultCount');
-            if (rc) rc.textContent = `${visible.length} sản phẩm`;
+  <div class="chat-panel" id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <h3>Trợ Lý LUMIÈRE</h3>
+        <small>Powered by AI</small>
+      </div>
+      <button class="chat-close" id="chat-close">&times;</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-msg bot">
+        <div class="chat-avatar">L</div>
+        <div class="chat-msg-bubble">Xin chào! Tôi là trợ lý AI của LUMIÈRE. Bạn cần tư vấn về sách hay thời trang hàng hiệu?</div>
+      </div>
+    </div>
+    <div class="chat-quick-replies" id="chat-quick-replies">
+      <button class="chat-quick-btn" data-msg="Gợi ý sách hay cho tôi">Gợi ý sách hay</button>
+      <button class="chat-quick-btn" data-msg="Có khuyến mãi gì không?">Khuyến mãi?</button>
+      <button class="chat-quick-btn" data-msg="Chính sách đổi trả như thế nào?">Đổi trả</button>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chat-input" placeholder="Nhập câu hỏi..." autocomplete="off">
+      <button class="chat-send" id="chat-send">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
+  <script>
+    /* ==========================
+       BEHAVIOR TRACKING
+       ========================== */
+    const track = (event, data) => {
+      console.log('%c[BEHAVIOR]', 'color: #2D6A4F; font-weight: bold', event, data);
+    };
+
+    // Page view
+    track('page_view', { page: 'homepage', timestamp: Date.now() });
+
+    // Section view (IntersectionObserver)
+    const sections = document.querySelectorAll('section[id]');
+    const sectionObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          track('section_view', { section: e.target.id });
+          sectionObs.unobserve(e.target);
         }
+      });
+    }, { threshold: 0.3 });
+    sections.forEach(s => sectionObs.observe(s));
 
-        function resetFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('sortSelect').value = 'default';
-            document.getElementById('categorySelect').value = 'all';
-            document.getElementById('priceMinInput').value = '';
-            document.getElementById('priceMaxInput').value = '';
-            filterBooks();
+    // Product click
+    document.querySelectorAll('[data-id]').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const name = card.dataset.name;
+        const cat = card.dataset.category;
+        if (id && name) track('product_click', { id, name, category: cat });
+      });
+    });
+
+    // Hover dwell (2s)
+    document.querySelectorAll('[data-id]').forEach(card => {
+      let timer;
+      card.addEventListener('mouseenter', () => {
+        timer = setTimeout(() => {
+          track('hover_dwell', { id: card.dataset.id, duration: '2000ms' });
+        }, 2000);
+      });
+      card.addEventListener('mouseleave', () => clearTimeout(timer));
+    });
+
+    // Add to cart
+    document.querySelectorAll('.btn-add-sm').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        track('add_to_cart', { id: btn.dataset.id, price: btn.dataset.price });
+        btn.textContent = '✓';
+        btn.style.background = 'var(--color-emerald)';
+        setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; }, 1500);
+      });
+    });
+
+    /* ==========================
+       NAVBAR SCROLL
+       ========================== */
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    /* ==========================
+       HAMBURGER MENU
+       ========================== */
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    });
+
+    /* ==========================
+       COUNTDOWN TIMER
+       ========================== */
+    function startCountdown() {
+      // Sale ends at end of April 2026
+      const end = new Date('2026-04-30T23:59:59').getTime();
+      function tick() {
+        const now = Date.now();
+        const diff = Math.max(0, end - now);
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+        document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+        document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+    startCountdown();
+
+    /* ==========================
+       FADE-IN ON SCROLL
+       ========================== */
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const fadeObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 100);
+          fadeObs.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.1 });
+    fadeEls.forEach(el => fadeObs.observe(el));
 
-        async function addToCart(bookId) {
-            // Lấy user từ LocalStorage
-            const user = JSON.parse(localStorage.getItem('quystore_user') || 'null');
-            
-            // FIX CHÍ MẠNG: Nếu có user và user có ID thì lấy, nếu không BẮT BUỘC gán bằng 1
-            const customerId = (user && user.id) ? user.id : 1; 
+    /* ==========================
+       AI CHAT WIDGET
+       ========================== */
+    (function() {
+      const AI_API = 'http://localhost:8020';
+      const API_KEY = 'bookstore-ai-secret-key-2024';
+      const userId = localStorage.getItem('lumiere_uid') || ('user_' + Date.now());
+      localStorage.setItem('lumiere_uid', userId);
 
-            try {
-                const res = await fetch('/api/cart/cart-items/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    // Ép kiểu parseInt cho chắc cốp, không bao giờ bị undefined nữa
-                    body: JSON.stringify({
-                        customer_id: parseInt(customerId), 
-                        book_id: parseInt(bookId), 
-                        quantity: 1
-                    })
-                });
-                
-                if (res.ok || res.status === 201) {
-                    const toast = document.createElement('div');
-                    toast.textContent = '✅ Đã thêm vào giỏ hàng!';
-                    toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#28a745;color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;z-index:9999;box-shadow:0 4px 15px rgba(0,0,0,0.2);';
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 2500);
-                } else { 
-                    alert('❌ Lỗi khi thêm vào giỏ!'); 
-                }
-            } catch (e) { 
-                alert('⚠️ Lỗi kết nối!'); 
-            }
+      const bubble = document.getElementById('chat-bubble');
+      const panel = document.getElementById('chat-panel');
+      const closeBtn = document.getElementById('chat-close');
+      const input = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send');
+      const messagesEl = document.getElementById('chat-messages');
+      const quickReplies = document.getElementById('chat-quick-replies');
+
+      // Toggle chat panel
+      bubble.addEventListener('click', () => {
+        panel.classList.toggle('open');
+        if (panel.classList.contains('open')) input.focus();
+      });
+      closeBtn.addEventListener('click', () => panel.classList.remove('open'));
+
+      // Add message to chat
+      function addMsg(text, isUser) {
+        const div = document.createElement('div');
+        div.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
+        div.innerHTML = `
+          <div class="chat-avatar">${isUser ? 'B' : 'L'}</div>
+          <div class="chat-msg-bubble">${text}</div>
+        `;
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      // Typing indicator
+      function showTyping() {
+        const div = document.createElement('div');
+        div.className = 'chat-msg bot';
+        div.id = 'typing-indicator';
+        div.innerHTML = `
+          <div class="chat-avatar">L</div>
+          <div class="chat-msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>
+        `;
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+      function hideTyping() {
+        const el = document.getElementById('typing-indicator');
+        if (el) el.remove();
+      }
+
+      // Send message to AI
+      async function sendMessage(msg) {
+        if (!msg.trim()) return;
+        addMsg(msg, true);
+        input.value = '';
+        quickReplies.style.display = 'none';
+        showTyping();
+        track('chat_message', { user_id: userId, message: msg });
+
+        try {
+          const res = await fetch(AI_API + '/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
+            body: JSON.stringify({ user_id: userId, message: msg })
+          });
+          const data = await res.json();
+          hideTyping();
+          addMsg(data.answer || data.detail || 'Xin lỗi, có lỗi xảy ra.', false);
+        } catch(e) {
+          hideTyping();
+          addMsg('Không kết nối được AI service. Vui lòng thử lại sau.', false);
         }
+      }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            filterBooks();
+      sendBtn.addEventListener('click', () => sendMessage(input.value));
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(input.value); });
+
+      // Quick replies
+      document.querySelectorAll('.chat-quick-btn').forEach(btn => {
+        btn.addEventListener('click', () => sendMessage(btn.dataset.msg));
+      });
+    })();
+
+    /* ==========================
+       LOAD PRODUCTS FROM API
+       ========================== */
+    
+    // Helper to format currency
+    function formatPrice(price) {
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(price);
+    }
+
+    // Load books from API
+    async function loadBooks() {
+      try {
+        const response = await fetch('/api/book/books/');
+        const books = await response.json();
+        const carousel = document.getElementById('books-carousel');
+        carousel.innerHTML = '';
+        
+        books.slice(0, 6).forEach((book, idx) => {
+          const priceFormatted = formatPrice(book.price);
+          const card = document.createElement('div');
+          card.className = 'book-card fade-in';
+          card.dataset.id = 'B' + book.id;
+          card.dataset.name = book.title;
+          card.dataset.category = 'Sách';
+          
+          const imageUrl = book.image_url || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400'%3E%3Crect fill='%23e5e5e5' width='300' height='400'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EBook Cover%3C/text%3E%3C/svg%3E`;
+          
+          card.innerHTML = `
+            <div class="book-cover">
+              <img class="cover-art" src="${imageUrl}" alt="${book.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+              <div class="cover-art" style="background: linear-gradient(135deg, #2D6A4F 0%, #1B4332 50%, #081C15 100%); display: none;"></div>
+              <span class="book-badge badge-bestseller">Bestseller</span>
+            </div>
+            <div class="book-info">
+              <h4>${book.title}</h4>
+              <p class="book-author">${book.author}</p>
+              <div class="book-bottom">
+                <span class="book-price">${priceFormatted}</span>
+                <button class="btn-add-sm" data-id="B${book.id}" data-price="${book.price}" title="Thêm vào giỏ">+</button>
+              </div>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            carousel.appendChild(card);
+            card.classList.add('visible');
+            attachEventListeners();
+          }, idx * 100);
         });
-    </script>
+      } catch (e) {
+        console.error('Failed to load books:', e);
+      }
+    }
+
+    // Load clothes from API
+    async function loadClothes() {
+      try {
+        const response = await fetch('/api/clothes/clothes/');
+        const clothes = await response.json();
+        const grid = document.getElementById('fashion-grid');
+        grid.innerHTML = '';
+        
+        clothes.slice(0, 4).forEach((item, idx) => {
+          const priceFormatted = formatPrice(item.price);
+          const card = document.createElement('div');
+          card.className = 'fashion-card fade-in';
+          card.dataset.id = 'F' + item.id;
+          card.dataset.name = item.name;
+          card.dataset.category = 'Thời Trang';
+          
+          const imageUrl = item.image_url || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%23e5e5e5' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EClothes Image%3C/text%3E%3C/svg%3E`;
+          
+          card.innerHTML = `
+            <div class="fashion-art">
+              <img class="fashion-art-inner" src="${imageUrl}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+              <div class="fashion-art-inner" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #533483 100%); display: none;"></div>
+            </div>
+            <div class="fashion-overlay">
+              <span class="fashion-brand">${item.brand}</span>
+              <h3 class="fashion-name">${item.name}</h3>
+              <div class="fashion-price-row">
+                <span class="fashion-price">${priceFormatted}</span>
+                <span class="fashion-cta">Xem Chi Tiết →</span>
+              </div>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            grid.appendChild(card);
+            card.classList.add('visible');
+            attachEventListeners();
+          }, idx * 150);
+        });
+      } catch (e) {
+        console.error('Failed to load clothes:', e);
+      }
+    }
+
+    // Load AI recommendations (mix of books and clothes)
+    async function loadRecommendations() {
+      try {
+        const booksRes = await fetch('/api/book/books/?limit=2');
+        const clothesRes = await fetch('/api/clothes/clothes/?limit=2');
+        
+        const books = await booksRes.json();
+        const clothes = await clothesRes.json();
+        
+        const grid = document.getElementById('ai-grid');
+        grid.innerHTML = '';
+        
+        const allItems = [];
+        books.slice(0, 2).forEach(b => allItems.push({ ...b, type: 'book' }));
+        clothes.slice(0, 2).forEach(c => allItems.push({ ...c, type: 'clothes' }));
+        
+        allItems.forEach((item, idx) => {
+          const priceFormatted = formatPrice(item.price);
+          const card = document.createElement('div');
+          card.className = 'product-card fade-in';
+          card.dataset.id = item.type === 'book' ? 'B' + item.id : 'C' + item.id;
+          card.dataset.name = item.type === 'book' ? item.title : item.name;
+          card.dataset.category = item.type === 'book' ? 'Sách' : 'Thời Trang';
+          
+          const imageUrl = item.image_url || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23e5e5e5' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EProduct%3C/text%3E%3C/svg%3E`;
+          
+          const label = item.type === 'book' ? item.author : item.brand;
+          const title = item.type === 'book' ? item.title : item.name;
+          
+          card.innerHTML = `
+            <div class="card-img" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+              <img style="display: none;" src="${imageUrl}" alt="${title}">
+              <div class="card-heart"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            </div>
+            <div class="card-body">
+              <p class="card-category">${label}</p>
+              <h4 class="card-title">${title}</h4>
+              <p class="card-price">${priceFormatted}</p>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            grid.appendChild(card);
+            card.classList.add('visible');
+            attachEventListeners();
+          }, idx * 100);
+        });
+      } catch (e) {
+        console.error('Failed to load recommendations:', e);
+      }
+    }
+
+    // Reattach event listeners to newly added elements
+    function attachEventListeners() {
+      // Reattach click tracking
+      document.querySelectorAll('[data-id]').forEach(card => {
+        card.removeEventListener('click', trackProductClick);
+        card.addEventListener('click', trackProductClick);
+      });
+      
+      // Reattach hover dwell tracking
+      document.querySelectorAll('[data-id]').forEach(card => {
+        card.removeEventListener('mouseenter', startHoverDwell);
+        card.removeEventListener('mouseleave', clearHoverDwell);
+        card.addEventListener('mouseenter', startHoverDwell);
+        card.addEventListener('mouseleave', clearHoverDwell);
+      });
+      
+      // Reattach add to cart
+      document.querySelectorAll('.btn-add-sm').forEach(btn => {
+        btn.removeEventListener('click', addToCartClick);
+        btn.addEventListener('click', addToCartClick);
+      });
+    }
+
+    // Toggle dropdown menus
+    function setupDropdowns() {
+      const searchIcon = document.getElementById('nav-search');
+      const profileIcon = document.getElementById('nav-profile');
+      const searchInput = document.getElementById('search-input');
+      const toast = document.getElementById('toast-message');
+
+      function closeAllDropdowns() {
+        searchIcon.classList.remove('search-active');
+        profileIcon.classList.remove('profile-active');
+      }
+
+      // Add event listeners to input elements inside dropdowns
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (this.value) window.location.href = '/listing/?q=' + this.value;
+        }
+      });
+
+      // Search toggle
+      searchIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = searchIcon.classList.contains('search-active');
+        closeAllDropdowns();
+        if (!isActive) {
+          searchIcon.classList.add('search-active');
+          setTimeout(() => searchInput.focus(), 100);
+        }
+      });
+
+      // Profile toggle
+      profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Check login status first to simulate profile check
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          // If not logged in, go to login page
+          window.location.href = '/auth/';
+          return;
+        }
+
+        const isActive = profileIcon.classList.contains('profile-active');
+        closeAllDropdowns();
+        if (!isActive) {
+          profileIcon.classList.add('profile-active');
+          document.getElementById('profile-name').textContent = localStorage.getItem('user_name') || 'Người dùng';
+          document.getElementById('profile-email').textContent = 'Chào mừng trở lại';
+        }
+      });
+
+      // Favorite click
+      document.getElementById('nav-favorite').addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeAllDropdowns();
+        
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          alert('Vui lòng đăng nhập để xem danh sách yêu thích!');
+          window.location.href = '/auth/';
+        } else {
+          toast.textContent = 'Đang mở danh sách yêu thích của bạn...';
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2000);
+          setTimeout(() => window.location.href = '/listing/', 500); // Route dummy to listing
+        }
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', () => {
+        closeAllDropdowns();
+      });
+      
+      // Prevent dropdowns from closing when clicking inside
+      document.getElementById('search-dropdown').addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+      document.getElementById('profile-dropdown').addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    // Handle logout action
+    window.handleLogout = function() {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_name');
+      const toast = document.getElementById('toast-message');
+      toast.textContent = 'Đã đăng xuất thành công!';
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        window.location.href = '/auth/';
+      }, 1000);
+    };
+
+    const hoverTimers = new Map();
+
+    function trackProductClick(e) {
+      const card = e.currentTarget;
+      const id = card.dataset.id;
+      const name = card.dataset.name;
+      const cat = card.dataset.category;
+      if (id && name) track('product_click', { id, name, category: cat });
+      
+      // Redirect to product detail page
+      if (id) {
+        window.location.href = `/product/${id}/`;
+      }
+    }
+
+    function startHoverDwell(e) {
+      const card = e.currentTarget;
+      const timer = setTimeout(() => {
+        track('hover_dwell', { id: card.dataset.id, duration: '2000ms' });
+      }, 2000);
+      hoverTimers.set(card, timer);
+    }
+
+    function clearHoverDwell(e) {
+      const timer = hoverTimers.get(e.currentTarget);
+      if (timer) clearTimeout(timer);
+      hoverTimers.delete(e.currentTarget);
+    }
+
+    function addToCartClick(e) {
+      e.stopPropagation();
+      track('add_to_cart', { id: this.dataset.id, price: this.dataset.price });
+      this.textContent = '✓';
+      this.style.background = 'var(--color-emerald)';
+      setTimeout(() => { this.textContent = '+'; this.style.background = ''; }, 1500);
+    }
+
+    // Load all products when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBooks();
+      loadClothes();
+      loadRecommendations();
+      setupDropdowns();
+    });
+  </script>
 </body>
 </html>

@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Order, OrderItem
 from .serializers import OrderSerializer
+from .rabbitmq_utils import publish_message
 import requests
 
 CART_SERVICE_URL = "http://cart-service:8000"
@@ -102,48 +103,29 @@ class CreateOrder(APIView):
         order.save()
 
         # =========================================================
-        # 4. KÍCH HOẠT THANH TOÁN & VẬN CHUYỂN
-        # =========================================================
-        # (Phần gọi PAY và SHIP bên dưới giữ nguyên)
-        # =========================================================
-        # 4. KÍCH HOẠT THANH TOÁN & VẬN CHUYỂN
+        # 4. KÍCH HOẠT THANH TOÁN QUA RABBITMQ (SAGA PATTERN)
         # =========================================================
         
-        # Gọi Payment Service
-        try:
-            pay_res = requests.post(f"{PAY_SERVICE_URL}/payments/", json={
-                "order_id": order.id,
-                "payment_method_id": pay_id,
-                "amount": float(total_price)
-            })
-            pay_data = pay_res.json() if pay_res.status_code in [200, 201] else {"error": "Lỗi thanh toán"}
-        except:
-            pay_data = {"error": "Pay Service không phản hồi"}
+        # Thay vì chờ đợi mỏi mòn tự đi gõ cửa dịch vụ Thanh toán và Vận chuyển,
+        # Nhạc trưởng (Order Service) tạo một Mệnh lệnh (Command) và quẳng vào Queue.
+        payment_command = {
+            "order_id": order.id,
+            "payment_method_id": pay_id,
+            "amount": float(total_price),
+            "customer_address": address,            # Gửi kèm thông tin giao hàng
+            "shipping_method_id": ship_id,          # Để lát nữa Pay xong thì gửi thông tin này cho Ship
+        }
 
-        # Gọi Shipping Service
-        try:
-            ship_res = requests.post(f"{SHIP_SERVICE_URL}/shippings/", json={
-                "order_id": order.id,
-                "shipping_method_id": ship_id,
-                "address": address
-            })
-            ship_data = ship_res.json() if ship_res.status_code in [200, 201] else {"error": "Lỗi giao hàng"}
-        except:
-            ship_data = {"error": "Ship Service không phản hồi"}
+        # Quẳng mệnh lệnh vào cái loa phát thanh payment_queue
+        publish_message('payment_queue', payment_command)
 
-        # 5. Cập nhật trạng thái chốt hạ
-        if "error" not in pay_data and "error" not in ship_data:
-            order.status = 'PAID_AND_SHIPPING'
-            order.save()
-            msg = "🎉 Chốt đơn thành công! Đã lên đơn giao hàng."
-        else:
-            msg = "⚠️ Đơn hàng đã ghi nhận nhưng có lỗi khi gọi Pay/Ship!"
+        # Trả lời Khách hàng ngay lập tức! Mọi thứ còn lại để Hệ thống tự động xử.
+        msg = "🎉 Đơn hàng Nháp đã được tạo thành công! Đang tiến hành xử lý thanh toán tự động..."
 
         return Response({
             "message": msg,
             "order_id": order.id,
-            "payment_details": pay_data,
-            "shipping_details": ship_data
+            "status": "PENDING (Processing Saga...)"
         }, status=201)
 
 

@@ -35,6 +35,9 @@
 		},
 		{
 			"path": "staff-service"
+		},
+		{
+			"path": "auth-service"
 		}
 	]
 }
