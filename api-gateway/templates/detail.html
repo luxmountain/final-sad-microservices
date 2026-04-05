@@ -1,3 +1,4 @@
+{% load currency_filters %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -311,7 +312,7 @@
           <span class="rating-count">(<a href="#reviews">{{ reviews|length }} đánh giá</a>)</span>
         </div>
         <div class="product-price-row">
-          <span class="product-price">{{ product.price|floatformat:0 }} ₫</span>
+          <span class="product-price">{{ product.price|vnd }} ₫</span>
         </div>
         <div class="divider"></div>
 
