@@ -9,15 +9,21 @@ __pycache__/
 *$py.class
 *.so
 
-# IDE và Editor (VS Code)
+# IDE và Editor
 .vscode/
+.kiro/
 
-# SQLite database (có thể cân nhắc giữ lại db.sqlite3 nếu muốn làm data mẫu)
+# SQLite database
 # db.sqlite3
 
 # Log files
 *.log
 
-# Cấu hình hệ điều hành
+# OS
 .DS_Store
 Thumbs.db
+
+# Reports (large binary files)
+docs/reports/*.pdf
+docs/reports/*.docx
+docs/reports/*.zip
