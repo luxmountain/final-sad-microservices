@@ -105,11 +105,11 @@
 
 | ID | Yêu cầu | Trạng thái | Nguồn | Ghi chú |
 |----|----------|:-----------:|-------|---------|
-| ML-01 | Construct dataset with peer influence | ⚠️ | BT §2 Task 1, tr.1 | `module1_behavior/generate_data.py` tạo data nhưng là behavior data, không phải academic scores |
-| ML-02 | Train 3 models (GBoost, MLP, GraphSAGE) | ⚠️ | BT §2 Task 2, tr.1 | Có LSTM + GNN nhưng không khớp đúng 3 model yêu cầu (thiếu GBoost) |
-| ML-03 | Evaluate using 5 metrics (MAE, MSE, RMSE, MAPE, R²) | ⚠️ | BT §2 Task 3, tr.1 | `compare_models.py` có so sánh nhưng cần verify metrics |
-| ML-04 | Compare under different social structures | ❓ | BT §2 Task 4, tr.2 | Chưa xác nhận được |
-| ML-05 | Analyze peer influence propagation | ⚠️ | BT §2 Task 5, tr.2 | GNN graph có user interactions nhưng khác context đề bài |
+| ML-01 | Construct dataset with peer influence | ✅ | BT §2 Task 1, tr.1 | `ml-exam-prediction/predict_exam_score.ipynb` — N=800, 5 academic + 10 peer, CSV import |
+| ML-02 | Train 3 models (GBoost, MLP, GraphSAGE) | ✅ | BT §2 Task 2, tr.1 | Đúng 3 model theo đề: GBoost, MLP (GNN-style), GraphSAGE |
+| ML-03 | Evaluate using 5 metrics (MAE, MSE, RMSE, MAPE, R²) | ✅ | BT §2 Task 3, tr.1 | 5 metrics đầy đủ + bar chart |
+| ML-04 | Compare under different social structures | ✅ | BT §2 Task 4, tr.2 | 4 structures × 3 models, grouped bar chart |
+| ML-05 | Analyze peer influence propagation | ✅ | BT §2 Task 5, tr.2 | Hop 0/1/2 analysis + propagation chart |
 
 ---
 
