@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="LUMIÈRE — Nền tảng mua sắm sách và thời trang hàng hiệu cao cấp. Tri thức gặp xa xỉ.">
-  <title>LUMIÈRE — Sách & Thời Trang Hàng Hiệu</title>
+  <meta name="description" content="LUX — Nền tảng mua sắm sách và thời trang hàng hiệu cao cấp. Tri thức gặp xa xỉ.">
+  <title>LUX — Sách & Thời Trang Hàng Hiệu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -701,7 +701,7 @@
        ============================================ -->
   <nav class="navbar" id="navbar">
     <div class="navbar-inner">
-      <a href="/" class="nav-logo">LUMIÈRE</a>
+      <a href="/" class="nav-logo">LUX</a>
       <ul class="nav-links">
         <li><a href="/listing/">Sách</a></li>
         <li><a href="/listing/">Thời Trang</a></li>
@@ -792,7 +792,7 @@
     <div class="container">
       <div class="section-header fade-in">
         <h2>Sách Bán Chạy Tuần Này</h2>
-        <p>Những cuốn sách được yêu thích nhất bởi cộng đồng LUMIÈRE</p>
+        <p>Những cuốn sách được yêu thích nhất bởi cộng đồng LUX</p>
       </div>
       <div class="books-carousel-wrap">
         <div class="books-carousel" id="books-carousel">
@@ -841,7 +841,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <h3>LUMIÈRE</h3>
+          <h3>LUX</h3>
           <p>Nơi trí tuệ hòa quyện cùng phong cách. Chúng tôi mang đến những cuốn sách hay nhất và thời trang hàng hiệu đẳng cấp nhất dành cho bạn.</p>
         </div>
         <div>
@@ -868,12 +868,12 @@
             <li><a href="#">Facebook</a></li>
             <li><a href="#">Instagram</a></li>
             <li><a href="#">TikTok</a></li>
-            <li><a href="#">Email: hello@lumiere.vn</a></li>
+            <li><a href="#">Email: hello@lux.vn</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        © 2026 LUMIÈRE. All rights reserved. | Tri thức · Phong cách · Đẳng cấp
+        © 2026 LUX. All rights reserved. | Tri thức · Phong cách · Đẳng cấp
       </div>
     </div>
   </footer>
@@ -890,7 +890,7 @@
   <div class="chat-panel" id="chat-panel">
     <div class="chat-header">
       <div class="chat-header-info">
-        <h3>Trợ Lý LUMIÈRE</h3>
+        <h3>Trợ Lý LUX</h3>
         <small>Powered by AI</small>
       </div>
       <button class="chat-close" id="chat-close">&times;</button>
@@ -898,7 +898,7 @@
     <div class="chat-messages" id="chat-messages">
       <div class="chat-msg bot">
         <div class="chat-avatar">L</div>
-        <div class="chat-msg-bubble">Xin chào! Tôi là trợ lý AI của LUMIÈRE. Bạn cần tư vấn về sách hay thời trang hàng hiệu?</div>
+        <div class="chat-msg-bubble">Xin chào! Tôi là trợ lý AI của LUX. Bạn cần tư vấn về sách hay thời trang hàng hiệu?</div>
       </div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">
@@ -1045,8 +1045,8 @@
     (function() {
       const AI_API = '/api/ai-behavior';
       const API_KEY = 'bookstore-ai-secret-key-2024';
-      const userId = localStorage.getItem('lumiere_uid') || ('user_' + Date.now());
-      localStorage.setItem('lumiere_uid', userId);
+      const userId = localStorage.getItem('lux_uid') || ('user_' + Date.now());
+      localStorage.setItem('lux_uid', userId);
 
       const bubble = document.getElementById('chat-bubble');
       const panel = document.getElementById('chat-panel');
@@ -1432,7 +1432,7 @@
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('user_role');
       localStorage.removeItem('user_name');
-      localStorage.removeItem('lumiere_uid');
+      localStorage.removeItem('lux_uid');
       localStorage.removeItem('quystore_user');
       // Xóa cookie — middleware đọc cookie nên phải clear cả đây
       document.cookie = 'access_token=; path=/; max-age=0; SameSite=Lax';

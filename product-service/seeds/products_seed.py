@@ -191,21 +191,21 @@ NEW_PRODUCTS = [
      "attributes":{"brand":"Orient","movement":"Automatic","water_resistance":"200m","color":"Navy Blue"}},
 
     # ── QUÀ TẶNG (category_id=19) ──
-    {"product_type":"gift","name":"Hộp Quà Valentine LUMIÈRE Premium","price":450000,"stock":50,"category_id":19,
+    {"product_type":"gift","name":"Hộp Quà Valentine LUX Premium","price":450000,"stock":50,"category_id":19,
      "image_url":"https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=500",
-     "attributes":{"occasion":"Valentine","includes":"Card + Ribbon + Box","brand":"LUMIÈRE"}},
+     "attributes":{"occasion":"Valentine","includes":"Card + Ribbon + Box","brand":"LUX"}},
     {"product_type":"gift","name":"Combo Sách + Nến Thơm + Bookmarks","price":650000,"stock":30,"category_id":19,
      "image_url":"https://images.unsplash.com/photo-1512689975003-1b22a40d374b?auto=format&fit=crop&w=500",
-     "attributes":{"occasion":"Birthday / Any","includes":"1 book + candle + 5 bookmarks","brand":"LUMIÈRE"}},
+     "attributes":{"occasion":"Birthday / Any","includes":"1 book + candle + 5 bookmarks","brand":"LUX"}},
     {"product_type":"gift","name":"Bộ Trà Cao Cấp TWG Tea Selection","price":850000,"stock":20,"category_id":19,
      "image_url":"https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=500",
      "attributes":{"occasion":"Any","includes":"10 sachets × 5 flavors","brand":"TWG Tea"}},
     {"product_type":"gift","name":"Hộp Socola Godiva Belgian Chocolates 24pc","price":680000,"stock":25,"category_id":19,
      "image_url":"https://images.unsplash.com/photo-1548155782-1b2c0dde3e83?auto=format&fit=crop&w=500",
      "attributes":{"occasion":"Any","includes":"24 pieces assorted","brand":"Godiva"}},
-    {"product_type":"gift","name":"Voucher Spa & Wellness LUMIÈRE 2 Giờ","price":1200000,"stock":15,"category_id":19,
+    {"product_type":"gift","name":"Voucher Spa & Wellness LUX 2 Giờ","price":1200000,"stock":15,"category_id":19,
      "image_url":"https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=500",
-     "attributes":{"occasion":"Anniversary / Birthday","includes":"2h massage + tea","brand":"LUMIÈRE"}},
+     "attributes":{"occasion":"Anniversary / Birthday","includes":"2h massage + tea","brand":"LUX"}},
 ]
 
 # ─────────────────────────────────────────────

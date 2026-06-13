@@ -27,7 +27,7 @@ from .graph_schema import NodeType, BRAND_ALIASES
 # =============================================
 NEO4J_URI      = os.getenv("NEO4J_URI",      "bolt://neo4j:7687")
 NEO4J_USER     = os.getenv("NEO4J_USER",     "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "lumiere123")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "lux123")
 NEO4J_DATABASE = os.getenv("NEO4J_DATABASE", "neo4j")
 
 

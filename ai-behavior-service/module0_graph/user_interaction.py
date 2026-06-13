@@ -72,7 +72,7 @@ class UserInteractionGraph:
             from neo4j import GraphDatabase
             uri      = os.getenv("NEO4J_URI",      "bolt://neo4j:7687")
             user     = os.getenv("NEO4J_USER",     "neo4j")
-            password = os.getenv("NEO4J_PASSWORD", "lumiere123")
+            password = os.getenv("NEO4J_PASSWORD", "lux123")
             self._driver    = GraphDatabase.driver(uri, auth=(user, password))
             self._driver.verify_connectivity()
             self._connected = True

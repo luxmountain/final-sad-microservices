@@ -63,7 +63,7 @@ services = [
         # (neo4j đọc nhầm các biến đó thành config setting → crash)
         "disable_service_links": True,
         "env": {
-            "NEO4J_AUTH": "neo4j/lumiere123",
+            "NEO4J_AUTH": "neo4j/lux123",
             "NEO4J_server_memory_heap_initial__size": "256m",
             "NEO4J_server_memory_heap_max__size": "512m",
         },
@@ -174,7 +174,7 @@ services = [
             "POSTGRES_HOST": "postgres-db",
             "NEO4J_URI": "bolt://neo4j:7687",
             "NEO4J_USER": "neo4j",
-            "NEO4J_PASSWORD": "lumiere123",
+            "NEO4J_PASSWORD": "lux123",
             "POSTGRES_USER": "admin",
             "POSTGRES_PASSWORD": "123",
             "POSTGRES_DB": "default_db",

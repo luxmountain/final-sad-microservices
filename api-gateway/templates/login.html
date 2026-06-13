@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xác Thực — LUMIÈRE</title>
+  <title>Xác Thực — LUX</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -111,11 +111,11 @@
 
   <div class="split-left">
     <h1>Khám Phá Phong Cách<br>& Tri Thức.</h1>
-    <p>Gia nhập không gian LUMIÈRE để tận hưởng những đặc quyền riêng biệt và trải nghiệm mua bán đẳng cấp toàn cầu.</p>
+    <p>Gia nhập không gian LUX để tận hưởng những đặc quyền riêng biệt và trải nghiệm mua bán đẳng cấp toàn cầu.</p>
   </div>
 
   <div class="split-right">
-    <div class="auth-logo" onclick="location.href='/'">LUMIÈRE</div>
+    <div class="auth-logo" onclick="location.href='/'">LUX</div>
 
     <div id="alert-box" class="alert"></div>
 
@@ -123,7 +123,7 @@
     <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
       <div>
         <h2 class="form-title">Đăng Nhập</h2>
-        <p class="form-subtitle">Chào mừng bạn quay lại không gian LUMIÈRE.</p>
+        <p class="form-subtitle">Chào mừng bạn quay lại không gian LUX.</p>
       </div>
       <div class="input-group">
         <label>Tên đăng nhập</label>
@@ -149,7 +149,7 @@
     <form class="auth-form" id="register-form" onsubmit="handleRegister(event)" style="display: none;">
       <div>
         <h2 class="form-title">Đăng Ký Thành Viên</h2>
-        <p class="form-subtitle">Tham gia cộng đồng tinh hoa LUMIÈRE.</p>
+        <p class="form-subtitle">Tham gia cộng đồng tinh hoa LUX.</p>
       </div>
       <div class="input-group">
         <label>Tên đăng nhập</label>
@@ -240,7 +240,7 @@
               role = payload.role || 'customer';
             } catch(e) {}
 
-            localStorage.setItem('lumiere_uid', username);
+            localStorage.setItem('lux_uid', username);
             localStorage.setItem('user_name', username);
             localStorage.setItem('user_role', role);
             localStorage.setItem('quystore_user', JSON.stringify({ username, role }));
@@ -319,7 +319,7 @@
              localStorage.setItem('access_token', access_token);
              if(data.refresh) localStorage.setItem('refresh_token', data.refresh);
 
-             localStorage.setItem('lumiere_uid', username);
+             localStorage.setItem('lux_uid', username);
              localStorage.setItem('user_name', username);
              localStorage.setItem('user_role', 'customer');
              localStorage.setItem('quystore_user', JSON.stringify({ username, role: 'customer' }));

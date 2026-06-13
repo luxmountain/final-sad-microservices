@@ -8,9 +8,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         accounts = [
-            {'username': 'admin',    'password': 'admin123',    'role': 'staff',    'email': 'admin@lumiere.vn'},
-            {'username': 'manager',  'password': 'manager123',  'role': 'manager',  'email': 'manager@lumiere.vn'},
-            {'username': 'customer', 'password': 'customer123', 'role': 'customer', 'email': 'customer@lumiere.vn'},
+            {'username': 'admin',    'password': 'admin123',    'role': 'staff',    'email': 'admin@lux.vn'},
+            {'username': 'manager',  'password': 'manager123',  'role': 'manager',  'email': 'manager@lux.vn'},
+            {'username': 'customer', 'password': 'customer123', 'role': 'customer', 'email': 'customer@lux.vn'},
         ]
 
         for acc in accounts:

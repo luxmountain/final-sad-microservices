@@ -3,7 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = 'django-insecure-user-service-lumiere-2024'
+SECRET_KEY = 'django-insecure-user-service-lux-2024'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 

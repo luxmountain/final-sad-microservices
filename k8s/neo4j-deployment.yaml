@@ -23,7 +23,7 @@ spec:
         - containerPort: 7687
         env:
         - name: NEO4J_AUTH
-          value: "neo4j/lumiere123"
+          value: "neo4j/lux123"
         - name: NEO4J_server_memory_heap_initial__size
           value: "256m"
         - name: NEO4J_server_memory_heap_max__size

@@ -1,156 +1,253 @@
 # API Documentation
 
-This document outlines the exposed REST API endpoints for the Bookstore Microservices project. The API requests are intended to be routed through the `api-gateway` which forwards them to the respective service.
+Tài liệu REST API cho dự án Bookstore Microservices. Cập nhật theo kiến trúc hiện tại (user-service, product-service, ai-behavior-service).
+
+> Xem thêm: [Hướng dẫn sử dụng](./HUONG_DAN_SU_DUNG.md) | [Luồng AI](./AI_LUONG_HOAT_DONG.md)
+
+---
 
 ## Base URL
-All API requests (other than direct gateway UI routes) are typically prefixed with the API gateway host and port.
 
-**Example**: `http://localhost:8000/api/<service_name>/`
+Khi chạy Docker với Nginx:
 
----
+```
+http://localhost/api/<prefix>/
+```
 
-## 1. Gateway & Authentication Routes (`api-gateway`)
+Ví dụ: `http://localhost/api/product/products/`
 
-These endpoints are handled directly by the API Gateway to serve pages and manage global auth.
+Khi gọi qua API Gateway proxy:
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Home page |
-| GET | `/auth/` | Authentication view/page |
-| POST | `/login/` | Process user login and retrieve tokens |
-| GET | `/book/<int:book_id>/` | Gateway view for book details |
-| GET | `/cart/` | Cart page view |
-| GET | `/checkout/` | Checkout page view |
-| GET | `/orders/` | User orders dashboard |
-| GET | `/staff/` | Staff dashboard view |
-| GET | `/manager/` | Manager dashboard view |
-| GET | `/api/docs/` | Swagger UI documentation |
-| GET | `/api/redoc/` | ReDoc API documentation |
+```
+http://localhost/api/<service_name>/<path>
+```
+
+Ví dụ: `http://localhost/api/product/products/` hoặc `http://localhost/api/cart/carts/1/`
 
 ---
 
-## 2. Book Service (`book-service`)
+## 1. API Gateway — Giao diện & Proxy
 
-Manages the core book inventory, prices, authorship, and availability.
+### Trang web (HTML)
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/book-service/books/` | Retrieve a list of all active books |
-| POST | `/api/book-service/books/` | Create a new book record |
-| GET | `/api/book-service/books/<id>/` | Retrieve specific book details by ID |
-| PUT | `/api/book-service/books/<id>/` | Update an existing book's entirety |
-| PATCH| `/api/book-service/books/<id>/` | Partially update an existing book |
-| DELETE| `/api/book-service/books/<id>/` | Remove a book from inventory |
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/` | Trang chủ |
+| GET | `/health/` | Health check gateway |
+| GET | `/login/` | Trang đăng nhập |
+| GET | `/logout/` | Đăng xuất |
+| GET | `/auth/` | Trang xác thực |
+| GET | `/listing/` | Danh sách sản phẩm |
+| GET | `/product/<product_id>/` | Chi tiết sản phẩm |
+| GET | `/cart/` | Giỏ hàng |
+| GET | `/checkout/` | Thanh toán |
+| GET | `/orders/` | Lịch sử đơn hàng |
+| GET | `/staff/` | Dashboard nhân viên |
+| GET | `/manager/` | Dashboard quản trị |
+| POST | `/track/` | Tracking hành vi + ghi graph |
+| GET | `/recommendations/` | Gợi ý cá nhân hóa (4 SP) |
 
----
+### Tài liệu OpenAPI
 
-## 3. Cart Service (`cart-service`)
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/api/schema/` | OpenAPI schema |
+| GET | `/api/docs/` | Swagger UI |
+| GET | `/api/redoc/` | ReDoc |
 
-Manages user shopping carts and active session items.
+### Universal Proxy
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/cart-service/carts/` | Create a new unified cart |
-| GET | `/api/cart-service/carts/<customer_id>/` | Retrieve the active cart for a customer |
-| POST | `/api/cart-service/cart-items/` | Add a new item to the cart |
-| PUT | `/api/cart-service/cart-items/<item_id>/` | Update a cart item (e.g., quantity) |
-| DELETE| `/api/cart-service/cart-items/<item_id>/` | Remove an item from the cart |
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| * | `/api/<service_name>/<path>` | Chuyển tiếp tới microservice |
 
----
-
-## 4. Order Service (`order-service`)
-
-Handles order processing, fulfillment lifecycle, and checkout history.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/order-service/orders/` | List all orders (filtered by user context) |
-| POST | `/api/order-service/orders/` | Create a new order (checkout) |
-| PUT/PATCH | `/api/order-service/orders/<id>/status/` | Update the delivery/payment status of an order |
+`service_name`: `auth`, `customer`, `staff`, `admin`, `cart`, `order`, `pay`, `ship`, `book`, `clothes`, `product`, `catalog`, `comment`, `ai`, `ai-behavior`
 
 ---
 
-## 5. Pay Service (`pay-service`)
+## 2. Auth Service
 
-Handles transactions, external payment intents, and methods.
+**Prefix Nginx:** `/api/auth/`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/pay-service/payment-methods/` | List all available payment methods |
-| POST | `/api/pay-service/payments/` | Process a new payment transaction |
-
----
-
-## 6. Catalog Service (`catalog-service`)
-
-Manages product categorization and tags.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/catalog-service/categories/` | List all book categories / genres |
-| POST | `/api/catalog-service/categories/` | Create a new category |
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/register/` | Đăng ký |
+| POST | `/login/` | Đăng nhập JWT |
+| POST | `/token/refresh/` | Refresh token |
 
 ---
 
-## 7. Customer Service (`customer-service`)
+## 3. User Service
 
-Manages user and profile details.
+Gộp customer, staff, manager.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/customer-service/customers/` | List customer profiles |
-| POST | `/api/customer-service/customers/` | Register/Create a new customer profile |
+### Khách hàng — `/api/customer/`
 
----
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/customers/` | Liệt kê khách |
+| POST | `/customers/` | Tạo khách |
+| GET | `/customers/<id>/` | Chi tiết |
+| PUT/PATCH/DELETE | `/customers/<id>/` | Cập nhật / xóa |
 
-## 8. Ship Service (`ship-service`)
+### Nhân viên — `/api/staff/`
 
-Manages shipping integration, delivery tracking, and providers.
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/staffs/` | Liệt kê nhân viên |
+| POST | `/staffs/` | Tạo nhân viên |
+| GET/PUT/PATCH/DELETE | `/staffs/<id>/` | CRUD nhân viên |
+| POST | `/staffs/<id>/add-product/` | Thêm sản phẩm |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/ship-service/shipping-methods/` | List supported shipping providers/methods |
-| POST | `/api/ship-service/shippings/` | Create a new shipping manifest or update state |
+### Quản trị — `/api/admin/` (gateway: `admin`)
 
----
-
-## 9. Comment & Rate Service (`comment-rate-service`)
-
-Manages user-generated reviews, numerical ratings, and feedback on books.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/comment-rate-service/reviews/` | Fetch reviews (filterable by book ID) |
-| POST | `/api/comment-rate-service/reviews/` | Submit a new review/rating |
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET/POST | `/reports/` | Báo cáo |
+| GET | `/reports/<id>/` | Chi tiết báo cáo |
 
 ---
 
-## 10. Recommender AI Service (`recommender-ai-service`)
+## 4. Product Service
 
-Provides AI-driven suggestions.
+**Prefix:** `/api/product/`, `/api/book/`, `/api/clothes/`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST/GET | `/api/recommender-ai-service/ai-suggest/` | Request AI-based book recommendations |
-
----
-
-## 11. Staff Service (`staff-service`)
-
-Manages internal staff roles and privileged actions on books.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/staff-service/staffs/` | Register / Onboard new staff |
-| POST/PUT | `/api/staff-service/staff-books/` | Advanced inventory and management queries for books |
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET/POST | `/books/` | Sách |
+| GET/PUT/PATCH/DELETE | `/books/<id>/` | Chi tiết sách |
+| GET/POST | `/clothes/` | Quần áo |
+| GET/PUT/PATCH/DELETE | `/clothes/<id>/` | Chi tiết quần áo |
+| GET | `/products/` | Tất cả loại sản phẩm |
+| GET | `/products/<id>/` | Chi tiết unified |
+| GET/POST | `/<type>/` | `stationery`, `electronics`, `toy`, `cosmetic`, `bag`, `shoe`, `watch`, `gift` |
+| GET/PUT/PATCH/DELETE | `/<type>/<id>/` | CRUD theo loại |
 
 ---
 
-## 12. Manager Service (`manager-service`)
+## 5. Cart Service — `/api/cart/`
 
-Manages high-level aggregation and corporate reporting.
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/carts/` | Tạo giỏ |
+| GET | `/carts/<customer_id>/` | Xem giỏ |
+| POST | `/cart-items/` | Thêm item |
+| PUT | `/cart-items/<item_id>/` | Cập nhật số lượng |
+| DELETE | `/cart-items/<item_id>/` | Xóa item |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/manager-service/reports/` | Generate and fetch sales, inventory, and activity reports |
+---
 
+## 6. Order Service — `/api/order/`
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET/POST | `/orders/` | Danh sách / tạo đơn |
+| PUT/PATCH | `/orders/<id>/status/` | Cập nhật trạng thái |
+
+---
+
+## 7. Pay Service — `/api/pay/`
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/payment-methods/` | Phương thức thanh toán |
+| POST | `/payments/` | Xử lý thanh toán |
+
+---
+
+## 8. Ship Service — `/api/ship/`
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/shipping-methods/` | Phương thức vận chuyển |
+| POST | `/shippings/` | Tạo / cập nhật vận chuyển |
+
+---
+
+## 9. Catalog Service — `/api/catalog/`
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET/POST | `/categories/` | Danh mục |
+
+---
+
+## 10. Comment & Rate Service — `/api/comment/`
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET/POST | `/reviews/` | Đánh giá sản phẩm |
+
+---
+
+## 11. Recommender AI Service — `/api/ai/`
+
+Gợi ý sách dựa trên review (collaborative filtering).
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/ai-suggest/` | Gợi ý 1 sách cho `customer_id` |
+
+**Body:** `{ "customer_id": 1 }`
+
+---
+
+## 12. AI Behavior Service — `/api/ai-behavior/`
+
+FastAPI service — phân tích hành vi, graph, RAG chatbot.
+
+**Auth:** Header `X-API-Key: bookstore-ai-secret-key-2024` (trừ `/health`, `/gnn/status`)
+
+### Core
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/health` | Health check |
+| POST | `/analyze-behavior` | Phân loại hành vi LSTM |
+| POST | `/chat` | Chatbot RAG |
+| GET | `/user/<user_id>/profile` | Behavior profile |
+| POST | `/feedback` | Feedback chat (rating 1–5) |
+| POST | `/clear-session/<user_id>` | Xóa session chat |
+
+### Graph (Neo4j)
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/interact` | Ghi tương tác User→Product |
+| GET | `/recommend` | Gợi ý graph (`?user_id=&behavior_label=&top_k=`) |
+| GET | `/user/<user_id>/history` | Lịch sử tương tác |
+
+### GNN
+
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/gnn/status` | Trạng thái model |
+| POST | `/gnn/train` | Train GNN (background) |
+| GET | `/gnn/product/<id>/embedding` | Product embedding |
+| GET | `/gnn/product/<id>/similar` | Sản phẩm tương tự |
+| POST | `/gnn/user/embedding` | User embedding |
+
+Chi tiết luồng xử lý: [AI_LUONG_HOAT_DONG.md](./AI_LUONG_HOAT_DONG.md)
+
+---
+
+## Mapping Nginx → Service
+
+| Location | Upstream |
+|----------|----------|
+| `/api/auth/` | auth-service:8000 |
+| `/api/customer/`, `/api/staff/`, `/api/user/` | user-service:8000 |
+| `/api/product/`, `/api/book/`, `/api/clothes/` | product-service:8000 |
+| `/api/cart/` | cart-service:8000 |
+| `/api/order/` | order-service:8000 |
+| `/api/pay/` | pay-service:8000 |
+| `/api/ship/` | ship-service:8000 |
+| `/api/catalog/` | catalog-service:8000 |
+| `/api/comment/` | comment-rate-service:8000 |
+| `/api/ai-behavior/` | ai-behavior-service:8020 |
+| `/api/ai/` | recommender-ai-service:8000 |
+| `/` (còn lại) | api-gateway:8000 |
+
+---
+
+*Cập nhật: 2026 — Bookstore Microservices Project*

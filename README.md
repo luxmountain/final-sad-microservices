@@ -9,17 +9,17 @@ This project is built using a Monorepo structured microservices architecture. Th
 | Service Name | Description |
 |---|---|
 | `api-gateway` | The main entry point for clients, routing requests to the appropriate microservices |
-| `book-service` | Manages book records and inventory |
+| `auth-service` | Authentication (JWT register/login) |
+| `user-service` | Customer, staff, and admin profiles (DDD monolith) |
+| `product-service` | Books, clothes, and 8 other product types |
 | `cart-service` | Handles user shopping carts and active sessions |
 | `catalog-service` | Stores and retrieves book catalog and category details |
 | `comment-rate-service` | Handles user ratings and comments on books |
-| `customer-service` | Manages customer profiles |
-| `manager-service` | Admin dashboard and management operations |
 | `order-service` | Handles order creation and lifecycle |
 | `pay-service` | Manages payment processing |
-| `recommender-ai-service` | AI-based book recommendation engine |
+| `recommender-ai-service` | Review-based book recommendation (collaborative filtering) |
+| `ai-behavior-service` | LSTM behavior analysis, Neo4j graph, GNN, RAG chatbot |
 | `ship-service` | Manages shipping and delivery updates |
-| `staff-service` | Platform for bookstore staff to manage tasks |
 
 ## 🚀 How to Run the Project (Using Docker)
 
@@ -44,7 +44,9 @@ The easiest way to run the entire cluster of microservices is by using `docker-c
    *The `-d` flag runs the containers in the background.*
 
 3. **Access the Application:**
-   - The Main Website (Frontend via API Gateway): `http://localhost:<YOUR_GATEWAY_PORT>`
+   - Main website (via Nginx): `http://localhost`
+   - API docs (Swagger): `http://localhost/api/docs/`
+   - Neo4j Browser: `http://localhost:7474`
    - To stop the system, run:
      ```bash
      docker-compose down
@@ -72,10 +74,19 @@ If you'd rather run the services individually without Docker, you will need Pyth
    python manage.py runserver 8000
    ```
 
+## 📚 Documentation
+
+| Tài liệu | Nội dung |
+|---|---|
+| [Hướng dẫn sử dụng](./docs/HUONG_DAN_SU_DUNG.md) | Cài đặt, router, luồng nghiệp vụ, ví dụ API |
+| [API Documentation](./docs/API_Documentation.md) | Chi tiết endpoint REST từng service |
+| [Luồng hoạt động AI](./docs/AI_LUONG_HOAT_DONG.md) | LSTM, Neo4j graph, GNN, RAG chatbot |
+| [Technical Report](./docs/Technical_Report.md) | Báo cáo kỹ thuật |
+
 ## 📦 Deliverables
 - [x] GitHub Repository setup
+- [x] API documentation
 - [ ] Architecture diagram for each service
-- [ ] API documentation
 - [ ] 10-minute demo video
 - [ ] 8-12 page technical report
 

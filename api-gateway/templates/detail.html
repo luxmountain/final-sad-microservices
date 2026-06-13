@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Chi tiết sản phẩm — LUMIÈRE">
-  <title>Áo Blazer Wool Classic — LUMIÈRE</title>
+  <meta name="description" content="Chi tiết sản phẩm — LUX">
+  <title>Áo Blazer Wool Classic — LUX</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -256,7 +256,7 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="navbar-inner">
-      <a href="/" class="nav-logo">LUMIÈRE</a>
+      <a href="/" class="nav-logo">LUX</a>
       <ul class="nav-links">
         <li><a href="/listing/">Sách</a></li>
         <li><a href="/listing/">Thời Trang</a></li>
@@ -452,12 +452,12 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand"><h3>LUMIÈRE</h3><p>Nơi trí tuệ hòa quyện cùng phong cách.</p></div>
+        <div class="footer-brand"><h3>LUX</h3><p>Nơi trí tuệ hòa quyện cùng phong cách.</p></div>
         <div><h4>Chăm Sóc KH</h4><ul><li><a href="#">Liên hệ hỗ trợ</a></li><li><a href="#">Theo dõi đơn hàng</a></li><li><a href="#">Hướng dẫn chọn size</a></li></ul></div>
         <div><h4>Chính Sách</h4><ul><li><a href="#">Đổi trả & Hoàn tiền</a></li><li><a href="#">Vận chuyển</a></li><li><a href="#">Thanh toán</a></li></ul></div>
-        <div><h4>Kết Nối</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li><li><a href="#">Email: hello@lumiere.vn</a></li></ul></div>
+        <div><h4>Kết Nối</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li><li><a href="#">Email: hello@lux.vn</a></li></ul></div>
       </div>
-      <div class="footer-bottom">© 2026 LUMIÈRE. All rights reserved.</div>
+      <div class="footer-bottom">© 2026 LUX. All rights reserved.</div>
     </div>
   </footer>
 
@@ -469,11 +469,11 @@
   </div>
   <div class="chat-panel" id="chat-panel">
     <div class="chat-header">
-      <div class="chat-header-info"><h3>Trợ Lý LUMIÈRE</h3><small>Powered by AI</small></div>
+      <div class="chat-header-info"><h3>Trợ Lý LUX</h3><small>Powered by AI</small></div>
       <button class="chat-close" id="chat-close">&times;</button>
     </div>
     <div class="chat-messages" id="chat-messages">
-      <div class="chat-msg bot"><div class="chat-avatar">L</div><div class="chat-msg-bubble">Xin chào! Tôi là trợ lý AI của LUMIÈRE. Bạn cần tư vấn về sách hay thời trang hàng hiệu?</div></div>
+      <div class="chat-msg bot"><div class="chat-avatar">L</div><div class="chat-msg-bubble">Xin chào! Tôi là trợ lý AI của LUX. Bạn cần tư vấn về sách hay thời trang hàng hiệu?</div></div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">
       <button class="chat-quick-btn" data-msg="Size M có vừa với 1m70 65kg không?">Tư vấn size</button>
@@ -598,8 +598,8 @@
     (function() {
       const AI_API = '/api/ai-behavior';
       const API_KEY = 'bookstore-ai-secret-key-2024';
-      const userId = localStorage.getItem('lumiere_uid') || ('user_' + Date.now());
-      localStorage.setItem('lumiere_uid', userId);
+      const userId = localStorage.getItem('lux_uid') || ('user_' + Date.now());
+      localStorage.setItem('lux_uid', userId);
       const bubble = document.getElementById('chat-bubble');
       const panel = document.getElementById('chat-panel');
       const closeBtn = document.getElementById('chat-close');
@@ -674,7 +674,7 @@
       document.addEventListener('click', () => { if (profileIcon) profileIcon.classList.remove('profile-active'); });
     }
 
-    window.handleLogout = function() { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); localStorage.removeItem('user_name'); localStorage.removeItem('user_role'); localStorage.removeItem('lumiere_uid'); localStorage.removeItem('quystore_user'); document.cookie = 'access_token=; path=/; max-age=0; SameSite=Lax'; window.location.href = '/auth/'; };
+    window.handleLogout = function() { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); localStorage.removeItem('user_name'); localStorage.removeItem('user_role'); localStorage.removeItem('lux_uid'); localStorage.removeItem('quystore_user'); document.cookie = 'access_token=; path=/; max-age=0; SameSite=Lax'; window.location.href = '/auth/'; };
 
     document.addEventListener('DOMContentLoaded', () => {
       updateCartBadge();

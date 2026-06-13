@@ -178,7 +178,7 @@ class RAGPipeline:
     def _build_system_prompt(self, behavior_profile: Optional[Dict] = None) -> str:
         """Tạo system prompt với behavior profile."""
         base = (
-            "Bạn là trợ lý tư vấn AI của LUMIÈRE (BookStore & Fashion) — thương hiệu sách và thời trang luxury.\n"
+            "Bạn là trợ lý tư vấn AI của LUX (BookStore & Fashion) — thương hiệu sách và thời trang luxury.\n"
             "QUY TẮC PHẢN HỒI (RẤT QUAN TRỌNG):\n"
             "1. KHÔNG sử dụng định dạng Markdown (như **, __, #, v.v.). Trả lời bằng VĂN BẢN THUẦN (Plain Text).\n"
             "2. Trả lời bằng tiếng Việt, giọng điệu thanh lịch, đẳng cấp và hiếu khách.\n"
@@ -186,7 +186,7 @@ class RAGPipeline:
             "liên quan đến câu hỏi (cùng thương hiệu, cùng loại, cùng từ khoá), hãy LIỆT KÊ và GIỚI THIỆU chúng "
             "một cách nhiệt tình. Lưu ý: 'LV' = 'Louis Vuitton', 'YSL' = 'Yves Saint Laurent', "
             "'Dior' = 'Christian Dior' — coi như cùng một thương hiệu.\n"
-            "4. CHỈ trả lời 'LUMIÈRE hiện chưa có thông tin về vấn đề này' khi Context HOÀN TOÀN KHÔNG "
+            "4. CHỈ trả lời 'LUX hiện chưa có thông tin về vấn đề này' khi Context HOÀN TOÀN KHÔNG "
             "nhắc tới chủ đề/thương hiệu/sản phẩm mà khách hỏi. Nếu có dù chỉ 1 sản phẩm liên quan, "
             "TUYỆT ĐỐI KHÔNG được dùng câu fallback này.\n"
             "5. KHÔNG BỊA thông tin sản phẩm, giá cả. Giá luôn đi kèm đơn vị VNĐ và format có dấu chấm ngàn.\n"
