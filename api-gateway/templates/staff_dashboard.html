@@ -9,11 +9,11 @@
   </title>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
   </script>
   <style>
-   :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
+   :root{--color-obsidian:#0A0A0A;--color-ivory:#F8F5F0;--color-cream:#EDE8E0;--color-gold:#C9A84C;--color-gold-light:#E8D5A3;--color-charcoal:#2C2C2C;--color-ash:#6B6B6B;--color-silk:#F0EBE3;--color-emerald:#2D6A4F;--color-crimson:#8B1A1A;--font-display:'Inter', sans-serif;--font-body:'Inter', sans-serif;--font-mono:'Inter', sans-serif;--shadow-subtle:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 4px 12px rgba(0,0,0,0.10);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);--radius-sm:2px;--radius-md:8px;--radius-lg:16px}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     body{font-family:var(--font-body);font-size:14px;line-height:1.6;color:var(--color-charcoal);background:#f4f1ec;-webkit-font-smoothing:antialiased;display:flex;min-height:100vh}
     h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.2}
@@ -729,7 +729,7 @@
           borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.08)',tension:0.4,fill:true,pointRadius:4,pointBackgroundColor:'#C9A84C'
         }]
       },
-      options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:12},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'JetBrains Mono',size:11},callback:v=>v+'M'}},x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:12}}}}}
+      options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Inter',size:12},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'Inter',size:11},callback:v=>v+'M'}},x:{grid:{display:false},ticks:{font:{family:'Inter',size:12}}}}}
     });
 
     /* SEGMENT CHART */
@@ -739,7 +739,7 @@
         labels:['Loyal Customer','Premium Buyer','Impulse Buyer','Window Shopper','Price Sensitive'],
         datasets:[{data:[35,20,18,15,12],backgroundColor:['#2D6A4F','#533483','#C9A84C','#6B6B6B','#8B1A1A'],borderWidth:0,hoverOffset:8}]
       },
-      options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:11},usePointStyle:true,pointStyle:'circle',padding:12}}}}
+      options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{family:'Inter',size:11},usePointStyle:true,pointStyle:'circle',padding:12}}}}
     });
 
     /* REFRESH AI DATA */
