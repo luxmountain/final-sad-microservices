@@ -67,46 +67,47 @@ class CrossEncoderReranker:
 
 
 # =============================================
-# LLM GENERATOR (Google Gemini)
+# LLM GENERATOR (DeepSeek API — OpenAI-compatible)
 # =============================================
-class GeminiGenerator:
-    """Sinh câu trả lời bằng Google Gemini API."""
+class DeepSeekGenerator:
+    """Sinh câu trả lời bằng DeepSeek API (OpenAI-compatible)."""
 
     def __init__(self):
-        api_key = os.getenv("GOOGLE_API_KEY", "")
-        self.model_name = os.getenv("LLM_MODEL", "gemini-2.5-flash")
-        self.temperature = float(os.getenv("LLM_TEMPERATURE", "0.7"))
-        self.max_tokens = int(os.getenv("LLM_MAX_TOKENS", "2048"))
+        api_key = os.getenv("DEEPSEEK_API_KEY", "")
+        self.model_name = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+        self.temperature = float(os.getenv("DEEPSEEK_TEMPERATURE", "0.8"))
+        self.max_tokens = int(os.getenv("DEEPSEEK_MAX_TOKENS", "8192"))
 
-        if api_key and api_key != "your_gemini_api_key_here":
-            from google import genai
-            self.client = genai.Client(api_key=api_key)
+        if api_key:
+            from openai import OpenAI
+            self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
             self.available = True
-            print(f"✅ Gemini (genai SDK) ready: {self.model_name}")
+            print(f"✅ DeepSeek ready: {self.model_name}")
         else:
             self.client = None
             self.available = False
-            print("⚠️  Gemini API key chưa cấu hình → dùng mock response")
+            print("⚠️  DEEPSEEK_API_KEY chưa cấu hình → dùng mock response")
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
-        """Gọi Gemini API (bản google-genai SDK mới) hoặc trả mock response."""
+        """Gọi DeepSeek API hoặc trả mock response."""
         if not self.available:
             return self._mock_response(prompt)
 
         try:
-            # Cấu trúc mới của google-genai SDK
-            response = self.client.models.generate_content(
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
+            response = self.client.chat.completions.create(
                 model=self.model_name,
-                contents=prompt,
-                config={
-                    "system_instruction": system_prompt,
-                    "temperature": self.temperature,
-                    "max_output_tokens": self.max_tokens,
-                }
+                messages=messages,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
             )
-            return self._clean_response(response.text)
+            return self._clean_response(response.choices[0].message.content)
         except Exception as e:
-            print(f"⚠️ Gemini (genai SDK) error: {e}")
+            print(f"⚠️ DeepSeek error: {e}")
             return self._mock_response(prompt)
 
     def _clean_response(self, text: str) -> str:
@@ -124,10 +125,10 @@ class GeminiGenerator:
     def _mock_response(self, prompt: str) -> str:
         """Mock response khi chưa có API key."""
         return (
-            "🤖 [Mock Response - Cần cấu hình GOOGLE_API_KEY]\n\n"
+            "🤖 [Mock Response - Cần cấu hình DEEPSEEK_API_KEY]\n\n"
             "Xin chào! Tôi là trợ lý tư vấn AI của BookStore. "
             "Hiện tại tôi đang chạy ở chế độ demo. "
-            "Để có câu trả lời thực, vui lòng thêm Gemini API key vào file .env.\n\n"
+            "Để có câu trả lời thực, vui lòng thêm DeepSeek API key vào file .env.\n\n"
             f"Câu hỏi của bạn: {prompt[:200]}..."
         )
 
@@ -172,7 +173,7 @@ class RAGPipeline:
         self.reranker = CrossEncoderReranker()
 
         # Generator
-        self.generator = GeminiGenerator()
+        self.generator = DeepSeekGenerator()
 
     def _build_system_prompt(self, behavior_profile: Optional[Dict] = None) -> str:
         """Tạo system prompt với behavior profile."""
